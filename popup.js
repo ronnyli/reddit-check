@@ -48,6 +48,7 @@ function makeDisplay(redditPosts, encodedUrl, title) {
     for( var i=0; entry = redditPosts[i]; i++) {
             date_entry = new Date(entry.data.created_utc*1000).getTime();
             permalinks[i] = {
+                id: entry.data.id,
                 link: entry.data.permalink,
                 title: entry.data.title,
                 score: entry.data.score+"",
@@ -69,7 +70,8 @@ function makeDisplay(redditPosts, encodedUrl, title) {
         $("#links").append(
             "<li>"+ 
             "<div class='score'>"+permalink.score+"</div>"+
-            " <a href='" + url + "' title='" + permalink.link + "' target='_blank' >"+
+            " <a href='" + buildCommentUrl(permalink) +
+              "' title='" + permalink.link + "'>"+
               permalink.title + "</a>"+
             "<div class='age'>" + getAge(permalink.age)+ 
              " ,&nbsp;&nbsp;" + permalink.comments + " comments,"+
@@ -78,6 +80,12 @@ function makeDisplay(redditPosts, encodedUrl, title) {
             "</li>"
         );
     });
+}
+
+function buildCommentUrl(permalink) {
+    return "comment.html?" +
+      "id=" + permalink.id +
+      "&num_comments=" + permalink.comments
 }
 
 function comparePosts(postA, postB) {
