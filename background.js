@@ -243,6 +243,14 @@ function backgroundSnoowrap() {
             snoowrap_requester.searchSubreddits({
                 'query': query
             }).then(subreddits => callback(subreddits));
+        },
+
+        getSubmissionComments: function(id, callback) {
+            snoowrap_requester.getSubmission(id)
+            .fetch()
+            .then(submission => {
+                callback(submission.comments);
+            });
         }
     }
 }
@@ -262,6 +270,9 @@ function onRequest(request, sender, callback) {
         return true;
     } else if (request.action == 'searchSubreddits') {
         snoo.searchSubreddits(request.query, callback);
+        return true;
+    } else if (request.action == 'getSubmissionComments') {
+        snoo.getSubmissionComments(request.id, callback);
         return true;
     }
 }
