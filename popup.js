@@ -66,7 +66,6 @@ function makeDisplay(redditPosts, encodedUrl, title) {
         " href='post.html'>Repost</a></span>");
     
     $.each(permalinks, function(index, permalink) {
-		url = "https://www.reddit.com" + permalink.link
         $("#links").append(
             "<li>"+ 
             "<div class='score'>"+permalink.score+"</div>"+
@@ -83,9 +82,13 @@ function makeDisplay(redditPosts, encodedUrl, title) {
 }
 
 function buildCommentUrl(permalink) {
-    return "comment.html?" +
-      "id=" + permalink.id +
-      "&num_comments=" + permalink.comments
+    var uri = new URI("comment.html")
+    var query = {
+        'id': permalink.id,
+        'num_comments': permalink.comments,
+        'title': cropTitle(permalink.title)
+    }
+    return uri.search(query);
 }
 
 function comparePosts(postA, postB) {
