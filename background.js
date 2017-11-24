@@ -155,7 +155,7 @@ function backgroundSnoowrap() {
     var snoowrap_requester_json = lscache.get('snoowrap_requester_json');
     var snoowrap_requester = setSnoowrapFromJson(snoowrap_requester_json);
 
-    var an
+    var anonymous_requester;
 
     function setSnoowrapFromJson(snoo_json) {
         if (snoo_json) {
@@ -248,7 +248,16 @@ function backgroundSnoowrap() {
         },
 
         getSubmissionComments: function(id, callback) {
-            snoowrap_requester.getSubmission(id)
+            var requester;
+            if (snoowrap_requester) {
+                console.log('using logged in requester');
+                requester = snoowrap_requester;
+            } else if (anonymous_requester) {
+                console.log('using anonymous requester');
+                requester = anonymous_requester;
+            }
+
+            requester.getSubmission(id)
             .fetch()
             .then(submission => {
                 callback(submission.comments);
@@ -271,14 +280,16 @@ function backgroundSnoowrap() {
               .then(anonymousToken => {
                   const anonymousSnoowrap = new snoowrap({ accessToken: anonymousToken });
                   anonymousSnoowrap.config({ proxies: false, requestDelay: 1000 });
-                  this.setState({ anonymousSnoowrap });
-                  return anonymousSnoowrap;
+                  anonymous_requester = anonymousSnoowrap;
+                  lscache.set('anonymous_requester_json', anonymousSnoowrap);
+                  console.log('Got anonymous snoowrap requester');
               });
         }
     }
 }
 
 var snoo = backgroundSnoowrap();
+snoo.fetchAnonymousToken();
 
 function onRequest(request, sender, callback) {
     console.log(request);
