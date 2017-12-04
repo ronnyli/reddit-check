@@ -17,6 +17,9 @@ function makeDisplay(redditComments) {
             "<li>"+
             "<div class='score'>"+comment.score+"</div>"+
             comment.body+
+            "<div class='age'>" + comment.replies.length + " comments,"+
+             "&nbsp;&nbsp;r/" + comment.author +
+            "</div>"+
             "</li>"
         );
     });
