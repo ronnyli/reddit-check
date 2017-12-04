@@ -1,6 +1,5 @@
 # Notes to Self
 ## TODO
-1. Cache comments for posts
 1. Reply to comments within posts
 1. Code Cleanup
     - bogus user agents, state

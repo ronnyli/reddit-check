@@ -1,6 +1,7 @@
 var gUrlToAsyncMap = {}
 var DEDUPE_KEY = "Dedupe:"
 var POST_STORAGE_KEY = "Posts:"
+var COMMENT_STORAGE_KEY = "Comments:"
 
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
@@ -260,6 +261,7 @@ function backgroundSnoowrap() {
             requester.getSubmission(id)
             .fetch()
             .then(submission => {
+                lscache.set(COMMENT_STORAGE_KEY + id, submission.comments);
                 callback(submission.comments);
             });
         },

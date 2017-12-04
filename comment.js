@@ -34,10 +34,12 @@ $(document).ready(function(){
     parseCurrentUrl(function(query) {
         if (query.num_comments > 0) {
             $("#no_results").hide();
-            getSubmissionComments(query.id, function(comments) {
-                console.log(comments);
+            var comments = lscache.get("Comments:" + query.id);
+            if (comments != null) {
                 makeDisplay(comments);
-            })
+            } else {
+                getSubmissionComments(query.id, makeDisplay);
+            }
         }
     });
 });
