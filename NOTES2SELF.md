@@ -2,9 +2,12 @@
 ## TODO
 1. View replies to comments
     - (iterate through the tree forever)
+        - [how to implement the tree](https://www.webdesignerdepot.com/2013/01/how-to-build-a-threaded-comment-block-with-html5-and-css3/)
+        - [useful terminology like AJAX, realtime sync, etc](http://engineering.hackerearth.com/2015/01/27/making-comments-more-powerful/)
     - Youtube only allows one level of nesting
 1. Reply to comments within posts
     - Reply button below each comment (youtube)
+    - [JS markdown editor](https://simplemde.com/)
 1. Code Cleanup
     - bogus user agents, state
 1. Research using backbone.js for collections
