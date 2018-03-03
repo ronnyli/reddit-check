@@ -2,27 +2,26 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="style.css">
-<link href='http://fonts.googleapis.com/css?family=Shanti' rel='stylesheet' type='text/css'>
 <script src="jquery.min.js" language="javascript"></script>
 <script src="lscache.min.js"></script>
+<script src="snoowrap-v1.min.js"></script>
 <script src="URI.js"></script>
-<script src="shared.js"> </script>
-<script src="popup.js"></script>
+<script src="comment.js"></script>
 </head>
 <body>
     <div id="data">
+        <div id='back'>
+            <a href="popup.html">Back</a>
+        </div>
         <div id='close'>
             <a href="#"><img src="images/close.png"/> </a>
         </div>
+        <span id='title'>
+        </span>
     </div>
     <div id="links"  class="below-title">
-    </div>
-    <div id="timeout">
-        Loading... please wait.
-    </div>
-
-    <div id="blacklisted">
-        You have chosen to blacklist this URL for reddit-check.
+    <div id='no_results' class="below-title">
+        No comments for this post. Would you like to make one?
     </div>
 </body>
 </html>

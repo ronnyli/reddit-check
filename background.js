@@ -155,6 +155,8 @@ function backgroundSnoowrap() {
     var snoowrap_requester_json = lscache.get('snoowrap_requester_json');
     var snoowrap_requester = setSnoowrapFromJson(snoowrap_requester_json);
 
+    var anonymous_requester;
+
     function setSnoowrapFromJson(snoo_json) {
         if (snoo_json) {
             return new snoowrap({
@@ -243,11 +245,51 @@ function backgroundSnoowrap() {
             snoowrap_requester.searchSubreddits({
                 'query': query
             }).then(subreddits => callback(subreddits));
+        },
+
+        getSubmissionComments: function(id, callback) {
+            var requester;
+            if (snoowrap_requester) {
+                console.log('using logged in requester');
+                requester = snoowrap_requester;
+            } else if (anonymous_requester) {
+                console.log('using anonymous requester');
+                requester = anonymous_requester;
+            }
+
+            requester.getSubmission(id)
+            .fetch()
+            .then(submission => {
+                callback(submission.comments);
+            });
+        },
+
+
+        fetchAnonymousToken: function() {
+            const form = new FormData();
+            form.set('grant_type', 'https://oauth.reddit.com/grants/installed_client');
+            form.set('device_id', 'DO_NOT_TRACK_THIS_DEVICE');
+            return fetch('https://www.reddit.com/api/v1/access_token', {
+                method: 'post',
+                body: form,
+                headers: { authorization: `Basic ${btoa(clientId + ':')}` },
+                credentials: 'omit',
+            }).then(response => response.text())
+              .then(JSON.parse)
+              .then(tokenInfo => tokenInfo.access_token)
+              .then(anonymousToken => {
+                  const anonymousSnoowrap = new snoowrap({ accessToken: anonymousToken });
+                  anonymousSnoowrap.config({ proxies: false, requestDelay: 1000 });
+                  anonymous_requester = anonymousSnoowrap;
+                  lscache.set('anonymous_requester_json', anonymousSnoowrap);
+                  console.log('Got anonymous snoowrap requester');
+              });
         }
     }
 }
 
 var snoo = backgroundSnoowrap();
+snoo.fetchAnonymousToken();
 
 function onRequest(request, sender, callback) {
     console.log(request);
@@ -262,6 +304,9 @@ function onRequest(request, sender, callback) {
         return true;
     } else if (request.action == 'searchSubreddits') {
         snoo.searchSubreddits(request.query, callback);
+        return true;
+    } else if (request.action == 'getSubmissionComments') {
+        snoo.getSubmissionComments(request.id, callback);
         return true;
     }
 }
