@@ -18,7 +18,7 @@ function makeDisplay(redditComments) {
             "<div class='score'>"+comment.score+"</div>"+
             comment.body+
             "<div class='age'>" + comment.replies.length + " comments,"+
-             "&nbsp;&nbsp;r/" + comment.author +
+             "&nbsp;&nbsp;u/" + comment.author +
             "</div>"+
             "</li>"
         );
