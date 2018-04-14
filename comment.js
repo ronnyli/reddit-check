@@ -11,16 +11,46 @@ function parseCurrentUrl(callback) {
     callback(query)
 }
 
+const iterateComments = (index, comment) => {
+    let commentHTML = renderComment(index, comment);
+
+    if (comment.replies.length > 0) {
+        commentHTML += "<ul>";
+        $.each(comment.replies, (index, comment) =>{
+            commentHTML += iterateComments(index, comment);
+        });
+        // comment.replies.forEach((element,index) => {
+            
+        // });
+
+        // for (let i = 0; i < comment.replies.length; i++) {
+
+        // }
+
+        commentHTML += "</ul>";
+    }
+
+    return commentHTML;
+}
+
+const renderComment = (comment) => {
+    // return `<li>${comment.score}</li>
+    //     dsfskfl
+    // `
+    return "<li>"+
+    "<div class='score'>"+comment.score+"</div>"+
+    comment.body+
+    "<div class='age'>" + comment.replies.length + " comments,"+
+     "&nbsp;&nbsp;u/" + comment.author +
+    "</div>"+
+    "</li>"
+}
+
+
 function makeDisplay(redditComments) {
     $.each(redditComments, function(index, comment) {
         $("#links").append(
-            "<li>"+
-            "<div class='score'>"+comment.score+"</div>"+
-            comment.body+
-            "<div class='age'>" + comment.replies.length + " comments,"+
-             "&nbsp;&nbsp;u/" + comment.author +
-            "</div>"+
-            "</li>"
+            iterateComments(index, comment)
         );
     });
 }
