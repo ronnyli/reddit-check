@@ -11,45 +11,49 @@ function parseCurrentUrl(callback) {
     callback(query)
 }
 
-const iterateComments = (index, comment) => {
-    let commentHTML = renderComment(index, comment);
+// Nested comments don't expand (only top-level comments)
+
+function iterateComments(index, comment) {
+    var commentHTML = renderComment(comment);
 
     if (comment.replies.length > 0) {
-        commentHTML += "<ul>";
+        commentHTML += `
+            <div class="collapsible-body">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <ul class="collapsible" data-collapsible="accordion">`;
         $.each(comment.replies, (index, comment) =>{
             commentHTML += iterateComments(index, comment);
         });
-        // comment.replies.forEach((element,index) => {
-            
-        // });
 
-        // for (let i = 0; i < comment.replies.length; i++) {
-
-        // }
-
-        commentHTML += "</ul>";
+        commentHTML += `
+                        </ul>
+                    </div>
+                </div>
+            </div>`;
     }
-
+    commentHTML += '</li>';
     return commentHTML;
 }
 
-const renderComment = (comment) => {
+function renderComment(comment) {
     // return `<li>${comment.score}</li>
     //     dsfskfl
     // `
     return "<li>"+
+    "<div class='collapsible-header'>"+
     "<div class='score'>"+comment.score+"</div>"+
     comment.body+
     "<div class='age'>" + comment.replies.length + " comments,"+
      "&nbsp;&nbsp;u/" + comment.author +
     "</div>"+
-    "</li>"
+    "</div>"
 }
 
 
 function makeDisplay(redditComments) {
     $.each(redditComments, function(index, comment) {
-        $("#links").append(
+        $("#comments").append(
             iterateComments(index, comment)
         );
     });
