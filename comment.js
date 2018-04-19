@@ -21,7 +21,7 @@ function iterateComments(index, comment) {
             <div class="collapsible-body">
                 <div class="row">
                     <div class="col s12 m12">
-                        <ul class="collapsible" data-collapsible="accordion">`;
+                        <ul class="collapsible" data-collapsible="collapsible">`;
         $.each(comment.replies, (index, comment) =>{
             commentHTML += iterateComments(index, comment);
         });
@@ -57,6 +57,7 @@ function makeDisplay(redditComments) {
             iterateComments(index, comment)
         );
     });
+    $('.collapsible').collapsible();
 }
 
 $(document).ready(function(){
