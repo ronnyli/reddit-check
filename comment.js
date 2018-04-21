@@ -1,7 +1,13 @@
-function getSubmissionComments(id, callback)  {
+function getSubmission(id, callback)  {
     chrome.runtime.sendMessage({
-        'action' : 'getSubmissionComments',
+        'action' : 'getSubmission',
         'id' : id
+    }, callback)
+}
+
+function getCurrentUserName(callback)  {
+    chrome.runtime.sendMessage({
+        'action' : 'getCurrentUserName'
     }, callback)
 }
 
@@ -37,27 +43,37 @@ function iterateComments(index, comment) {
 }
 
 function renderComment(comment) {
-    // return `<li>${comment.score}</li>
-    //     dsfskfl
-    // `
-    return "<li>"+
+    return "<li id='comment_"+comment.id+"'>"+
     "<div class='collapsible-header'>"+
     "<div class='score'>"+comment.score+"</div>"+
     comment.body+
     "<div class='age'>" + comment.replies.length + " comments,"+
      "&nbsp;&nbsp;u/" + comment.author +
     "</div>"+
+    "<a class='reply_button' href='#'>REPLY</a>"+
     "</div>"
+    // missing </li> tag because I need to delay closing until later
+    ;
 }
 
+function makeDisplay(submission) {
+    var redditComments = submission.comments;
+    var archived = submission.archived;
 
-function makeDisplay(redditComments) {
     $.each(redditComments, function(index, comment) {
         $("#comments").append(
             iterateComments(index, comment)
         );
     });
     $('.collapsible').collapsible();
+
+    $('.reply_button').click(function() {console.log('hi')});
+}
+
+function renderReplyComment(comment_id) {
+    return `
+        <textarea id="reply_${comment_id}" class="materialize-textarea reply_box"></textarea>
+        <label for="reply_${comment_id}">Add a reply</label>`;
 }
 
 $(document).ready(function(){
@@ -70,14 +86,19 @@ $(document).ready(function(){
     $("#title").append(query.title);
 
     parseCurrentUrl(function(query) {
+        var submission = lscache.get("Comments:" + query.id);
+
         if (query.num_comments > 0) {
             $("#no_results").hide();
-            var comments = lscache.get("Comments:" + query.id);
-            if (comments != null) {
-                makeDisplay(comments);
+            if (submission != null) {
+                makeDisplay(submission);
             } else {
-                getSubmissionComments(query.id, makeDisplay);
+                getSubmission(query.id, makeDisplay);
             }
         }
+
+        // TODO: render the top-level reply box
+        // makeTopLevelCommentBox(submission.archived);
     });
+
 });

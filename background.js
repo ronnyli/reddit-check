@@ -238,8 +238,12 @@ function backgroundSnoowrap() {
         },
 
         getCurrentUserName: function(callback) {
-            snoowrap_requester.getMe()
-            .then(u => callback(u.name));
+            try {
+                snoowrap_requester.getMe()
+                .then(u => callback(u.name));
+            } catch(err) {
+                callback(err.toString());
+            }
         },
 
         searchSubreddits: function(query, callback) {
@@ -248,7 +252,7 @@ function backgroundSnoowrap() {
             }).then(subreddits => callback(subreddits));
         },
 
-        getSubmissionComments: function(id, callback) {
+        getSubmission: function(id, callback) {
             var requester;
             if (snoowrap_requester) {
                 console.log('using logged in requester');
@@ -261,11 +265,10 @@ function backgroundSnoowrap() {
             requester.getSubmission(id)
             .fetch()
             .then(submission => {
-                lscache.set(COMMENT_STORAGE_KEY + id, submission.comments);
-                callback(submission.comments);
+                lscache.set(COMMENT_STORAGE_KEY + id, submission);
+                callback(submission);
             });
         },
-
 
         fetchAnonymousToken: function() {
             const form = new FormData();
@@ -307,8 +310,8 @@ function onRequest(request, sender, callback) {
     } else if (request.action == 'searchSubreddits') {
         snoo.searchSubreddits(request.query, callback);
         return true;
-    } else if (request.action == 'getSubmissionComments') {
-        snoo.getSubmissionComments(request.id, callback);
+    } else if (request.action == 'getSubmission') {
+        snoo.getSubmission(request.id, callback);
         return true;
     }
 }

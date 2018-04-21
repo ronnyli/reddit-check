@@ -5,7 +5,9 @@
 1. Display comments page
     - make it look nicer
 1. Reply to comments within posts
+    - IF POST IS ARCHIVED THEN CANNOT REPLY
     - Reply button below each comment (how youtube does it)
+    - Top-level comment at top of screen
     - [JS markdown editor](https://simplemde.com/)
 1. List of subscribed subreddits when submitting post
 1. UI aesthetics
