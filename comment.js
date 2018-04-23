@@ -19,8 +19,8 @@ function parseCurrentUrl(callback) {
 
 // Nested comments don't expand (only top-level comments)
 
-function iterateComments(index, comment) {
-    var commentHTML = renderComment(comment);
+function iterateComments(index, comment, archived) {
+    var commentHTML = renderComment(comment, archived);
 
     if (comment.replies.length > 0) {
         commentHTML += `
@@ -29,7 +29,7 @@ function iterateComments(index, comment) {
                     <div class="col s12 m12">
                         <ul class="collapsible" data-collapsible="collapsible">`;
         $.each(comment.replies, (index, comment) =>{
-            commentHTML += iterateComments(index, comment);
+            commentHTML += iterateComments(index, comment, archived);
         });
 
         commentHTML += `
@@ -42,16 +42,16 @@ function iterateComments(index, comment) {
     return commentHTML;
 }
 
-function renderComment(comment) {
-    return "<li id='comment_"+comment.id+"'>"+
-    "<div class='collapsible-header'>"+
-    "<div class='score'>"+comment.score+"</div>"+
-    comment.body+
-    "<div class='age'>" + comment.replies.length + " comments,"+
-     "&nbsp;&nbsp;u/" + comment.author +
-    "</div>"+
-    "<a class='reply_button' href='#'>REPLY</a>"+
-    "</div>"
+function renderComment(comment, archived) {
+    return `<li id='comment_${comment.id}'>
+    <div class='collapsible-header'>
+    <div class='score'>${comment.score}</div>
+    ${comment.body}
+    <div class='age'> ${comment.replies.length} comments,
+     &nbsp;&nbsp;u/${comment.author}
+    </div>
+    ${archived ? "": "<a class='reply_button' href='#'>REPLY</a>"}
+    </div>`
     // missing </li> tag because I need to delay closing until later
     ;
 }
@@ -62,12 +62,16 @@ function makeDisplay(submission) {
 
     $.each(redditComments, function(index, comment) {
         $("#comments").append(
-            iterateComments(index, comment)
+            iterateComments(index, comment, archived)
         );
     });
     $('.collapsible').collapsible();
 
     $('.reply_button').click(function() {console.log('hi')});
+}
+
+function checkLoginStatus() {
+
 }
 
 function renderReplyComment(comment_id) {
