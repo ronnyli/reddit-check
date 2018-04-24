@@ -26,3 +26,4 @@
 1. Show users involved for a given URL and allow to add to friends list
     - connect with similar ppl
 1. Allow for subscribing to subreddits
+    - just send the user over to Reddit for now
