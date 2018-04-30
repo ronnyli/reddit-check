@@ -6,12 +6,12 @@
     - make it look nicer
 1. Reply to comments within posts
     - IF POST IS ARCHIVED THEN CANNOT REPLY
+        - remember to do this with the top level comment box
     - Reply button below each comment (how youtube does it)
         - if not signed in, clicking button triggers sign-in flow
     - Top-level comment at top of screen
         - do not show if post is archived
         - if not signed in, clicking div triggers sign-in
-    - move message about post being archived to top of screen and have it hidden by default
     - [JS markdown editor](https://simplemde.com/)
 1. List of subscribed subreddits when submitting post
 1. UI aesthetics
@@ -25,5 +25,13 @@
     - so they can see it in browser action window
 1. Show users involved for a given URL and allow to add to friends list
     - connect with similar ppl
+    - just send over to Reddit for now
 1. Allow for subscribing to subreddits
     - just send the user over to Reddit for now
+1. Think about actions for:
+    - pages without posts
+    - people who don't want to post/comment
+    - IDEAS:
+        - "check-in" to pages, like Foursquare
+1. Look at the results for reddit.com for an example of what should ideally be avoided
+1. Maybe move ALL HTML into Javascript b/c otherwise you have to remember which HTML goes where

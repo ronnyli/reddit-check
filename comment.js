@@ -43,7 +43,7 @@ function iterateComments(index, comment, archived) {
 }
 
 function renderComment(comment, archived) {
-    return `<li id='comment_${comment.id}'>
+    return `<li id='${comment.id}'>
     <div class='collapsible-header'>
     <div class='score'>${comment.score}</div>
     ${comment.body}
@@ -51,6 +51,7 @@ function renderComment(comment, archived) {
      &nbsp;&nbsp;u/${comment.author}
     </div>
     ${archived ? "": "<a class='reply_button' href='#'>REPLY</a>"}
+    <form></form>
     </div>`
     // missing </li> tag because I need to delay closing until later
     ;
@@ -60,6 +61,10 @@ function makeDisplay(submission) {
     var redditComments = submission.comments;
     var archived = submission.archived;
 
+    if (archived) {
+        $("#archived").show();
+    }
+
     $.each(redditComments, function(index, comment) {
         $("#comments").append(
             iterateComments(index, comment, archived)
@@ -67,7 +72,23 @@ function makeDisplay(submission) {
     });
     $('.collapsible').collapsible();
 
-    $('.reply_button').click(function() {console.log('hi')});
+    $('.reply_button').click(function() {
+        // TODO: trigger sign-in flow if user is not logged in
+        // TODO: make this toggle a form
+        var comment_id = $( this ).closest('li').attr('id');
+        const $form = $( this ).siblings('form');
+        console.log('Reply to ' + comment_id);
+        // TODO: only render once per click
+        if ($form.children().length == 0) {
+            $form.append(renderReplyComment(comment_id));
+        } else {
+            $form.toggle();
+        }
+        // TODO: provide a cancel button
+    });
+
+    // TODO: render the top-level reply box
+    // makeTopLevelCommentBox(submission.archived);
 }
 
 function checkLoginStatus() {
@@ -77,13 +98,17 @@ function checkLoginStatus() {
 function renderReplyComment(comment_id) {
     return `
         <textarea id="reply_${comment_id}" class="materialize-textarea reply_box"></textarea>
-        <label for="reply_${comment_id}">Add a reply</label>`;
+        <label for="reply_${comment_id}">Add a reply</label>
+        <button class="btn waves-effect waves-light" type="submit">REPLY</button>
+        <button class="btn waves-effect waves-light transparent grey-text">CANCEL</button>`;
 }
 
 $(document).ready(function(){
     $("#close").click(function() {
       window.close();
     });
+
+    $("#archived").hide();
 
     var window_url = new URI(window.location.href);
     var query = window_url.search(true);
@@ -100,9 +125,6 @@ $(document).ready(function(){
                 getSubmission(query.id, makeDisplay);
             }
         }
-
-        // TODO: render the top-level reply box
-        // makeTopLevelCommentBox(submission.archived);
     });
 
 });
