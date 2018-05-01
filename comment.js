@@ -1,14 +1,12 @@
-function getSubmission(id, callback)  {
-    chrome.runtime.sendMessage({
-        'action' : 'getSubmission',
-        'id' : id
-    }, callback)
-}
 
-function getCurrentUserName(callback)  {
-    chrome.runtime.sendMessage({
-        'action' : 'getCurrentUserName'
-    }, callback)
+
+function isLoggedIn(callback) {
+    snoo_json = lscache.get('snoowrap_requester_json');
+    if (snoo_json) {
+        // renderReplyBox
+    } else {
+        callback();
+    }
 }
 
 function parseCurrentUrl(callback) {
@@ -74,11 +72,11 @@ function makeDisplay(submission) {
 
     $('.reply_button').click(function() {
         // TODO: trigger sign-in flow if user is not logged in
-        // TODO: make this toggle a form
+
         var comment_id = $( this ).closest('li').attr('id');
         const $form = $( this ).siblings('form');
         console.log('Reply to ' + comment_id);
-        // TODO: only render once per click
+
         if ($form.children().length == 0) {
             $form.append(renderReplyComment(comment_id));
         } else {
@@ -89,10 +87,6 @@ function makeDisplay(submission) {
 
     // TODO: render the top-level reply box
     // makeTopLevelCommentBox(submission.archived);
-}
-
-function checkLoginStatus() {
-
 }
 
 function renderReplyComment(comment_id) {
