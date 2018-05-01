@@ -2,18 +2,19 @@
 ## TODO
 1. Code Cleanup
     - bogus user agents, state
-1. Display comments page
-    - make it look nicer
 1. Reply to comments within posts
     - IF POST IS ARCHIVED THEN CANNOT REPLY
         - remember to do this with the top level comment box
     - Reply button below each comment (how youtube does it)
         - if not signed in, clicking button triggers sign-in flow
+            - remember to do this with the top level comment box
     - Top-level comment at top of screen
         - do not show if post is archived
         - if not signed in, clicking div triggers sign-in
+    - Clicking Reply button doesn't trigger expanding comments
+        - could be achieved by putting dedicated button outside of collapsible div?
+        - or dedicated "expand" / "show replies" button
     - [JS markdown editor](https://simplemde.com/)
-1. List of subscribed subreddits when submitting post
 1. UI aesthetics
     - Materialize UI on initial results page and also comments page
     - https://www.joelonsoftware.com/2003/03/03/building-communities-with-software/
@@ -34,4 +35,5 @@
     - IDEAS:
         - "check-in" to pages, like Foursquare
 1. Look at the results for reddit.com for an example of what should ideally be avoided
+    - Avoid NSFW subreddits (or at least set an option to avoid those subreddits)
 1. Maybe move ALL HTML into Javascript b/c otherwise you have to remember which HTML goes where

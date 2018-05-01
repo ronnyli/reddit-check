@@ -1,9 +1,10 @@
 
 
-function isLoggedIn(callback) {
+function isLoggedIn($this, callback) {
+    // TODO: need to generalize this function
     snoo_json = lscache.get('snoowrap_requester_json');
     if (snoo_json) {
-        // renderReplyBox
+        displayReplyComment($this);
     } else {
         callback();
     }
@@ -71,22 +72,38 @@ function makeDisplay(submission) {
     $('.collapsible').collapsible();
 
     $('.reply_button').click(function() {
-        // TODO: trigger sign-in flow if user is not logged in
-
-        var comment_id = $( this ).closest('li').attr('id');
-        const $form = $( this ).siblings('form');
-        console.log('Reply to ' + comment_id);
-
-        if ($form.children().length == 0) {
-            $form.append(renderReplyComment(comment_id));
-        } else {
-            $form.toggle();
-        }
-        // TODO: provide a cancel button
+        const $this = $( this );
+        isLoggedIn($this, function() {
+            logInReddit(function(status) {
+                console.log('Login status: ' + status);
+                isLoggedIn($this, function() {
+                    $("#status").append("<span>Problem logging in. Try again.</span>");
+                })
+            });
+        });
     });
 
     // TODO: render the top-level reply box
     // makeTopLevelCommentBox(submission.archived);
+}
+
+function displayReplyComment($this) {
+    // TODO: make this function work for the top-level reply box too
+    var comment_id = $this.closest('li').attr('id');
+    const $form = $this.siblings('form');
+    console.log('Reply to ' + comment_id);
+
+    if ($form.children().length == 0) {
+        $form.append(renderReplyComment(comment_id));
+        // TODO: better handling of cancel button
+        $('.cancel_reply').click(function(event) {
+            event.preventDefault();
+            $form.toggle();
+        });
+        // TODO: form.submit();
+    } else {
+        $form.toggle();
+    }
 }
 
 function renderReplyComment(comment_id) {
@@ -94,7 +111,7 @@ function renderReplyComment(comment_id) {
         <textarea id="reply_${comment_id}" class="materialize-textarea reply_box"></textarea>
         <label for="reply_${comment_id}">Add a reply</label>
         <button class="btn waves-effect waves-light" type="submit">REPLY</button>
-        <button class="btn waves-effect waves-light transparent grey-text">CANCEL</button>`;
+        <button class="btn waves-effect waves-light transparent grey-text cancel_reply">CANCEL</button>`;
 }
 
 $(document).ready(function(){
