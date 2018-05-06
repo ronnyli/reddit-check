@@ -1,7 +1,8 @@
 
 
 function isLoggedIn($this, callback) {
-    // TODO: need to generalize this function
+    // TODO: need to generalize this function b/c it needs to at least work with top-level comment box as well
+    // TODO: or I could handle this logic in background.js (wrapping every function that requires login by default)
     snoo_json = lscache.get('snoowrap_requester_json');
     if (snoo_json) {
         displayReplyComment($this);
@@ -95,12 +96,29 @@ function displayReplyComment($this) {
 
     if ($form.children().length == 0) {
         $form.append(renderReplyComment(comment_id));
-        // TODO: better handling of cancel button
+        // TODO: better handling of this function
         $('.cancel_reply').click(function(event) {
             event.preventDefault();
             $form.toggle();
         });
-        // TODO: form.submit();
+        // TODO: better handling of this function
+        $form.submit(function(event) {
+            event.preventDefault();
+            replyComment(comment_id,
+                $(`#reply_${comment_id}`).val(),
+                function (status) {
+                if (status == 'Success') {
+                    $form.hide(0);
+                    // TODO: individual status div per reply box
+                    $("#status").append("<span>Successful post</span>")
+                } else {
+                    // TODO: better error handling
+                    $form.hide(0);
+                    console.log('Status of failed post:');
+                    console.log(status);
+                }
+            });
+        });
     } else {
         $form.toggle();
     }

@@ -270,6 +270,24 @@ function backgroundSnoowrap() {
             });
         },
 
+        replySubmission: function(id, text, callback) {
+            snoowrap_requester.getSubmission(id)
+            .reply(text)
+            .then(() => callback('Success'))
+            .catch(function(err) {
+                callback(err.toString())
+            })
+        },
+
+        replyComment: function(id, text, callback) {
+            snoowrap_requester.getComment(id)
+            .reply(text)
+            .then(() => callback('Success'))
+            .catch(function(err) {
+                callback(err.toString())
+            })
+        },
+
         fetchAnonymousToken: function() {
             const form = new FormData();
             form.set('grant_type', 'https://oauth.reddit.com/grants/installed_client');
@@ -312,6 +330,12 @@ function onRequest(request, sender, callback) {
         return true;
     } else if (request.action == 'getSubmission') {
         snoo.getSubmission(request.id, callback);
+        return true;
+    } else if (request.action == 'replySubmission') {
+        snoo.replySubmission(request.id, request.text, callback);
+        return true;
+    } else if (request.action == 'replyComment') {
+        snoo.replyComment(request.id, request.text, callback);
         return true;
     }
 }
