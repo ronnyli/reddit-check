@@ -3,11 +3,6 @@
 1. Code Cleanup
     - bogus user agents, state
 1. Reply to comments within posts
-    - IF POST IS ARCHIVED THEN CANNOT REPLY
-        - remember to do this with the top level comment box
-    - Reply button below each comment (how youtube does it)
-        - if not signed in, clicking button triggers sign-in flow
-            - remember to do this with the top level comment box
     - Top-level comment at top of screen
         - do not show if post is archived
         - if not signed in, clicking div triggers sign-in
@@ -22,7 +17,7 @@
     - https://blog.codinghorror.com/discussions-flat-or-threaded/
 1. Show inbox when/if someone responds to your post
     - actually not recommended by Joel
-1. Clear cache for current URL if user makes a post
+1. Clear cache for current URL if user makes a post or comment
     - so they can see it in browser action window
 1. Show users involved for a given URL and allow to add to friends list
     - connect with similar ppl

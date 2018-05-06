@@ -270,22 +270,22 @@ function backgroundSnoowrap() {
             });
         },
 
-        replySubmission: function(id, text, callback) {
-            snoowrap_requester.getSubmission(id)
-            .reply(text)
-            .then(() => callback('Success'))
-            .catch(function(err) {
-                callback(err.toString())
-            })
-        },
-
-        replyComment: function(id, text, callback) {
-            snoowrap_requester.getComment(id)
-            .reply(text)
-            .then(() => callback('Success'))
-            .catch(function(err) {
-                callback(err.toString())
-            })
+        leaveComment: function(id, text, replyable_content_type, callback) {
+            if (replyable_content_type == 'submission') {
+                snoowrap_requester.getSubmission(id)
+                .reply(text)
+                .then(() => callback('Success'))
+                .catch(function(err) {
+                    callback(err.toString())
+                });
+            } else if (replyable_content_type == 'comment') {
+                snoowrap_requester.getComment(id)
+                .reply(text)
+                .then(() => callback('Success'))
+                .catch(function(err) {
+                    callback(err.toString())
+                });
+            }
         },
 
         fetchAnonymousToken: function() {
@@ -331,11 +331,11 @@ function onRequest(request, sender, callback) {
     } else if (request.action == 'getSubmission') {
         snoo.getSubmission(request.id, callback);
         return true;
-    } else if (request.action == 'replySubmission') {
-        snoo.replySubmission(request.id, request.text, callback);
-        return true;
-    } else if (request.action == 'replyComment') {
-        snoo.replyComment(request.id, request.text, callback);
+    } else if (request.action == 'leaveComment') {
+        snoo.leaveComment(request.id,
+            request.text,
+            request.replyable_content_type,
+            callback);
         return true;
     }
 }

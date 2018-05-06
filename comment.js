@@ -5,7 +5,9 @@ function isLoggedIn($this, callback) {
     // TODO: or I could handle this logic in background.js (wrapping every function that requires login by default)
     snoo_json = lscache.get('snoowrap_requester_json');
     if (snoo_json) {
-        displayReplyComment($this);
+        var comment_id = $this.closest('li').attr('id');
+        const $form = $this.siblings('form');
+        displayReplyComment(comment_id, $form, 'comment');
     } else {
         callback();
     }
@@ -60,6 +62,7 @@ function renderComment(comment, archived) {
 function makeDisplay(submission) {
     var redditComments = submission.comments;
     var archived = submission.archived;
+    var submission_id = submission.id;
 
     if (archived) {
         $("#archived").show();
@@ -84,14 +87,14 @@ function makeDisplay(submission) {
         });
     });
 
-    // TODO: render the top-level reply box
-    // makeTopLevelCommentBox(submission.archived);
+    if (!archived) {
+        // TODO: check log-in status when clicking $form
+        const $form = $('#reply_post');
+        displayReplyComment(submission_id, $form, 'submission');
+    }
 }
 
-function displayReplyComment($this) {
-    // TODO: make this function work for the top-level reply box too
-    var comment_id = $this.closest('li').attr('id');
-    const $form = $this.siblings('form');
+function displayReplyComment(comment_id, $form, replyable_content_type) {
     console.log('Reply to ' + comment_id);
 
     if ($form.children().length == 0) {
@@ -104,8 +107,9 @@ function displayReplyComment($this) {
         // TODO: better handling of this function
         $form.submit(function(event) {
             event.preventDefault();
-            replyComment(comment_id,
+            leaveComment(comment_id,
                 $(`#reply_${comment_id}`).val(),
+                replyable_content_type,
                 function (status) {
                 if (status == 'Success') {
                     $form.hide(0);
