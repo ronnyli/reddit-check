@@ -12,26 +12,26 @@
 <script src="comment.js"></script>
 </head>
 <body class="container">
-    <div id="data">
-        <div id='back'>
+    <div id="data" class="row">
+        <div id='back' class="col s1">
             <a href="popup.html">Back</a>
         </div>
-        <div id='close'>
+        <span id='title' class="col s10">
+        </span>
+        <div id='close' class="col s1">
             <a href="#"><img src="images/close.png"/> </a>
         </div>
-        <span id='title'>
-        </span>
     </div>
-    <div id='archived' class="below-title">
+    <div id='archived' class="row">
         This is an archived post. You won't be able to vote or comment.
     </div>
-    <div id="show_comments"  class="below-title">
+    <form id="reply_post" class="row"></form>
+    <div id="show_comments"  class="row">
         <ul id="comments" class="collapsible" data-collapsible="collapsible"></ul>
     </div>
-    <div id='no_results' class="below-title">
+    <div id='no_results' class="row">
         No comments for this post. Would you like to make one?
     </div>
-    <form id="reply_post" class="below-title"></form>
     <div id="status" class="row"></div>
 </body>
 </html>

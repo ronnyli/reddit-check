@@ -3,7 +3,7 @@
 function isLoggedIn($this, callback) {
     // TODO: need to generalize this function b/c it needs to at least work with top-level comment box as well
     // TODO: or I could handle this logic in background.js (wrapping every function that requires login by default)
-    snoo_json = lscache.get('snoowrap_requester_json');
+    const snoo_json = lscache.get('snoowrap_requester_json');
     if (snoo_json) {
         var comment_id = $this.closest('li').attr('id');
         const $form = $this.siblings('form');
@@ -18,8 +18,6 @@ function parseCurrentUrl(callback) {
     var query = window_url.search(true);
     callback(query)
 }
-
-// Nested comments don't expand (only top-level comments)
 
 function iterateComments(index, comment, archived) {
     var commentHTML = renderComment(comment, archived);
@@ -88,8 +86,15 @@ function makeDisplay(submission) {
     });
 
     if (!archived) {
-        // TODO: check log-in status when clicking $form
+        // TODO: unify log-in logic that is getting a bit out of hand
         const $form = $('#reply_post');
+        if (lscache.get('snoowrap_requester_json') == null) {
+            $form.click(function () {
+                logInReddit(function(status) {
+                    console.log('Login status: ' + status);
+                })
+            });
+        }
         displayReplyComment(submission_id, $form, 'submission');
     }
 }
@@ -149,7 +154,7 @@ $(document).ready(function(){
 
     parseCurrentUrl(function(query) {
         var submission = lscache.get("Comments:" + query.id);
-
+        // TODO: there's a bug where the top-level comment box is not shown if there are no comments
         if (query.num_comments > 0) {
             $("#no_results").hide();
             if (submission != null) {
