@@ -1,27 +1,37 @@
 <!doctype html>
 <html>
 <head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 <link rel="stylesheet" type="text/css" href="style.css">
 <script src="jquery.min.js" language="javascript"></script>
 <script src="lscache.min.js"></script>
 <script src="snoowrap-v1.min.js"></script>
 <script src="URI.js"></script>
+<script src="materialize/js/materialize.js"></script>
+<script src="js/snoowrap_background_message.js"></script>
 <script src="comment.js"></script>
 </head>
-<body>
-    <div id="data">
-        <div id='back'>
+<body class="container">
+    <div id="data" class="row">
+        <div id='back' class="col s1">
             <a href="popup.html">Back</a>
         </div>
-        <div id='close'>
+        <span id='title' class="col s10">
+        </span>
+        <div id='close' class="col s1">
             <a href="#"><img src="images/close.png"/> </a>
         </div>
-        <span id='title'>
-        </span>
     </div>
-    <div id="links"  class="below-title">
-    <div id='no_results' class="below-title">
+    <div id='archived' class="row">
+        This is an archived post. You won't be able to vote or comment.
+    </div>
+    <form id="reply_post" class="row"></form>
+    <div id="show_comments"  class="row">
+        <ul id="comments" class="collapsible" data-collapsible="collapsible"></ul>
+    </div>
+    <div id='no_results' class="row">
         No comments for this post. Would you like to make one?
     </div>
+    <div id="status" class="row"></div>
 </body>
 </html>

@@ -1,9 +1,3 @@
-function getCurrentUserName(callback) {
-    chrome.runtime.sendMessage({
-        'action' : 'getCurrentUserName'
-    }, callback)
-}
-
 function submitPost(callback) {
     var request = {
         'action' : 'submitPost',
@@ -53,13 +47,7 @@ function isLoggedIn(callback) {
     }
 }
 
-function logInReddit(callback) {
-    chrome.runtime.sendMessage({
-        'action' : 'logInReddit',
-        'interactive' : true
-    }, callback)
-}
-
+/* TODO: use the searchSubreddits function in js/snoowrap_background_messages.js */
 function searchSubreddits(request, response) {
     chrome.runtime.sendMessage({
         'action': 'searchSubreddits',
