@@ -66,24 +66,28 @@ function makeDisplay(submission) {
         $("#archived").show();
     }
 
-    $.each(redditComments, function(index, comment) {
-        $("#comments").append(
-            iterateComments(index, comment, archived)
-        );
-    });
-    $('.collapsible').collapsible();
+    if (redditComments.length > 0) {
+        $("#no_results").hide();
 
-    $('.reply_button').click(function() {
-        const $this = $( this );
-        isLoggedIn($this, function() {
-            logInReddit(function(status) {
-                console.log('Login status: ' + status);
-                isLoggedIn($this, function() {
-                    $("#status").append("<span>Problem logging in. Try again.</span>");
-                })
+        $.each(redditComments, function(index, comment) {
+            $("#comments").append(
+                iterateComments(index, comment, archived)
+            );
+        });
+        $('.collapsible').collapsible();
+
+        $('.reply_button').click(function() {
+            const $this = $( this );
+            isLoggedIn($this, function() {
+                logInReddit(function(status) {
+                    console.log('Login status: ' + status);
+                    isLoggedIn($this, function() {
+                        $("#status").append("<span>Problem logging in. Try again.</span>");
+                    })
+                });
             });
         });
-    });
+    }
 
     if (!archived) {
         // TODO: unify log-in logic that is getting a bit out of hand
@@ -154,14 +158,10 @@ $(document).ready(function(){
 
     parseCurrentUrl(function(query) {
         var submission = lscache.get("Comments:" + query.id);
-        // TODO: there's a bug where the top-level comment box is not shown if there are no comments
-        if (query.num_comments > 0) {
-            $("#no_results").hide();
-            if (submission != null) {
-                makeDisplay(submission);
-            } else {
-                getSubmission(query.id, makeDisplay);
-            }
+        if (submission != null) {
+            makeDisplay(submission);
+        } else {
+            getSubmission(query.id, makeDisplay);
         }
     });
 

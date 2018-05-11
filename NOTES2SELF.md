@@ -3,7 +3,6 @@
 1. Code Cleanup
     - bogus user agents, state
 1. Reply to comments within posts
-    - There's a bug where the top-level comment box is not shown if there are no comments
     - Clicking Reply button doesn't trigger expanding comments
         - could be achieved by putting dedicated button outside of collapsible div?
         - or dedicated "expand" / "show replies" button
@@ -29,3 +28,4 @@
 1. Look at the results for reddit.com for an example of what should ideally be avoided
     - Avoid NSFW subreddits (or at least set an option to avoid those subreddits)
 1. Maybe move ALL HTML into Javascript b/c otherwise you have to remember which HTML goes where
+1. User testing
