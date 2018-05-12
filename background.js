@@ -172,7 +172,6 @@ function backgroundSnoowrap() {
     }
 
     return {
-        // TODO: anonymous login
 
         logInReddit: function(interactive, callback) {
             // In case we already have a snoowrap requester cached, simply return it.
