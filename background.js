@@ -290,6 +290,9 @@ function backgroundSnoowrap() {
         searchRedditForURL: function(url) {
             // TODO: for some reason this is not finding the same results as the original query
             // ANSWER: do not include http[s]:// in the query
+            // TODO: modify to search for multiple URLs by using url:(link1 OR link2 OR...)
+            // Do not include http[s]:// or Reddit will return an error
+            // see this query for an example https://www.reddit.com/search?q=url%3A%28imgur.com%2FhyLlADL+OR+en.wikipedia.org%2Fwiki%2FBankruptcy_barrel+OR+en.wikipedia.org%2Fwiki%2FExertional_rhabdomyolysis%29&restrict_sr=&sort=relevance&t=all
             var requester;
             if (snoowrap_requester) {
                 console.log('using logged in requester');
