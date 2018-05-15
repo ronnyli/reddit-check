@@ -287,6 +287,28 @@ function backgroundSnoowrap() {
             }
         },
 
+        searchRedditForURL: function(url) {
+            // TODO: for some reason this is not finding the same results as the original query
+            // ANSWER: do not include http[s]:// in the query
+            var requester;
+            if (snoowrap_requester) {
+                console.log('using logged in requester');
+                requester = snoowrap_requester;
+            } else if (anonymous_requester) {
+                console.log('using anonymous requester');
+                requester = anonymous_requester;
+            }
+
+            requester.search({
+                query: "url:" + url,
+                restrictSr: false,
+                time: 'all',
+                sort: 'relevance',
+                syntax: 'lucene'
+              })
+              .then(console.log);
+        },
+
         fetchAnonymousToken: function() {
             const form = new FormData();
             form.set('grant_type', 'https://oauth.reddit.com/grants/installed_client');

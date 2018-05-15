@@ -29,3 +29,4 @@
     - Avoid NSFW subreddits (or at least set an option to avoid those subreddits)
 1. Maybe move ALL HTML into Javascript b/c otherwise you have to remember which HTML goes where
 1. User testing
+1. Move all Reddit API calls to snoowrap
