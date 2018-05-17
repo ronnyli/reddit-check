@@ -9,6 +9,7 @@ function parsePosts(globalPage, tab) {
     if (redditPosts != null && redditPosts != []) {
         processPosts(redditPosts, encodedUrl, title)
     } else {
+        // TODO: modify this else statement since it uses the old way of getting redditPosts
         var promises = globalPage.gUrlToAsyncMap[tab.url]
         redditPosts = []
         if (promises != null) {
@@ -46,15 +47,15 @@ function makeDisplay(redditPosts, encodedUrl, title) {
     redditPosts.sort(comparePosts)
     var permalinks = [];
     for( var i=0; entry = redditPosts[i]; i++) {
-            date_entry = new Date(entry.data.created_utc*1000).getTime();
+            date_entry = new Date(entry.created_utc*1000).getTime();
             permalinks[i] = {
-                id: entry.data.id,
-                link: entry.data.permalink,
-                title: entry.data.title,
-                score: entry.data.score+"",
+                id: entry.id,
+                link: entry.permalink,
+                title: entry.title,
+                score: entry.score+"",
                 age: (date_now-date_entry)/one_day,
-                comments: entry.data.num_comments+"",
-                subreddit: entry.data.subreddit,
+                comments: entry.num_comments+"",
+                subreddit: entry.subreddit_name_prefixed,
             };
     }
 
@@ -74,7 +75,7 @@ function makeDisplay(redditPosts, encodedUrl, title) {
               permalink.title + "</a>"+
             "<div class='age'>" + getAge(permalink.age)+ 
              " ,&nbsp;&nbsp;" + permalink.comments + " comments,"+
-             "&nbsp;&nbsp;r/" + permalink.subreddit +
+             "&nbsp;&nbsp;" + permalink.subreddit +
             "</div>"+
             "</li>"
         );
@@ -92,7 +93,7 @@ function buildCommentUrl(permalink) {
 }
 
 function comparePosts(postA, postB) {
-    return postB.data.score - postA.data.score
+    return postB.score - postA.score
 }
 
 function getAge (days) {

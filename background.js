@@ -40,10 +40,8 @@ function getYoutubeURLs(url){
     }
     if (gotVidId) {
         var prefixes = [
-            'http://www.youtube.com/watch?v=',
-            'https://www.youtube.com/watch?v=',
-            'http://www.youtu.be/',
-            'https://www.youtu.be/'
+            'www.youtube.com/watch?v=',
+            'www.youtu.be/',
         ];
         prefixes.forEach(function(prefix) {
 			if (prefix + video_id != url)
@@ -57,12 +55,11 @@ function constructURLs(url){
     if (url.indexOf('http') == -1) {
         return []
     }
-    var urls = [url];
+    // TODO: keep everything after the first instance of '://'
+    var url_without_protocol = url.split('://')[1];
+    var urls = [url_without_protocol];
     if (url.indexOf('youtube.com') != -1) {
         urls = urls.concat(getYoutubeURLs(url));
-    }
-    if (url.startsWith('https')) {
-        urls = urls.concat(url.replace('https', 'http'));
     }
     return urls;
 }
@@ -78,30 +75,11 @@ function getURLInfo(tab){
         return;
     } else {
         console.log('getURLInfo: calling reddit API')
-        gUrlToAsyncMap[url] = getPostsForUrl(url)
-        var redditPosts = []
-        Promise.all(gUrlToAsyncMap[url]).then(values => {
-            values.forEach(function(jsonData) { 
-                redditPosts = redditPosts.concat(jsonData.data.children)
-                updateBadge(redditPosts.length, tab);
-                lscache.set(POST_STORAGE_KEY + url, redditPosts, 5)
-            });
+        snoo.searchRedditForURL(url, function(listing) {
+            updateBadge(listing.length, tab);
+            lscache.set(POST_STORAGE_KEY + url, listing, 5);
         });
     }
-}
-
-function getPostsForUrl(url) {
-    var redditPosts = []
-    var promises = []
-    var urls = constructURLs(url);
-    console.log("checking " + urls.length)
-    for (var i = 0; i < urls.length; ++i) {
-        let queryUrl = encodeURIComponent(urls[i]);
-        var redditUrl = 'https://www.reddit.com/api/info.json?url=' + queryUrl;
-        var promise = Promise.resolve($.getJSON(redditUrl));
-        promises.push(promise)
-    }
-    return promises
 }
 
 function disableBadge(tab){
@@ -287,12 +265,7 @@ function backgroundSnoowrap() {
             }
         },
 
-        searchRedditForURL: function(url) {
-            // TODO: for some reason this is not finding the same results as the original query
-            // ANSWER: do not include http[s]:// in the query
-            // TODO: modify to search for multiple URLs by using url:(link1 OR link2 OR...)
-            // Do not include http[s]:// or Reddit will return an error
-            // see this query for an example https://www.reddit.com/search?q=url%3A%28imgur.com%2FhyLlADL+OR+en.wikipedia.org%2Fwiki%2FBankruptcy_barrel+OR+en.wikipedia.org%2Fwiki%2FExertional_rhabdomyolysis%29&restrict_sr=&sort=relevance&t=all
+        searchRedditForURL: function(url, callback) {
             var requester;
             if (snoowrap_requester) {
                 console.log('using logged in requester');
@@ -302,14 +275,20 @@ function backgroundSnoowrap() {
                 requester = anonymous_requester;
             }
 
+            var urls = constructURLs(url);
+            // search for multiple URLs by using url:(link1 OR link2 OR...)
+            // Do not include http[s]:// or Reddit will return an error
+            // see this query for an example https://www.reddit.com/search?q=url%3A%28imgur.com%2FhyLlADL+OR+en.wikipedia.org%2Fwiki%2FBankruptcy_barrel+OR+en.wikipedia.org%2Fwiki%2FExertional_rhabdomyolysis%29&restrict_sr=&sort=relevance&t=all
+            var urls_query = '(' + urls.join(' OR ') + ')';
+
             requester.search({
-                query: "url:" + url,
+                query: "url:" + urls_query,
                 restrictSr: false,
                 time: 'all',
                 sort: 'relevance',
                 syntax: 'lucene'
               })
-              .then(console.log);
+              .then(listing => callback(listing));
         },
 
         fetchAnonymousToken: function() {
