@@ -288,7 +288,14 @@ function backgroundSnoowrap() {
                 sort: 'relevance',
                 syntax: 'lucene'
               })
-              .then(listing => callback(listing));
+              .then(listing => {
+                let listing_filtered = listing;
+                // Filter out NSFW results
+                if (true) {  // TODO: convert this to an option
+                    listing_filtered = listing.filter((el) => {return !el.over_18});
+                }
+                callback(listing_filtered);
+              });
         },
 
         fetchAnonymousToken: function() {
