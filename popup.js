@@ -47,6 +47,7 @@ function makeDisplay(redditPosts, encodedUrl, title) {
     redditPosts.sort(comparePosts)
     var permalinks = [];
     for( var i=0; entry = redditPosts[i]; i++) {
+            console.log(entry);
             date_entry = new Date(entry.created_utc*1000).getTime();
             permalinks[i] = {
                 id: entry.id,
@@ -56,6 +57,7 @@ function makeDisplay(redditPosts, encodedUrl, title) {
                 age: (date_now-date_entry)/one_day,
                 comments: entry.num_comments+"",
                 subreddit: entry.subreddit_name_prefixed,
+                author: entry.author
             };
     }
 
@@ -67,17 +69,17 @@ function makeDisplay(redditPosts, encodedUrl, title) {
         " href='post.html'>Repost</a></span>");
     
     $.each(permalinks, function(index, permalink) {
-        $("#links").append(
-            "<li>"+ 
-            "<div class='score'>"+permalink.score+"</div>"+
-            " <a href='" + buildCommentUrl(permalink) +
-              "' title='" + permalink.link + "'>"+
-              permalink.title + "</a>"+
-            "<div class='age'>" + getAge(permalink.age)+ 
-             " ,&nbsp;&nbsp;" + permalink.comments + " comments,"+
-             "&nbsp;&nbsp;" + permalink.subreddit +
-            "</div>"+
-            "</li>"
+        // TODO: finish converting double quotes to ` (backtick) quotes
+        $("#links").append(`
+            <li>
+                <div class='score'>${permalink.score}</div>
+                <a href='${buildCommentUrl(permalink)}' title='${permalink.link}'>${permalink.title}</a>
+                <div class='age'>${getAge(permalink.age)}
+                    ,&nbsp;&nbsp;${permalink.comments} comments
+                    ,&nbsp;&nbsp;${permalink.subreddit}
+                    ,&nbsp;&nbsp;" + 'u/' + permalink.author +
+                </div>
+            "</li>"`
         );
     });
 }
