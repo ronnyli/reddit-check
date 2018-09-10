@@ -47,7 +47,6 @@ function makeDisplay(redditPosts, encodedUrl, title) {
     redditPosts.sort(comparePosts)
     var permalinks = [];
     for( var i=0; entry = redditPosts[i]; i++) {
-            console.log(entry);
             date_entry = new Date(entry.created_utc*1000).getTime();
             permalinks[i] = {
                 id: entry.id,
@@ -69,17 +68,16 @@ function makeDisplay(redditPosts, encodedUrl, title) {
         " href='post.html'>Repost</a></span>");
     
     $.each(permalinks, function(index, permalink) {
-        // TODO: finish converting double quotes to ` (backtick) quotes
         $("#links").append(`
             <li>
                 <div class='score'>${permalink.score}</div>
                 <a href='${buildCommentUrl(permalink)}' title='${permalink.link}'>${permalink.title}</a>
                 <div class='age'>${getAge(permalink.age)}
-                    ,&nbsp;&nbsp;${permalink.comments} comments
-                    ,&nbsp;&nbsp;${permalink.subreddit}
-                    ,&nbsp;&nbsp;" + 'u/' + permalink.author +
+                    &nbsp;&nbsp;${permalink.comments} comments
+                    &nbsp;&nbsp;<a href='http://www.reddit.com/${permalink.subreddit}' target='_blank'>${permalink.subreddit}</a>
+                    &nbsp;&nbsp;u/${permalink.author}
                 </div>
-            "</li>"`
+            </li>`
         );
     });
 }
