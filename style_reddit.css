@@ -1,0 +1,354 @@
+body {
+    min-height: calc(100vh - 48px);
+    line-height: 1;
+    font-family: IBMPlexSans, Helvetica Neue, Segoe UI, Helvetica, Verdana, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+div {
+    display: block;
+}
+
+.ekZcUT {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: rgb(135, 138, 140);
+    cursor: pointer;
+    fill: rgb(135, 138, 140);
+    margin-bottom: -1px;
+    position: relative;
+    z-index: 0;
+    max-width: 100%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(204, 204, 204);
+    border-image: initial;
+    overflow: hidden;
+}
+
+._3YgWdffoKyCp7UaGAEQpoo {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.WnMeTcero48dKo501T-19, .YA9IzN0YR-G5_oD5EUydl {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.WnMeTcero48dKo501T-19 {
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+}
+
+.YA9IzN0YR-G5_oD5EUydl {
+    -webkit-box-align: normal;
+    -ms-flex-align: normal;
+    align-items: normal;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+.hPvHME {
+    box-sizing: border-box;
+    border-left: 4px solid transparent;
+    flex: 0 0 36px;
+}
+
+.imqJCn {
+    -webkit-box-align: center;
+    display: flex;
+    fill: inherit;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.imqJCn {
+    display: none;
+}
+
+.cYUyoUM3wmgRXEHv1LlZv {
+    height: 24px;
+    width: 24px;
+}
+
+button {
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: initial;
+}
+
+.hsuuJr {
+    cursor: pointer;
+    color: rgb(135, 138, 140);
+    border-radius: 2px;
+    transition: background-color 0.1s;
+}
+
+._2q7IQ0BUOWeEZoeAxN555e {
+    display: inline-block;
+    overflow: hidden;
+    height: 24px;
+    width: 24px;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+._2Jxk822qXs4DaXwsN7yyHA {
+    position: relative;
+}
+
+._1rZYMD_4xY3gRcSS3p8ODO {
+    pointer-events: none;
+    word-break: normal;
+}
+
+.jpXmlO {
+    fill: inherit;
+    -webkit-box-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    margin: 0px;
+    padding: 0px 2px;
+}
+
+.jpXmlO ._1rZYMD_4xY3gRcSS3p8ODO {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+}
+
+.jpXmlO ._1rZYMD_4xY3gRcSS3p8ODO {
+    line-height: 15px;
+    text-align: center;
+    width: 32px;
+    margin: 0px 1px;
+}
+
+.kHKydv {
+    cursor: pointer;
+    color: rgb(135, 138, 140);
+    border-radius: 2px;
+    transition: background-color 0.1s;
+}
+
+._1iKd82bq_nqObFvSH1iC_Q {
+    display: inline-block;
+    overflow: hidden;
+    height: 24px;
+    width: 24px;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.ZyxIIl4FP5gHGrJDzNpUC {
+    position: relative;
+}
+
+._1poyrkZ7g36PawDueRza-J {
+    background: #fff;
+}
+
+.ixZJyb ._1poyrkZ7g36PawDueRza-J {
+    background: rgb(255, 255, 255);
+}
+
+.hOHJXs {
+    border-left: 1px solid rgb(237, 239, 241);
+    flex: 1 1 auto;
+    padding: 3px 0px;
+}
+
+.kCjrjf {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.kPovga {
+    margin-top: 2px;
+    word-wrap: break-word;
+    flex: 1 1 100%;
+    overflow: hidden;
+}
+
+._1wrPey753PxLyLbB0NCEZP {
+    display: inline-block;
+}
+
+.y8HYJ-y_lTUHkQIc1mdCq {
+    display: inline;
+    position: relative;
+    text-decoration: none;
+    word-break: break-word;
+}
+
+.SQnoC3ObvgnGjWt90zD9Z {
+    color: inherit;
+}
+
+._1xomvNxK4aHGoGa-YDw1Mc {
+    display: inline;
+}
+
+@media (min-width: 640px)
+._1xomvNxK4aHGoGa-YDw1Mc {
+    display: none;
+}
+
+.cFQOcm {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: rgb(124, 124, 124);
+}
+
+.ixZJyb ._2tbHP6ZydRpjI44J3syuqC {
+    color: rgb(120, 124, 126);
+}
+
+.fpcrlm {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: inherit;
+}
+
+._2tbHP6ZydRpjI44J3syuqC, ._3V0C4FGg6153xIBQjwsycq {
+    margin-right: 3px;
+    text-decoration: none;
+}
+
+.bLCqLa {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+._3AStxql1mQsrZuUIFP9xSg {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    color: inherit;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+._2fCzxBE1dlMh4OFc7B3Dun {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    margin-right: 3px;
+}
+
+.hPglCh {
+    display: inline-block;
+    flex: 0 0 auto;
+}
+
+.ixZJyb ._2tbHP6ZydRpjI44J3syuqC {
+    color: rgb(120, 124, 126);
+}
+
+.gWXVVu {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: inherit;
+}
+
+.ixZJyb ._3jOxDPIQ0KaOWpzvSQo-1s {
+    color: rgb(120, 124, 126);
+}
+
+._3jOxDPIQ0KaOWpzvSQo-1s {
+    margin-right: 3px;
+    text-decoration: none;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+}
+
+.kKLlzI {
+    -webkit-box-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    height: 24px;
+    margin-left: 4px;
+    padding-right: 4px;
+    flex: 0 0 72px;
+}
+
+.ixZJyb ._1UoeAeSRhOKSNdY_h3iS1O {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+}
+
+.ixZJyb ._1Hw7tY9pMr-T1F4P1C-xNU {
+    border-radius: 2px;
+    transition: background-color 0.1s;
+}
+
+._1UoeAeSRhOKSNdY_h3iS1O {
+    padding: 4px;
+}
+
+.bLBpaK {
+    width: 53px;
+}
+
+.ecIAkj {
+    cursor: pointer;
+    height: 24px;
+    line-height: 0px;
+    width: 100%;
+    border-radius: 4px;
+    padding: 0px 4px;
+}
+
+.ejDVeC {
+    height: 24px;
+    border-radius: 2px;
+    transition: background-color 0.1s;
+}
+
+.dBJXeP {
+    display: inline-block;
+    vertical-align: text-bottom;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 16px;
+    color: rgb(135, 138, 140);
+}
+
+.bsfRLa {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgb(28, 28, 28);
+    display: inline;
+    line-height: 20px;
+    vertical-align: baseline;
+    text-decoration: none;
+}
