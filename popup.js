@@ -93,25 +93,25 @@ function postHtml(index, permalink) {
                         <div class="_3YgWdffoKyCp7UaGAEQpoo">
                             <div class="ky6nl9-4 hPvHME">
                                 <div class="ky6nl9-2 imqJCn">
-                                    <button class="vote-arrow" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
+                                    <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
                                         <div class="_3wVayy5JvIMI67DheMYra2 dplx91-0 hsuuJr">
                                             <i class="small material-icons _2Jxk822qXs4DaXwsN7yyHA _39UOLMgvssWenwbRxz_iEn">arrow_drop_up</i>
                                         </div>
                                     </button>
-                                    <button class="vote-arrow" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
+                                    <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
                                         <div class="jR747Vd1NbfaLusf5bHre s1y8gf4b-0 kHKydv">
                                             <i class="small material-icons ZyxIIl4FP5gHGrJDzNpUC _2GCoZTwJW7199HSwNZwlHk">arrow_drop_down</i>
                                         </div>
                                     </button>
                                 </div>
                                 <div class="ky6nl9-3 jpXmlO">
-                                    <button class="vote-arrow" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
+                                    <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
                                         <div class="_2q7IQ0BUOWeEZoeAxN555e dplx91-0 hsuuJr">
                                             <i class="small material-icons _2Jxk822qXs4DaXwsN7yyHA">arrow_drop_up</i>
                                         </div>
                                     </button>
                                     <div class="_1rZYMD_4xY3gRcSS3p8ODO" style="color: rgb(26, 26, 27);">${permalink.score}</div>
-                                    <button class="vote-arrow" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
+                                    <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
                                         <div class="_1iKd82bq_nqObFvSH1iC_Q s1y8gf4b-0 kHKydv">
                                             <i class="small material-icons ZyxIIl4FP5gHGrJDzNpUC">arrow_drop_down</i>
                                         </div>
@@ -143,7 +143,7 @@ function postHtml(index, permalink) {
                                     </div>
                                     <div class="_3AStxql1mQsrZuUIFP9xSg ky6nl9-10 bLCqLa">
                                         <a class="s1i3ufq7-0 bsfRLa" data-click-id="subreddit" href="http://www.reddit.com/${permalink.subreddit}" target="_blank">${permalink.subreddit}</a>
-                                        <span class="s1dvci6o-0 hYPqQt" role="presentation">•</span>
+                                        <span class="s1dvci6o-0 hYPqQt" role="presentation"> &middot; </span>
                                         <span class="_2fCzxBE1dlMh4OFc7B3Dun">Posted by</span>
                                         <div class="wx076j-0 hPglCh">
                                             <a class="_2tbHP6ZydRpjI44J3syuqC s1461iz-1 gWXVVu" href="https://www.reddit.com/user/${permalink.author}" target="_blank">u/${permalink.author}</a>

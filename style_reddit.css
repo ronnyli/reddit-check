@@ -46,6 +46,7 @@ div {
     -webkit-box-align: start;
     -ms-flex-align: start;
     align-items: flex-start;
+    padding-left: 16px;
 }
 
 .YA9IzN0YR-G5_oD5EUydl {
@@ -119,7 +120,7 @@ button {
     -webkit-box-align: center;
     align-items: center;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin: 0px;
     padding: 0px 2px;
 }
@@ -198,11 +199,6 @@ button {
     color: inherit;
 }
 
-._1xomvNxK4aHGoGa-YDw1Mc {
-    display: inline;
-}
-
-@media (min-width: 640px)
 ._1xomvNxK4aHGoGa-YDw1Mc {
     display: none;
 }
@@ -351,4 +347,17 @@ button {
     line-height: 20px;
     vertical-align: baseline;
     text-decoration: none;
+}
+
+.ekZcUT ._1Hw7tY9pMr-T1F4P1C-xNU:hover, .ekZcUT ._1Hw7tY9pMr-T1F4P1C-xNU:focus {
+    background-color: rgba(26, 26, 27, 0.1);
+    outline: none;
+}
+
+.ekZcUT:hover {
+    z-index: 1;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(137, 137, 137);
+    border-image: initial;
 }
