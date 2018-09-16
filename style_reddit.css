@@ -360,6 +360,7 @@ button {
 .ekZcUT ._1Hw7tY9pMr-T1F4P1C-xNU:hover, .ekZcUT ._1Hw7tY9pMr-T1F4P1C-xNU:focus {
     background-color: rgba(26, 26, 27, 0.1);
     outline: none;
+    text-decoration: none;
 }
 
 .ekZcUT:hover {
@@ -373,4 +374,12 @@ button {
 .ejDVeC:hover, .ejDVeC:focus {
     background-color: rgba(26, 26, 27, 0.1);
     outline: none;
+}
+
+.hsuuJr:hover {
+    color: rgb(204, 55, 0);
+}
+
+.kHKydv:hover {
+    color: rgb(90, 117, 204);
 }
