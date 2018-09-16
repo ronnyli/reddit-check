@@ -73,10 +73,10 @@ function makeDisplay(redditPosts, encodedUrl, title) {
 function oldPostHtml(index, permalink) {
     $("#links").append(`
         <li>
-            <div class='score'>${permalink.score}</div>
+            <div class='score'>${numToString(permalink.score)}</div>
             <a href='${buildCommentUrl(permalink)}' title='${permalink.link}'>${permalink.title}</a>
             <div class='age'>${getAge(permalink.age)}
-                &nbsp;&nbsp;${permalink.comments} comments
+                &nbsp;&nbsp;${numToString(permalink.comments)} comments
                 &nbsp;&nbsp;<a href='http://www.reddit.com/${permalink.subreddit}' target='_blank'>${permalink.subreddit}</a>
                 &nbsp;&nbsp;u/${permalink.author}
             </div>
@@ -110,7 +110,7 @@ function postHtml(index, permalink) {
                                             <i class="small material-icons _2Jxk822qXs4DaXwsN7yyHA">arrow_drop_up</i>
                                         </div>
                                     </button>
-                                    <div class="_1rZYMD_4xY3gRcSS3p8ODO" style="color: rgb(26, 26, 27);">${permalink.score}</div>
+                                    <div class="_1rZYMD_4xY3gRcSS3p8ODO" style="color: rgb(26, 26, 27);">${numToString(permalink.score)}</div>
                                     <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
                                         <div class="_1iKd82bq_nqObFvSH1iC_Q s1y8gf4b-0 kHKydv">
                                             <i class="small material-icons ZyxIIl4FP5gHGrJDzNpUC">arrow_drop_down</i>
@@ -131,9 +131,9 @@ function postHtml(index, permalink) {
                                         <div class="_1wrPey753PxLyLbB0NCEZP"></div>
                                     </div>
                                     <div class="_1xomvNxK4aHGoGa-YDw1Mc">
-                                        <span class="h5svje-0 cFQOcm">${permalink.score} points</span>
+                                        <span class="h5svje-0 cFQOcm">${numToString(permalink.score)} points</span>
                                         <span class="h5svje-0 cFQOcm"> · </span>
-                                        <span class="h5svje-0 cFQOcm">${permalink.comments} comment(s)</span>
+                                        <span class="h5svje-0 cFQOcm">${numToString(permalink.comments)} comment(s)</span>
                                         <span class="h5svje-0 cFQOcm"> · </span>
                                         <a href="http://www.reddit.com/${permalink.subreddit}" target="_blank">
                                             <span class="h5svje-0 cFQOcm">${permalink.subreddit}</span>
@@ -155,8 +155,8 @@ function postHtml(index, permalink) {
                                 </div>
                                 <div class="ky6nl9-12 kKLlzI">
                                     <a rel="nofollow" data-click-id="comments" data-test-id="comments-page-link-num-comments" class="_1UoeAeSRhOKSNdY_h3iS1O _1Hw7tY9pMr-T1F4P1C-xNU ky6nl9-14 bLBpaK" href="${buildCommentUrl(permalink)}">
-                                        <i class="small material-icons _3ch9jJ0painNf41PmU4F9i _3DVrpDrMM9NLT6TlsTUMxC" role="presentation">mode_comment</i>
-                                        <span class="FHCV02u6Cp2zYL0fhQPsO">${permalink.comments}</span>
+                                        <i class="tiny material-icons _3ch9jJ0painNf41PmU4F9i _3DVrpDrMM9NLT6TlsTUMxC" role="presentation">mode_comment</i>
+                                        <span class="FHCV02u6Cp2zYL0fhQPsO">${numToString(permalink.comments)}</span>
                                     </a>
                                     <div class="ky6nl9-13 cNPySB s1myzq5k-1 cJDeHo"></div>
                                     <div>
@@ -187,9 +187,18 @@ function comparePosts(postA, postB) {
     return postB.score - postA.score
 }
 
-function getAge (days) {
+function getAge(days) {
     var age = days.toFixed(1) + " days ago";
     return age;
+}
+
+function numToString(score) {
+    const thousands = score / 1000;
+    if (thousands >= 1) {
+        return `${thousands.toFixed(1)}k`
+    } else {
+        return score.toString();
+    }
 }
 
 function cropTitle(title) {

@@ -10,6 +10,10 @@ a {
     text-decoration: inherit;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 div {
     display: block;
 }
@@ -199,6 +203,10 @@ button {
     color: inherit;
 }
 
+.SQnoC3ObvgnGjWt90zD9Z:hover {
+    text-decoration: none;
+}
+
 ._1xomvNxK4aHGoGa-YDw1Mc {
     display: none;
 }
@@ -360,4 +368,9 @@ button {
     border-style: solid;
     border-color: rgb(137, 137, 137);
     border-image: initial;
+}
+
+.ejDVeC:hover, .ejDVeC:focus {
+    background-color: rgba(26, 26, 27, 0.1);
+    outline: none;
 }
