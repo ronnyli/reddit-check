@@ -86,13 +86,13 @@ function oldPostHtml(index, permalink) {
 
 function postHtml(index, permalink) {
     $("#links").append(`
-        <div style="">
+        <div style="max-width: 100%;">
             <div>
                 <div class="scrollerItem Post ${permalink.id}" id="${permalink.id}" tabindex="-1">
                     <div class="scrollerItem-content">
                         <div class="upvote-downvote-outer">
-                            <div class="upvote-downvote-inner">
-                                <div class="ky6nl9-3 jpXmlO">
+                            <div class="upvote-downvote-border">
+                                <div class="upvote-downvote-inner">
                                     <button class="vote-arrow" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
                                         <div class="upvote-arrow">
                                             <i class="small material-icons upvote-arrow-icon">arrow_drop_up</i>
@@ -116,7 +116,6 @@ function postHtml(index, permalink) {
                                                 <h2>${permalink.title}</h2>
                                             </a>
                                         </span>
-                                        <div class="_1wrPey753PxLyLbB0NCEZP"></div>
                                     </div>
                                     <div class="item-source">
                                         <a class="subreddit" data-click-id="subreddit" href="http://www.reddit.com/${permalink.subreddit}" target="_blank">${permalink.subreddit}</a>
@@ -131,14 +130,14 @@ function postHtml(index, permalink) {
                                     <div></div>
                                 </div>
                                 <div class="col-right">
-                                    <a rel="nofollow" data-click-id="comments" data-test-id="comments-page-link-num-comments" class="_1UoeAeSRhOKSNdY_h3iS1O _1Hw7tY9pMr-T1F4P1C-xNU" href="${buildCommentUrl(permalink)}">
-                                        <i class="tiny material-icons _3ch9jJ0painNf41PmU4F9i _3DVrpDrMM9NLT6TlsTUMxC" role="presentation">mode_comment</i>
-                                        <span class="FHCV02u6Cp2zYL0fhQPsO">${numToString(permalink.comments)}</span>
+                                    <a rel="nofollow" data-click-id="comments" data-test-id="comments-page-link-num-comments" class="comments-page-link" href="${buildCommentUrl(permalink)}">
+                                        <i class="tiny material-icons" role="presentation">mode_comment</i>
+                                        <span>${numToString(permalink.comments)}</span>
                                     </a>
-                                    <div class="ky6nl9-13 cNPySB s1myzq5k-1 cJDeHo"></div>
+                                    <div></div>
                                     <div>
-                                        <button class="s9zeh3a-14 ecIAkj yla1lg-1 ejDVeC" aria-expanded="false" aria-haspopup="true" aria-label="more options" id="${permalink.id}-overflow-menu">
-                                            <i class="small material-icons yla1lg-2 dBJXeP">more_horiz</i>
+                                        <button class="more-options" aria-expanded="false" aria-haspopup="true" aria-label="more options" id="${permalink.id}-overflow-menu">
+                                            <i class="small material-icons more-options-icon">more_horiz</i>
                                         </button>
                                     </div>
                                 </div>

@@ -63,7 +63,7 @@ div {
     flex-direction: row;
 }
 
-.upvote-downvote-inner {
+.upvote-downvote-border {
     box-sizing: border-box;
     border-left: 4px solid transparent;
     flex: 0 0 36px;
@@ -104,7 +104,7 @@ button {
     word-break: normal;
 }
 
-.jpXmlO {
+.upvote-downvote-inner {
     fill: inherit;
     -webkit-box-align: center;
     align-items: center;
@@ -114,7 +114,7 @@ button {
     padding: 0px 2px;
 }
 
-.jpXmlO .score {
+.upvote-downvote-inner .score {
     font-size: 12px;
     font-weight: 700;
     line-height: 16px;
@@ -148,20 +148,11 @@ button {
     padding: 3px 0px;
 }
 
-.kCjrjf {
-    display: inline-block;
-    vertical-align: top;
-}
-
 .item-description {
     margin-top: 2px;
     word-wrap: break-word;
     flex: 1 1 100%;
     overflow: hidden;
-}
-
-._1wrPey753PxLyLbB0NCEZP {
-    display: inline-block;
 }
 
 .item-title {
@@ -237,35 +228,28 @@ button {
     flex: 0 0 72px;
 }
 
-._1UoeAeSRhOKSNdY_h3iS1O {
+.comments-page-link {
     font-size: 12px;
     font-weight: 700;
     line-height: 16px;
     padding: 4px;
     width: 53px;
-}
-
-._1Hw7tY9pMr-T1F4P1C-xNU {
     border-radius: 2px;
     transition: background-color 0.1s;
 }
 
-.ecIAkj {
+.more-options {
     cursor: pointer;
     height: 24px;
     line-height: 0px;
     width: 100%;
-    border-radius: 4px;
+    /* border-radius: 4px; */
     padding: 0px 4px;
-}
-
-.ejDVeC {
-    height: 24px;
     border-radius: 2px;
     transition: background-color 0.1s;
 }
 
-.dBJXeP {
+.more-options-icon {
     display: inline-block;
     vertical-align: text-bottom;
     width: 16px;
@@ -286,7 +270,7 @@ button {
     text-decoration: none;
 }
 
-.scrollerItem ._1Hw7tY9pMr-T1F4P1C-xNU:hover, .scrollerItem ._1Hw7tY9pMr-T1F4P1C-xNU:focus {
+.scrollerItem .comments-page-link:hover, .scrollerItem .comments-page-link:focus {
     background-color: rgba(26, 26, 27, 0.1);
     outline: none;
     text-decoration: none;
@@ -300,7 +284,7 @@ button {
     border-image: initial;
 }
 
-.ejDVeC:hover, .ejDVeC:focus {
+.more-options:hover, .more-options:focus {
     background-color: rgba(26, 26, 27, 0.1);
     outline: none;
 }
