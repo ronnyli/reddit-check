@@ -56,6 +56,7 @@ function makeDisplay(redditPosts, encodedUrl, title) {
                 age: (date_now-date_entry)/one_day,
                 comments: entry.num_comments+"",
                 subreddit: entry.subreddit_name_prefixed,
+                author: entry.author
             };
     }
 
@@ -66,20 +67,86 @@ function makeDisplay(redditPosts, encodedUrl, title) {
     $("#data").append("<span><a title='Post to reddit'"+
         " href='post.html'>Repost</a></span>");
     
-    $.each(permalinks, function(index, permalink) {
-        $("#links").append(
-            "<li>"+ 
-            "<div class='score'>"+permalink.score+"</div>"+
-            " <a href='" + buildCommentUrl(permalink) +
-              "' title='" + permalink.link + "'>"+
-              permalink.title + "</a>"+
-            "<div class='age'>" + getAge(permalink.age)+ 
-             " ,&nbsp;&nbsp;" + permalink.comments + " comments,"+
-             "&nbsp;&nbsp;" + permalink.subreddit +
-            "</div>"+
-            "</li>"
-        );
-    });
+    $.each(permalinks, postHtml);
+}
+
+function oldPostHtml(index, permalink) {
+    $("#links").append(`
+        <li>
+            <div class='score'>${numToString(permalink.score)}</div>
+            <a href='${buildCommentUrl(permalink)}' title='${permalink.link}'>${permalink.title}</a>
+            <div class='age'>${getAge(permalink.age)}
+                &nbsp;&nbsp;${numToString(permalink.comments)} comments
+                &nbsp;&nbsp;<a href='http://www.reddit.com/${permalink.subreddit}' target='_blank'>${permalink.subreddit}</a>
+                &nbsp;&nbsp;u/${permalink.author}
+            </div>
+        </li>`
+    );
+}
+
+function postHtml(index, permalink) {
+    $("#links").append(`
+        <div style="max-width: 100%;">
+            <div>
+                <div class="scrollerItem Post ${permalink.id}" id="${permalink.id}" tabindex="-1">
+                    <div class="scrollerItem-content">
+                        <div class="upvote-downvote-outer">
+                            <div class="upvote-downvote-border">
+                                <div class="upvote-downvote-inner">
+                                    <button class="vote-arrow" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
+                                        <div class="upvote-arrow">
+                                            <i class="small material-icons upvote-arrow-icon">arrow_drop_up</i>
+                                        </div>
+                                    </button>
+                                    <div class="score" style="color: rgb(26, 26, 27);">${numToString(permalink.score)}</div>
+                                    <button class="vote-arrow" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
+                                        <div class="downvote-arrow">
+                                            <i class="small material-icons downvote-arrow-icon">arrow_drop_down</i>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item-info">
+                            <div class="item-info-content">
+                                <div class="item-description" data-click-id="body">
+                                    <div>
+                                        <span class="item-title">
+                                            <a data-click-id="body" href="${buildCommentUrl(permalink)}">
+                                                <h2>${permalink.title}</h2>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="item-source">
+                                        <a class="subreddit" data-click-id="subreddit" href="http://www.reddit.com/${permalink.subreddit}" target="_blank">${permalink.subreddit}</a>
+                                        <span role="presentation"> &middot; </span>
+                                        <span class="posted-by">Posted by</span>
+                                        <div class="user">
+                                            <a class="user-link" href="https://www.reddit.com/user/${permalink.author}" target="_blank">u/${permalink.author}</a>
+                                            <div id="UserInfoTooltip--${permalink.id}"></div>
+                                        </div>
+                                        <a class="age" data-click-id="timestamp" href="${buildCommentUrl(permalink)}" id="PostTopMeta--Created--false--${permalink.id}" rel="nofollow noopener">${getAge(permalink.age)}</a>
+                                    </div>
+                                    <div></div>
+                                </div>
+                                <div class="col-right">
+                                    <a rel="nofollow" data-click-id="comments" data-test-id="comments-page-link-num-comments" class="comments-page-link" href="${buildCommentUrl(permalink)}">
+                                        <i class="tiny material-icons" role="presentation">mode_comment</i>
+                                        <span>${numToString(permalink.comments)}</span>
+                                    </a>
+                                    <div></div>
+                                    <div>
+                                        <button class="more-options" aria-expanded="false" aria-haspopup="true" aria-label="more options" id="${permalink.id}-overflow-menu">
+                                            <i class="small material-icons more-options-icon">more_horiz</i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`);
 }
 
 function buildCommentUrl(permalink) {
@@ -96,9 +163,18 @@ function comparePosts(postA, postB) {
     return postB.score - postA.score
 }
 
-function getAge (days) {
+function getAge(days) {
     var age = days.toFixed(1) + " days ago";
     return age;
+}
+
+function numToString(score) {
+    const thousands = score / 1000;
+    if (thousands >= 1) {
+        return `${thousands.toFixed(1)}k`
+    } else {
+        return score.toString();
+    }
 }
 
 function cropTitle(title) {
