@@ -18,7 +18,7 @@ div {
     display: block;
 }
 
-.ekZcUT {
+.scrollerItem {
     background-color: rgba(255, 255, 255, 0.8);
     color: rgb(135, 138, 140);
     cursor: pointer;
@@ -34,26 +34,26 @@ div {
     overflow: hidden;
 }
 
-._3YgWdffoKyCp7UaGAEQpoo {
+.upvote-downvote-outer {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
 }
 
-.WnMeTcero48dKo501T-19, .YA9IzN0YR-G5_oD5EUydl {
+.item-info-content, .scrollerItem-content {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
 }
 
-.WnMeTcero48dKo501T-19 {
+.item-info-content {
     -webkit-box-align: start;
     -ms-flex-align: start;
     align-items: flex-start;
     padding-left: 16px;
 }
 
-.YA9IzN0YR-G5_oD5EUydl {
+.scrollerItem-content {
     -webkit-box-align: normal;
     -ms-flex-align: normal;
     align-items: normal;
@@ -63,25 +63,13 @@ div {
     flex-direction: row;
 }
 
-.hPvHME {
+.upvote-downvote-inner {
     box-sizing: border-box;
     border-left: 4px solid transparent;
     flex: 0 0 36px;
 }
 
-.imqJCn {
-    -webkit-box-align: center;
-    display: flex;
-    fill: inherit;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.imqJCn {
-    display: none;
-}
-
-.cYUyoUM3wmgRXEHv1LlZv {
+.vote-arrow {
     height: 24px;
     width: 24px;
 }
@@ -94,14 +82,11 @@ button {
     padding: initial;
 }
 
-.hsuuJr {
+.upvote-arrow {
     cursor: pointer;
     color: rgb(135, 138, 140);
     border-radius: 2px;
     transition: background-color 0.1s;
-}
-
-._2q7IQ0BUOWeEZoeAxN555e {
     display: inline-block;
     overflow: hidden;
     height: 24px;
@@ -110,11 +95,11 @@ button {
     line-height: 24px;
 }
 
-._2Jxk822qXs4DaXwsN7yyHA {
+.upvote-arrow-icon {
     position: relative;
 }
 
-._1rZYMD_4xY3gRcSS3p8ODO {
+.score {
     pointer-events: none;
     word-break: normal;
 }
@@ -129,27 +114,21 @@ button {
     padding: 0px 2px;
 }
 
-.jpXmlO ._1rZYMD_4xY3gRcSS3p8ODO {
+.jpXmlO .score {
     font-size: 12px;
     font-weight: 700;
     line-height: 16px;
-}
-
-.jpXmlO ._1rZYMD_4xY3gRcSS3p8ODO {
-    line-height: 15px;
+    /* line-height: 15px; */
     text-align: center;
     width: 32px;
     margin: 0px 1px;
 }
 
-.kHKydv {
+.downvote-arrow {
     cursor: pointer;
     color: rgb(135, 138, 140);
     border-radius: 2px;
     transition: background-color 0.1s;
-}
-
-._1iKd82bq_nqObFvSH1iC_Q {
     display: inline-block;
     overflow: hidden;
     height: 24px;
@@ -158,19 +137,12 @@ button {
     line-height: 24px;
 }
 
-.ZyxIIl4FP5gHGrJDzNpUC {
+.downvote-arrow-icon {
     position: relative;
 }
 
-._1poyrkZ7g36PawDueRza-J {
-    background: #fff;
-}
-
-.ixZJyb ._1poyrkZ7g36PawDueRza-J {
+.item-info {
     background: rgb(255, 255, 255);
-}
-
-.hOHJXs {
     border-left: 1px solid rgb(237, 239, 241);
     flex: 1 1 auto;
     padding: 3px 0px;
@@ -181,7 +153,7 @@ button {
     vertical-align: top;
 }
 
-.kPovga {
+.item-description {
     margin-top: 2px;
     word-wrap: break-word;
     flex: 1 1 100%;
@@ -192,54 +164,29 @@ button {
     display: inline-block;
 }
 
-.y8HYJ-y_lTUHkQIc1mdCq {
+.item-title {
     display: inline;
     position: relative;
     text-decoration: none;
     word-break: break-word;
-}
-
-.SQnoC3ObvgnGjWt90zD9Z {
     color: inherit;
 }
 
-.SQnoC3ObvgnGjWt90zD9Z:hover {
+.item-title:hover {
     text-decoration: none;
 }
 
-._1xomvNxK4aHGoGa-YDw1Mc {
-    display: none;
-}
-
-.cFQOcm {
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    color: rgb(124, 124, 124);
-}
-
-.ixZJyb ._2tbHP6ZydRpjI44J3syuqC {
+.user-link {
     color: rgb(120, 124, 126);
-}
-
-.fpcrlm {
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    color: inherit;
-}
-
-._2tbHP6ZydRpjI44J3syuqC, ._3V0C4FGg6153xIBQjwsycq {
     margin-right: 3px;
     text-decoration: none;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    /* color: inherit; */
 }
 
-.bLCqLa {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-._3AStxql1mQsrZuUIFP9xSg {
+.item-source {
     font-size: 12px;
     font-weight: 400;
     line-height: 16px;
@@ -252,36 +199,24 @@ button {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    /* display: inline-block; */
+    vertical-align: middle;
 }
 
-._2fCzxBE1dlMh4OFc7B3Dun {
+.posted-by {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 auto;
     flex: 0 0 auto;
     margin-right: 3px;
 }
 
-.hPglCh {
+.user {
     display: inline-block;
     flex: 0 0 auto;
 }
 
-.ixZJyb ._2tbHP6ZydRpjI44J3syuqC {
+.age {
     color: rgb(120, 124, 126);
-}
-
-.gWXVVu {
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    color: inherit;
-}
-
-.ixZJyb ._3jOxDPIQ0KaOWpzvSQo-1s {
-    color: rgb(120, 124, 126);
-}
-
-._3jOxDPIQ0KaOWpzvSQo-1s {
     margin-right: 3px;
     text-decoration: none;
     -webkit-box-flex: 0;
@@ -289,7 +224,7 @@ button {
     flex: 0 0 auto;
 }
 
-.kKLlzI {
+.col-right {
     -webkit-box-align: center;
     align-items: center;
     display: flex;
@@ -302,23 +237,17 @@ button {
     flex: 0 0 72px;
 }
 
-.ixZJyb ._1UoeAeSRhOKSNdY_h3iS1O {
+._1UoeAeSRhOKSNdY_h3iS1O {
     font-size: 12px;
     font-weight: 700;
     line-height: 16px;
+    padding: 4px;
+    width: 53px;
 }
 
-.ixZJyb ._1Hw7tY9pMr-T1F4P1C-xNU {
+._1Hw7tY9pMr-T1F4P1C-xNU {
     border-radius: 2px;
     transition: background-color 0.1s;
-}
-
-._1UoeAeSRhOKSNdY_h3iS1O {
-    padding: 4px;
-}
-
-.bLBpaK {
-    width: 53px;
 }
 
 .ecIAkj {
@@ -347,7 +276,7 @@ button {
     color: rgb(135, 138, 140);
 }
 
-.bsfRLa {
+.subreddit {
     font-size: 12px;
     font-weight: 700;
     color: rgb(28, 28, 28);
@@ -357,13 +286,13 @@ button {
     text-decoration: none;
 }
 
-.ekZcUT ._1Hw7tY9pMr-T1F4P1C-xNU:hover, .ekZcUT ._1Hw7tY9pMr-T1F4P1C-xNU:focus {
+.scrollerItem ._1Hw7tY9pMr-T1F4P1C-xNU:hover, .scrollerItem ._1Hw7tY9pMr-T1F4P1C-xNU:focus {
     background-color: rgba(26, 26, 27, 0.1);
     outline: none;
     text-decoration: none;
 }
 
-.ekZcUT:hover {
+.scrollerItem:hover {
     z-index: 1;
     border-width: 1px;
     border-style: solid;
@@ -376,10 +305,10 @@ button {
     outline: none;
 }
 
-.hsuuJr:hover {
+.upvote-arrow:hover {
     color: rgb(204, 55, 0);
 }
 
-.kHKydv:hover {
+.downvote-arrow:hover {
     color: rgb(90, 117, 204);
 }
