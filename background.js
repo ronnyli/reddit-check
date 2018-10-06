@@ -294,8 +294,39 @@ function backgroundSnoowrap() {
                 if (true) {  // TODO: convert this to an option
                     listing_filtered = listing.filter((el) => {return !el.over_18});
                 }
-                callback(listing_filtered);
+                return listing_filtered;
               });
+        },
+
+        searchPushshiftForURL: function(url, callback) {
+            const comment_api = 'https://api.pushshift.io/reddit/search/comment/?';
+            const submission_api = 'https://api.pushshift.io/reddit/search/submission/?';
+
+            var urls = constructURLs(url);
+
+            let promises = [];
+
+            urls.forEach(u => {
+                promises.push(
+                    fetch(comment_api + 'q=' + u)
+                    .then(response => response.json())
+                    .then(resp => resp.data)
+                    .then(data => data.map(elem => elem.link_id))  // array of submission IDs
+                    .catch(error => {
+                        console.log(error);
+                        return [];
+                    })
+                    // .then(ids => ids.toString())
+                );
+            });
+
+            Promise.all(promises)
+            .then(values => [].concat.apply([], values))
+            // TODO: cannot pass an empty array to the below API call. Still returns values
+            .then(ids => fetch(submission_api + 'ids=' + ids.toString()))
+            .then(response => response.json())
+            .then(resp => resp.data)
+            .then(console.log);
         },
 
         fetchAnonymousToken: function() {
