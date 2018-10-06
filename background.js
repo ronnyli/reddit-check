@@ -75,10 +75,19 @@ function getURLInfo(tab){
         return;
     } else {
         console.log('getURLInfo: calling reddit API')
-        snoo.searchRedditForURL(url, function(listing) {
+        Promise.all([snoo.searchCommentsForURL(url), snoo.searchSubmissionsForURL(url)])
+        .then(values => {
+            console.log(values);
+            return [].concat.apply([], values);
+        })
+        .then(function(listing) {
             updateBadge(listing.length, tab);
             lscache.set(POST_STORAGE_KEY + url, listing, 5);
         });
+        // snoo.searchRedditForURL(url, function(listing) {
+        //     updateBadge(listing.length, tab);
+        //     lscache.set(POST_STORAGE_KEY + url, listing, 5);
+        // });
     }
 }
 
@@ -265,7 +274,7 @@ function backgroundSnoowrap() {
             }
         },
 
-        searchRedditForURL: function(url, callback) {
+        searchSubmissionsForURL: function(url) {
             var requester;
             if (snoowrap_requester) {
                 console.log('using logged in requester');
@@ -281,7 +290,7 @@ function backgroundSnoowrap() {
             // see this query for an example https://www.reddit.com/search?q=url%3A%28imgur.com%2FhyLlADL+OR+en.wikipedia.org%2Fwiki%2FBankruptcy_barrel+OR+en.wikipedia.org%2Fwiki%2FExertional_rhabdomyolysis%29&restrict_sr=&sort=relevance&t=all
             var urls_query = '(' + urls.join(' OR ') + ')';
 
-            requester.search({
+            return requester.search({
                 query: "url:" + urls_query,
                 restrictSr: false,
                 time: 'all',
@@ -298,7 +307,7 @@ function backgroundSnoowrap() {
               });
         },
 
-        searchPushshiftForURL: function(url, callback) {
+        searchCommentsForURL: function(url) {
             const comment_api = 'https://api.pushshift.io/reddit/search/comment/?';
             const submission_api = 'https://api.pushshift.io/reddit/search/submission/?';
 
@@ -316,17 +325,45 @@ function backgroundSnoowrap() {
                         console.log(error);
                         return [];
                     })
-                    // .then(ids => ids.toString())
                 );
             });
 
-            Promise.all(promises)
+            return Promise.all(promises)
             .then(values => [].concat.apply([], values))
-            // TODO: cannot pass an empty array to the below API call. Still returns values
-            .then(ids => fetch(submission_api + 'ids=' + ids.toString()))
+            .then(ids => {
+                if (ids.length == 0) {
+                    throw new Error('aborting pushshift api call');
+                    return [];
+                } else {
+                    return fetch(submission_api + 'ids=' + ids.toString());
+                }
+            })
             .then(response => response.json())
             .then(resp => resp.data)
-            .then(console.log);
+            .then(listing => {
+                let listing_filtered = listing;
+                // Filter out NSFW results
+                if (true) {  // TODO: convert this to an option
+                    listing_filtered = listing.filter((el) => {return !el.over_18});
+                }
+                return listing_filtered;
+            })
+            .then(listing => listing.map(function(el) {
+                if (el.subreddit_type === 'user') {
+                    el.subreddit_name_prefixed = el.subreddit.replace('_', '/');
+                    return el;
+                } else {
+                    el.subreddit_name_prefixed = 'r/' + el.subreddit;
+                    return el;
+                }
+            }))
+            .catch(error => {
+                if (error.message === 'aborting pushshift api call') {
+                    return [];
+                } else {
+                    throw error;
+                }
+            });
         },
 
         fetchAnonymousToken: function() {
