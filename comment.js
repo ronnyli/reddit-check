@@ -180,9 +180,12 @@ function renderPostContent(submission) {
                         <h2 class="s56cc5r-0 lpvuFi" data-redditstyle="true">${submission.title}</h2>
                     </span>
                 </div>
-                <div class="s1knm1ot-5 gGDEPn s1hmcfrd-0 ckueCN">
-                    ${submission.selftext_html}
-                </div>
+                ${submission.selftext_html ? `
+                    <div class="s1knm1ot-5 gGDEPn s1hmcfrd-0 ckueCN">
+                        ${submission.selftext_html}
+                    </div>
+                    `: ""
+                }
                 <!-- IF THIS IS A LINK POST THEN THE BELOW DIV IS NECESSARY ELSE OMIT -->
                 ${submission.url ? `
                     <div class="jlrhi6-1 bMGQBc">
