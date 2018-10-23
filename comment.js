@@ -233,7 +233,7 @@ function renderPostContent(submission) {
                         </div>
                         <div class="_21pmAV9gWG6F_UKVe7YIE0"></div>
                     </div>
-                    <div class="t4Hq30BDzTeJ85vREX7_M"><span>${Math.floor(submission.upvote_ratio)}% Upvoted</span></div>
+                    <div class="t4Hq30BDzTeJ85vREX7_M"><span>${Math.floor(submission.upvote_ratio * 100)}% Upvoted</span></div>
                 </div>
             </div>
         </div>
