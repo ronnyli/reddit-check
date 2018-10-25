@@ -112,6 +112,7 @@
   }
   
   body {
+      min-width: 500px;
       line-height: 1;
       font-family: BentonSans, sans-serif;
   }
@@ -126,14 +127,9 @@
       quotes: none;
   }
   
-  blockquote:before,
-  blockquote:after,
-  q:before,
-  q:after {
-      content: &#x27;
-      &#x27;
-      ;
-      content: none;
+  blockquote:before, blockquote:after, q:before, q:after {
+    content: &#x27;&#x27;;
+    content: none;
   }
   
   table {
@@ -296,6 +292,10 @@
     position: relative;
 }
 
+.icon-archived:before {
+    content: "\F104";
+}
+
 .icon-comment:before {
     content: "\F109";
 }
@@ -308,12 +308,20 @@
     content: "\F10D";
 }
 
+.icon-save:before {
+    content: "\F130";
+}
+
 .icon-share:before {
     content: "\F131";
 }
 
 .icon-outboundLink:before {
     content: "\F127";
+}
+
+.icon-menu:before {
+    content: "\F123";
 }
 
 .icon:before {
@@ -535,23 +543,12 @@
 ._2qww3J5KKzsD7e5DO0BvvU {
     word-break: normal;
     white-space: nowrap;
-    min-width: 25px;
 }
 ._3m17ICJgx45k_z-t82iVuO {
     cursor: default;
 }
 ._1UoeAeSRhOKSNdY_h3iS1O {
     padding: 4px;
-}
-
-._1Gn6JH0U8GJtJXSIc54IMU, ._1MDjRAzxk1RSTB12748O1v, ._2IVG3b9-lczna8tonL9FWB, ._3ch9jJ0painNf41PmU4F9i, ._3phKxmomoio9ulzAoL4XhZ, .hMF1wBi2Z6Lh9zHskfhX1, .MAe2tslj1FAD6GliiZ3it, .XHMWG1CPWX8RXeNg-o5-R, .xwmljjCrovDE5C9MasZja {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 16px;
-    vertical-align: text-bottom;
 }
 
 ._3DVrpDrMM9NLT6TlsTUMxC {
@@ -582,6 +579,11 @@
     padding: 4px;
 }
 
+._1GQDWqbF-wkYWbrpmOvjqJ {
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
 ._1Gn6JH0U8GJtJXSIc54IMU, ._1MDjRAzxk1RSTB12748O1v, ._2IVG3b9-lczna8tonL9FWB, ._3ch9jJ0painNf41PmU4F9i, ._3phKxmomoio9ulzAoL4XhZ, .hMF1wBi2Z6Lh9zHskfhX1, .MAe2tslj1FAD6GliiZ3it, .XHMWG1CPWX8RXeNg-o5-R, .xwmljjCrovDE5C9MasZja {
     display: inline-block;
     width: 16px;
@@ -592,20 +594,19 @@
     vertical-align: text-bottom;
 }
 
-._1GQDWqbF-wkYWbrpmOvjqJ {
-    margin-right: 4px;
-    vertical-align: middle;
-}
-
 ._6_44iTtZoeY6_XChKt5b0 {
     display: inline-block;
     line-height: 1;
     vertical-align: middle;
 }
 
-@media (max-width: 1080px)
-.jqIcAC {
-    display: none;
+.hxpTao {
+    -webkit-box-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    width: 100%;
 }
 
 .jqIcAC {
@@ -621,13 +622,11 @@
     transition: background-color 0.1s ease 0s;
 }
 
-.hxpTao {
-    -webkit-box-align: center;
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    text-align: left;
-    width: 100%;
+@media (max-width: 1080px) {
+    .jqIcAC {
+        display: none;
+    }
+
 }
 
 .cpAOsy {
@@ -674,11 +673,11 @@
     background: rgba(255, 255, 255, 0.8);
 }
 
-@media (min-width: 640px)
-.gxtxxZ {
-    padding: 0px;
+@media (min-width: 640px) {
+    .gxtxxZ {
+        padding: 0px;
+    }
 }
-
 .gxtxxZ {
     padding: 0px 15px;
 }
@@ -873,6 +872,95 @@
 .t4Hq30BDzTeJ85vREX7_M {
     padding-left: 8px;
     font-size: 12px;
+}
+
+.gdaRtq {
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    display: flex;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(255, 214, 53);
+    border-image: initial;
+    border-radius: 4px;
+    margin: 16px;
+}
+
+.cynRVh {
+    background-color: rgb(255, 214, 53);
+    display: inline-block;
+    width: 8px;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+}
+
+.giTFAC {
+    display: inline-block;
+    margin: 12px 8px 8px 16px;
+}
+
+.htBfCv {
+    color: rgb(255, 214, 53);
+    height: 24px;
+    vertical-align: sub;
+    width: 24px;
+    margin: 0px -4px 0px 4px;
+}
+
+._2trXhUAJMhIhxp8a2zvOVP, ._3ACtZ0jvC5KDN8RNxR0lXX {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 16px;
+    vertical-align: top;
+}
+
+.gZuIWP {
+    display: inline-block;
+    margin: 8px 0px;
+}
+
+.dTNJWj {
+    font-size: 12px;
+    line-height: 16px;
+    color: rgb(28, 28, 28);
+    font-weight: bold;
+}
+
+.dRQvyL {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: rgb(28, 28, 28);
+}
+
+.iheKDM {
+    height: 24px;
+    border-radius: 2px;
+    transition: background-color 0.1s ease 0s;
+}
+
+.ksTfYp {
+    cursor: pointer;
+    height: 24px;
+    line-height: 0px;
+    width: 100%;
+    border-radius: 4px;
+    padding: 0px 4px;
+}
+
+.ebwjqI {
+    display: inline-block;
+    vertical-align: text-bottom;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 16px;
+    color: rgb(135, 138, 140);
 }
 
 @font-face {

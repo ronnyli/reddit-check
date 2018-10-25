@@ -112,7 +112,6 @@ function makeDisplay(submission) {
                 iterateComments(index, comment, archived)
             );
         });
-        $('.collapsible').collapsible();
 
         $('.reply_button').click(function() {
             const $this = $( this );
