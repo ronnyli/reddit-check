@@ -19,40 +19,50 @@ function parseCurrentUrl(callback) {
     callback(query)
 }
 
-function iterateComments(index, comment, archived) {
-    var commentHTML = renderComment(comment, archived);
+function iterateComments(index, comment, archived, parent_ids=[]) {
+    var commentHTML = renderComment(comment, archived, parent_ids);
 
     if (comment.replies.length > 0) {
-        commentHTML += `
-            <div class="collapsible-body">
-                <div class="row">
-                    <div class="col s12 m12">
-                        <ul class="collapsible" data-collapsible="collapsible">`;
-        $.each(comment.replies, (index, comment) =>{
-            commentHTML += iterateComments(index, comment, archived);
+        commentHTML += `<ul>`;
+        $.each(comment.replies, (index, child) =>{
+            if (parent_ids.length < child.depth) {
+                parent_ids = parent_ids.concat(comment.id)
+            } else {
+                parent_ids = parent_ids.slice(0, child.depth)
+            }
+            commentHTML += iterateComments(index, child, archived, parent_ids);
         });
-
-        commentHTML += `
-                        </ul>
-                    </div>
-                </div>
-            </div>`;
+        commentHTML += `</ul>`;
     }
     commentHTML += '</li>';
     return commentHTML;
 }
 
-function renderComment(comment, archived) {
-    return `<li id='${comment.id}'>
-    <div class='collapsible-header'>
-    <div class='score'>${comment.score}</div>
-    ${comment.body}
-    <div class='age'> ${comment.replies.length} comments,
-     &nbsp;&nbsp;u/${comment.author}
-    </div>
-    ${archived ? "": "<a class='reply_button' href='#'>REPLY</a>"}
-    <form></form>
-    </div>`
+function renderComment(comment, archived, parent_ids) {
+    return `
+    <li id='${comment.id}' class="s136il31-0 cMWqxb" tabindex="-1">
+        <div class="fxv3b9-1 jDSCcP">
+            ${parent_ids.map(parent_id => `<div class="${parent_id} fxv3b9-0 efNcNS"><i class="threadline"></i></div>`).join('')}
+            <div class="fxv3b9-2 czhQfm">
+                <div class="${comment.id} fxv3b9-0 efNcNS"><i class="threadline"></i></div>
+            </div>
+        </div>
+        <div class="Comment ${comment.id} c497l3-5 MAIAY">
+            <div class="c497l3-2 eUvHWc">
+                <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
+                    <div class="_3wVayy5JvIMI67DheMYra2 dplx91-0 buaDRo"><i class="icon icon-upvote _2Jxk822qXs4DaXwsN7yyHA _39UOLMgvssWenwbRxz_iEn"></i></div>
+                </button>
+                <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
+                    <div class="jR747Vd1NbfaLusf5bHre s1y8gf4b-0 hxcKpF"><i class="icon icon-downvote ZyxIIl4FP5gHGrJDzNpUC _2GCoZTwJW7199HSwNZwlHk"></i></div>
+                </button>
+            </div>
+            ${comment.body}
+            <div class='age'> ${comment.replies.length} comments,
+            &nbsp;&nbsp;u/${comment.author}
+            </div>
+            ${archived ? "": "<a class='reply_button' href='#'>REPLY</a>"}
+            <form></form>
+        </div>`
     // missing </li> tag because I need to delay closing until later
     ;
 }
