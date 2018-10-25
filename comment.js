@@ -56,11 +56,39 @@ function renderComment(comment, archived, parent_ids) {
                     <div class="jR747Vd1NbfaLusf5bHre s1y8gf4b-0 hxcKpF"><i class="icon icon-downvote ZyxIIl4FP5gHGrJDzNpUC _2GCoZTwJW7199HSwNZwlHk"></i></div>
                 </button>
             </div>
-            ${comment.body}
-            <div class='age'> ${comment.replies.length} comments,
-            &nbsp;&nbsp;u/${comment.author}
+            <div class="c497l3-4 jHfOJm">
+                <span class="s1dqr9jy-0 imyGpC">level 1</span>
+                <div class="c497l3-3 clkVGJ s17xjtj0-21 heFPGG">
+                    <div class="wx076j-0 hPglCh">
+                        <a class="s1461iz-1 RVnoX" href="https://www.reddit.com/user/${comment.author}" target="_blank">${comment.author}</a>
+                    </div>
+                    <span class="h5svje-0 cFQOcm">${numToString(comment.score)} points</span>
+                    <span class="h5svje-0 cFQOcm"> &middot; </span>
+                    <a class="s17xjtj0-13 fjVFnL" href="https://www.reddit.com/${comment.permalink}" id="CommentTopMeta--Created--t1_e7i7pcvinOverlay" rel="nofollow" target="_blank">
+                        <span>${getAge(comment.created_utc)}</span>
+                    </a>
+                </div>
+                <div>
+                    <div class="c497l3-6 eCeBkc s1hmcfrd-0 ckueCN">
+                        ${comment.body_html}
+                    </div>
+                    <div>
+                        <div class="s5kaj4p-8 dtnsqo">
+                            ${archived ? "":
+                                `<button class="s5kaj4p-9 hNSNDN">
+                                    <i class="icon icon-comment _3ch9jJ0painNf41PmU4F9i s5kaj4p-0 domCcm"></i>Reply
+                                </button>`
+                            }
+                            <div id="t1_e7i7pcv-comment-share-menu">
+                                <button class="s5kaj4p-9 hNSNDN">share</button>
+                            </div>
+                            <button class="s5kaj4p-9 hNSNDN">report</button>
+                            <button class="s5kaj4p-9 hNSNDN">Save</button>
+                            <button class="s5kaj4p-9 hNSNDN">Give gold</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            ${archived ? "": "<a class='reply_button' href='#'>REPLY</a>"}
             <form></form>
         </div>`
     // missing </li> tag because I need to delay closing until later
