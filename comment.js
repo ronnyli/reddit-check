@@ -42,7 +42,6 @@ function renderComment(comment, archived, parent_ids) {
     return `
     <li id='${comment.id}' class="s136il31-0 cMWqxb" tabindex="-1">
         <div class="fxv3b9-1 jDSCcP">
-            ${parent_ids.map(parent_id => `<div class="${parent_id} fxv3b9-0 efNcNS"><i class="threadline"></i></div>`).join('')}
             <div class="fxv3b9-2 czhQfm">
                 <div class="${comment.id} fxv3b9-0 efNcNS"><i class="threadline"></i></div>
             </div>
@@ -64,7 +63,7 @@ function renderComment(comment, archived, parent_ids) {
                     </div>
                     <span class="h5svje-0 cFQOcm">${numToString(comment.score)} points</span>
                     <span class="h5svje-0 cFQOcm"> &middot; </span>
-                    <a class="s17xjtj0-13 fjVFnL" href="https://www.reddit.com/${comment.permalink}" id="CommentTopMeta--Created--t1_e7i7pcvinOverlay" rel="nofollow" target="_blank">
+                    <a class="s17xjtj0-13 hsxhRU" href="https://www.reddit.com/${comment.permalink}" id="CommentTopMeta--Created--t1_e7i7pcvinOverlay" rel="nofollow" target="_blank">
                         <span>${getAge(comment.created_utc)}</span>
                     </a>
                 </div>
@@ -80,9 +79,9 @@ function renderComment(comment, archived, parent_ids) {
                                 </button>`
                             }
                             <div id="t1_e7i7pcv-comment-share-menu">
-                                <button class="s5kaj4p-9 hNSNDN">share</button>
+                                <button class="s5kaj4p-9 hNSNDN">Share</button>
                             </div>
-                            <button class="s5kaj4p-9 hNSNDN">report</button>
+                            <button class="s5kaj4p-9 hNSNDN">Report</button>
                             <button class="s5kaj4p-9 hNSNDN">Save</button>
                             <button class="s5kaj4p-9 hNSNDN">Give gold</button>
                         </div>
