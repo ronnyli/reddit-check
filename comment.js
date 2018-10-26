@@ -40,6 +40,25 @@ function iterateComments(index, comment, archived, parent_ids=[]) {
 
 function renderComment(comment, archived, parent_ids) {
     return `
+    <li class="s136il31-0 cMWqxb" id="${comment.id}-collapsed" tabindex="-1" style="display:none">
+        <div class="Comment ${comment.id} c497l3-5 MAIAY">
+            <button class="${comment.id} c497l3-0 jtKgEe">
+                <i class="icon icon-expand qjrkk1-0 JnYFK"></i>
+            </button>
+            <div class="c497l3-4 bWacBs">
+                <div class="c497l3-3 cFXBbI">
+                    <div>
+                        <a class="s1461iz-1 RVnoX" href="https://www.reddit.com/user/${comment.author}" target="_blank">${comment.author}</a>
+                    </div>
+                    <span class="h5svje-0 cFQOcm">${numToString(comment.score)} points</span>
+                    <span class="h5svje-0 cFQOcm"> &middot; </span>
+                    <a class="s17xjtj0-13 hsxhRU" href="https://www.reddit.com/${comment.permalink}" id="CommentTopMeta--Created--t1_e7i7pcvinOverlay" rel="nofollow" target="_blank">
+                        <span>${getAge(comment.created_utc)}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </li>
     <li id='${comment.id}' class="s136il31-0 cMWqxb" tabindex="-1">
         <div class="fxv3b9-1 jDSCcP">
             <div class="fxv3b9-2 czhQfm">
@@ -124,6 +143,16 @@ function makeDisplay(submission) {
             });
         });
     }
+    $('.threadline').click(function() {
+        const comment_id = $( this ).parent()[0].classList[0];
+        $('#' + comment_id).hide();
+        $('#' + comment_id + '-collapsed').show();
+    })
+    $('.icon-expand').click(function() {
+        const comment_id = $( this ).parent()[0].classList[0];
+        $('#' + comment_id).show();
+        $('#' + comment_id + '-collapsed').hide();
+    })
 
     if (!archived) {
         // TODO: unify log-in logic that is getting a bit out of hand

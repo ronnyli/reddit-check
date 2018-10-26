@@ -300,6 +300,10 @@
     content: "\F109";
 }
 
+.icon-expand:before {
+    content: "\F111";
+}
+
 .icon-upvote:before {
     content: "\F138";
 }
@@ -981,6 +985,59 @@
     font-weight: 400;
     line-height: 16px;
     color: rgb(135, 138, 140);
+}
+
+.jtKgEe {
+    cursor: pointer;
+    height: 12px;
+    line-height: 12px;
+    width: 12px;
+    color: rgb(0, 121, 211);
+    transform: rotate(180deg);
+    left: 15px;
+    position: absolute;
+    top: 17px;
+    background: none;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    outline: none;
+}
+
+.JnYFK {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 12px;
+}
+
+.bWacBs {
+    box-sizing: border-box;
+    opacity: 1;
+    padding-top: 4px;
+    max-width: 800px;
+    width: 100%;
+    margin-left: 8px;
+    padding-left: 0px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+    border-image: initial;
+    border-radius: 4px;
+}
+
+.cFXBbI {
+    -webkit-box-align: center;
+    align-items: center;
+    line-height: 16px;
+    display: flex;
+    opacity: 0.5;
+    margin-left: 32px;
+    min-height: 18px;
+    transition: opacity 0.2s ease 0s;
 }
 
 @font-face {
