@@ -112,7 +112,7 @@
   }
   
   body {
-      min-width: 500px;
+      min-width: 510px;
       line-height: 1;
       font-family: BentonSans, sans-serif;
   }
@@ -404,6 +404,17 @@
     margin: 0px 4px;
 }
 
+.kESrVn {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    position: relative;
+    margin: 0px 8px 8px;
+}
+
 .kESrVn ._2fCzxBE1dlMh4OFc7B3Dun {
     color: rgb(120, 124, 126);
 }
@@ -443,6 +454,7 @@
     -webkit-box-flex: 0;
     -ms-flex: 0 0 auto;
     flex: 0 0 auto;
+    display: inline;
 }
 
 .cKmWbx {
