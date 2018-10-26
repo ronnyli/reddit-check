@@ -277,15 +277,10 @@ function renderPostContent(submission) {
 }
 
 $(document).ready(function(){
-    $("#close").click(function() {
-      window.close();
-    });
-
     $("#archived").hide();
 
     var window_url = new URI(window.location.href);
     var query = window_url.search(true);
-    $("#title").append(query.title);
 
     parseCurrentUrl(function(query) {
         var submission = lscache.get("Comments:" + query.id);

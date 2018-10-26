@@ -741,6 +741,10 @@
     border-right: 2px solid rgb(237, 239, 241);
 }
 
+.threadline:hover {
+    border-right: 2px solid rgb(0, 121, 211);
+}
+
 .MAIAY.top-level {
     margin-top: 16px;
 }
