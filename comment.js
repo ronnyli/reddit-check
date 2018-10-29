@@ -6,7 +6,7 @@ function isLoggedIn($this, callback) {
     const snoo_json = lscache.get('snoowrap_requester_json');
     if (snoo_json) {
         var comment_id = $this.closest('li').attr('id');
-        const $form = $this.siblings('form');
+        const $form = $this.parents().eq(1).siblings('form');;
         displayReplyComment(comment_id, $form, 'comment');
     } else {
         callback();
@@ -93,7 +93,7 @@ function renderComment(comment, archived, parent_ids) {
                     <div>
                         <div class="s5kaj4p-8 dtnsqo">
                             ${archived ? "":
-                                `<button class="s5kaj4p-9 hNSNDN">
+                                `<button class="s5kaj4p-9 hNSNDN reply_button">
                                     <i class="icon icon-comment _3ch9jJ0painNf41PmU4F9i s5kaj4p-0 domCcm"></i>Reply
                                 </button>`
                             }
@@ -105,6 +105,7 @@ function renderComment(comment, archived, parent_ids) {
                             <button class="s5kaj4p-9 hNSNDN">Give gold</button>
                         </div>
                     </div>
+                    <form></form>
                 </div>
             </div>
             <form></form>
@@ -174,16 +175,20 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
 
     if ($form.children().length == 0) {
         $form.append(renderReplyComment(comment_id));
+        const converter = new Markdown.getSanitizingConverter();
+        const editor = new Markdown.Editor(converter, '-' + comment_id);
+        editor.run();
         // TODO: better handling of this function
         $('.cancel_reply').click(function(event) {
+            const $this = $( this );
             event.preventDefault();
-            $form.toggle();
+            $this.parent().toggle();
         });
         // TODO: better handling of this function
         $form.submit(function(event) {
             event.preventDefault();
             leaveComment(comment_id,
-                $(`#reply_${comment_id}`).val(),
+                $(`#wmd-input-${comment_id}`).val(),
                 replyable_content_type,
                 function (status) {
                 if (status == 'Success') {
@@ -205,8 +210,9 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
 
 function renderReplyComment(comment_id) {
     return `
-        <textarea id="reply_${comment_id}" class="materialize-textarea reply_box"></textarea>
-        <label for="reply_${comment_id}">Add a reply</label>
+        <div id="wmd-button-bar-${comment_id}"></div>
+        <textarea id="wmd-input-${comment_id}" class="wmd-input"></textarea>
+        <div id="wmd-preview-${comment_id}" class="wmd-panel wmd-preview"></div>
         <button class="btn waves-effect waves-light" type="submit">REPLY</button>
         <button class="btn waves-effect waves-light transparent grey-text cancel_reply">CANCEL</button>`;
 }
