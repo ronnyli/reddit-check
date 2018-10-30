@@ -38,22 +38,16 @@ function processPosts(redditPosts, encodedUrl, title) {
 }
 
 function makeDisplay(redditPosts, encodedUrl, title) {
-    var now = new Date();
-    var date_now = new Date(now.getUTCFullYear(), now.getUTCMonth(), 
-        now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()); 
-    var date_entry; 
-    var one_day = 86400000; // milliseconds per day
     var resubmitUrl = "https://www.reddit.com/submit?resubmit=true&url=" + encodedUrl;
     redditPosts.sort(comparePosts)
     var permalinks = [];
     for( var i=0; entry = redditPosts[i]; i++) {
-            date_entry = new Date(entry.created_utc*1000).getTime();
             permalinks[i] = {
                 id: entry.id,
                 link: entry.permalink,
                 title: entry.title,
                 score: entry.score+"",
-                age: (date_now-date_entry)/one_day,
+                created_utc: entry.created_utc,
                 comments: entry.num_comments+"",
                 subreddit: entry.subreddit_name_prefixed,
                 author: entry.author
@@ -75,7 +69,7 @@ function oldPostHtml(index, permalink) {
         <li>
             <div class='score'>${numToString(permalink.score)}</div>
             <a href='${buildCommentUrl(permalink)}' title='${permalink.link}'>${permalink.title}</a>
-            <div class='age'>${getAge(permalink.age)}
+            <div class='age'>${getAge(permalink.created_utc)}
                 &nbsp;&nbsp;${numToString(permalink.comments)} comments
                 &nbsp;&nbsp;<a href='http://www.reddit.com/${permalink.subreddit}' target='_blank'>${permalink.subreddit}</a>
                 &nbsp;&nbsp;u/${permalink.author}
@@ -125,7 +119,7 @@ function postHtml(index, permalink) {
                                             <a class="user-link" href="https://www.reddit.com/user/${permalink.author}" target="_blank">u/${permalink.author}</a>
                                             <div id="UserInfoTooltip--${permalink.id}"></div>
                                         </div>
-                                        <a class="age" data-click-id="timestamp" href="${buildCommentUrl(permalink)}" id="PostTopMeta--Created--false--${permalink.id}" rel="nofollow noopener">${getAge(permalink.age)}</a>
+                                        <a class="age" data-click-id="timestamp" href="${buildCommentUrl(permalink)}" id="PostTopMeta--Created--false--${permalink.id}" rel="nofollow noopener">${getAge(permalink.created_utc)}</a>
                                     </div>
                                     <div></div>
                                 </div>
@@ -161,20 +155,6 @@ function buildCommentUrl(permalink) {
 
 function comparePosts(postA, postB) {
     return postB.score - postA.score
-}
-
-function getAge(days) {
-    var age = days.toFixed(1) + " days ago";
-    return age;
-}
-
-function numToString(score) {
-    const thousands = score / 1000;
-    if (thousands >= 1) {
-        return `${thousands.toFixed(1)}k`
-    } else {
-        return score.toString();
-    }
 }
 
 function cropTitle(title) {

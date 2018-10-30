@@ -1,14 +1,18 @@
 <!doctype html>
 <html>
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="style_reddit.css">
+<link rel="stylesheet" type="text/css" href="style_reddit2.css">
+<link rel="stylesheet" type="text/css" href="style_editor.css">
 <script src="jquery.min.js" language="javascript"></script>
 <script src="lscache.min.js"></script>
 <script src="snoowrap-v1.min.js"></script>
 <script src="URI.js"></script>
-<script src="materialize/js/materialize.js"></script>
+<script src="js/pagedown/Markdown.Converter.js"></script>
+<script src="js/pagedown/Markdown.Editor.js"></script>
+<script src="js/pagedown/Markdown.Sanitizer.js"></script>
 <script src="js/snoowrap_background_message.js"></script>
+<script src="shared.js"> </script>
 <script src="comment.js"></script>
 </head>
 <body class="container">
@@ -16,18 +20,27 @@
         <div id='back' class="col s1">
             <a href="popup.html">Back</a>
         </div>
-        <span id='title' class="col s10">
-        </span>
-        <div id='close' class="col s1">
-            <a href="#"><img src="images/close.png"/> </a>
-        </div>
     </div>
     <div id='archived' class="row">
-        This is an archived post. You won't be able to vote or comment.
+        <div class="s15t8fxx-5 gdaRtq">
+            <div class="s15t8fxx-1 cynRVh"></div>
+            <div class="s15t8fxx-0 giTFAC">
+                <i class="icon icon-archived _2trXhUAJMhIhxp8a2zvOVP s7xll5k-4 htBfCv">
+                    <span class="i729lw-0 ebGXPK"></span>
+                </i>
+            </div>
+            <div class="s15t8fxx-3 gZuIWP">
+                <div class="s15t8fxx-4 dTNJWj">This thread is archived</div>
+                <div class="s15t8fxx-2 dRQvyL">New comments cannot be posted and votes cannot be cast</div>
+            </div>
+        </div>
     </div>
+    <div id='post' class='row'></div>
     <form id="reply_post" class="row"></form>
-    <div id="show_comments"  class="row">
-        <ul id="comments" class="collapsible" data-collapsible="collapsible"></ul>
+    <div class="s1rikhqd-6 bCecKY">
+        <div class="s10usnt7-0 gxtxxZ">
+            <ul id="comments"></ul>
+        </div>
     </div>
     <div id='no_results' class="row">
         No comments for this post. Would you like to make one?
