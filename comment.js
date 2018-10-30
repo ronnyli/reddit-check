@@ -211,8 +211,21 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
 function renderReplyComment(comment_id) {
     return `
         <div id="wmd-button-bar-${comment_id}"></div>
-        <textarea id="wmd-input-${comment_id}" class="wmd-input"></textarea>
-        <div id="wmd-preview-${comment_id}" class="wmd-panel wmd-preview"></div>
+        <textarea id="wmd-input-${comment_id}" class="wmd-input" placeholder="Write your comment here using Markdown. You'll see a live preview of how your comment will look below this box."></textarea>
+        <div class="jvfwx7-0 gJASDC">
+            <div class="s1ly6fn0-7 dxkxnq">
+                <div class="s1htkqit-0 dkOnao">
+                    <div class="s1l8ionp-0 dmKBhh">
+                        <div class="s1ly6fn0-0 knfJib">
+                            Live Preview
+                        </div>
+                    </div>
+                </div>
+                <div class="s1ly6fn0-9 btsuju">
+                    <div id="wmd-preview-${comment_id}" class="wmd-panel wmd-preview"></div>
+                </div>
+            </div>
+        </div>
         <button class="btn waves-effect waves-light" type="submit">REPLY</button>
         <button class="btn waves-effect waves-light transparent grey-text cancel_reply">CANCEL</button>`;
 }

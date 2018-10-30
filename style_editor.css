@@ -2,14 +2,6 @@
     padding: 20px;
 }
 
-.wmd-panel
-{
-	margin-left: 25%;
-	margin-right: 25%;
-	width: 50%;
-	min-width: 500px;
-}
-
 .wmd-button-bar 
 {
 	width: 100%;
@@ -18,15 +10,10 @@
 
 .wmd-input 
 { 
-	height: 300px;
+	height: 150px;
 	width: 100%;
 	background-color: White;
 	border: 1px solid DarkGray;
-}
-
-.wmd-preview 
-{ 
-	background-color: #e3e9ef; 
 }
 
 .wmd-button-row 
@@ -117,36 +104,50 @@
   display: inline-block;
 }
 
-.wmd-preview strong {
+.gJASDC {
+    position: relative;
+    margin: 16px 0px;
+}
+
+.dxkxnq {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(135, 138, 140);
+    border-image: initial;
+    border-radius: 4px;
+    background: rgb(255, 255, 255);
+}
+
+.btsuju {
+    margin: 8px;
+}
+
+.dkOnao {
+    position: sticky;
+    bottom: 0px;
+    z-index: 1;
+    opacity: 1;
+    background-color: rgb(246, 247, 248);
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    height: 36px;
+    border-radius: 0px 0px 4px 4px;
+}
+
+.knfJib {
+    text-align: center;
+    font-size: 12px;
     font-weight: 700;
-}
-
-.wmd-preview em {
-    font-style: italic;
-}
-
-.wmd-preview h2 {
-    display: block;
-    margin-block-start: 0.83em;
-    margin-block-end: 0.83em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    font-family: "Noto Sans", "Helvetica Neue", "Segoe UI", Helvetica, Verdana, Arial, sans-serif;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 24px;
-    margin-bottom: 8px;
-    margin-top: 1.4em;
-}
-
-.wmd-preview code {
-    font-family: "Noto Mono", Menlo, Consolas, "Courier New", monospace;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 20px;
-    color: rgb(255, 0, 109);
-    max-width: 100%;
-    background: rgba(238, 238, 238, 0.8);
-    margin: 0px 2px;
-    overflow: auto;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background-color: transparent;
+    color: rgb(0, 121, 211);
+    fill: rgb(0, 121, 211);
+    min-width: 85px;
+    line-height: normal;
+    margin-right: 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    padding: 8px;
 }
