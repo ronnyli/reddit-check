@@ -317,7 +317,7 @@ function backgroundSnoowrap() {
 
             urls.forEach(u => {
                 promises.push(
-                    fetch(comment_api + 'q=' + u)
+                    fetch(comment_api + 'q="' + URI.encode(u) + '"')
                     .then(response => response.json())
                     .then(resp => resp.data)
                     .then(data => data.map(elem => elem.link_id))  // array of submission IDs
