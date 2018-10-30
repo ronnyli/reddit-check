@@ -291,7 +291,7 @@ function backgroundSnoowrap() {
             var urls_query = '(' + urls.join(' OR ') + ')';
 
             return requester.search({
-                query: "url:" + urls_query,
+                query: "url:" + urls_query + " OR selftext:" + urls_query,
                 restrictSr: false,
                 time: 'all',
                 sort: 'relevance',
@@ -317,7 +317,7 @@ function backgroundSnoowrap() {
 
             urls.forEach(u => {
                 promises.push(
-                    fetch(comment_api + 'q="' + URI.encode(u) + '"')
+                    fetch(comment_api + 'q="' + URI.encode(u) + '"&fields=link_id')
                     .then(response => response.json())
                     .then(resp => resp.data)
                     .then(data => data.map(elem => elem.link_id))  // array of submission IDs
