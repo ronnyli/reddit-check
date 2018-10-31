@@ -251,7 +251,7 @@ function backgroundSnoowrap() {
             requester.getSubmission(id)
             .fetch()
             .then(submission => {
-                lscache.set(COMMENT_STORAGE_KEY + id, submission);
+                lscache.set(COMMENT_STORAGE_KEY + id, submission, 5);
                 callback(submission);
             });
         },
