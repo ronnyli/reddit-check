@@ -82,56 +82,56 @@ function postHtml(index, permalink) {
     $("#links").append(`
         <div style="max-width: 100%;">
             <div>
-                <div class="scrollerItem Post ${permalink.id}" id="${permalink.id}" tabindex="-1">
-                    <div class="scrollerItem-content">
-                        <div class="upvote-downvote-outer">
-                            <div class="upvote-downvote-border">
-                                <div class="upvote-downvote-inner">
-                                    <button class="vote-arrow" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
-                                        <div class="upvote-arrow">
-                                            <i class="small material-icons upvote-arrow-icon">arrow_drop_up</i>
+                <div class="scrollerItem Post ${permalink.id} s9fusyd-17 eHSpeV s1ukwo15-0 RqhAo" id="${permalink.id}" tabindex="-1">
+                    <div class="scrollerItem-content YA9IzN0YR-G5_oD5EUydl">
+                        <div class="upvote-downvote-outer _3YgWdffoKyCp7UaGAEQpoo">
+                            <div class="upvote-downvote-border s9fusyd-4 cRuhKC">
+                                <div class="upvote-downvote-inner s9fusyd-3 iJSWiv">
+                                    <button class="vote-arrow cYUyoUM3wmgRXEHv1LlZv" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
+                                        <div class="upvote-arrow _2q7IQ0BUOWeEZoeAxN555e dplx91-0 buaDRo">
+                                            <i class="icon icon-upvote _2Jxk822qXs4DaXwsN7yyHA"></i>
                                         </div>
                                     </button>
-                                    <div class="score" style="color: rgb(26, 26, 27);">${numToString(permalink.score)}</div>
-                                    <button class="vote-arrow" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
-                                        <div class="downvote-arrow">
-                                            <i class="small material-icons downvote-arrow-icon">arrow_drop_down</i>
+                                    <div class="score _1rZYMD_4xY3gRcSS3p8ODO" style="color: rgb(26, 26, 27);">${numToString(permalink.score)}</div>
+                                    <button class="vote-arrow cYUyoUM3wmgRXEHv1LlZv" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
+                                        <div class="downvote-arrow _1iKd82bq_nqObFvSH1iC_Q s1y8gf4b-0 hxcKpF">
+                                            <i class="icon icon-downvote ZyxIIl4FP5gHGrJDzNpUC"></i>
                                         </div>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="item-info">
-                            <div class="item-info-content">
-                                <div class="item-description" data-click-id="body">
-                                    <div>
-                                        <span class="item-title">
-                                            <a data-click-id="body" href="${buildCommentUrl(permalink)}">
-                                                <h2>${permalink.title}</h2>
+                        <div class="item-info _1poyrkZ7g36PawDueRza-J s9fusyd-1 hnnoJG">
+                            <div class="item-info-content WnMeTcero48dKo501T-19">
+                                <div class="item-description s9fusyd-8 hgDRGI" data-click-id="body">
+                                    <div class="s56cc5r-1 jhlfXq">
+                                        <span class="item-title y8HYJ-y_lTUHkQIc1mdCq">
+                                            <a class="SQnoC3ObvgnGjWt90zD9Z" data-click-id="body" href="${buildCommentUrl(permalink)}">
+                                                <h2 class="s56cc5r-0 jpXBut">${permalink.title}</h2>
                                             </a>
                                         </span>
                                     </div>
-                                    <div class="item-source">
-                                        <a class="subreddit" data-click-id="subreddit" href="http://www.reddit.com/${permalink.subreddit}" target="_blank">${permalink.subreddit}</a>
-                                        <span role="presentation"> &middot; </span>
-                                        <span class="posted-by">Posted by</span>
-                                        <div class="user">
-                                            <a class="user-link" href="https://www.reddit.com/user/${permalink.author}" target="_blank">u/${permalink.author}</a>
+                                    <div class="item-source _3AStxql1mQsrZuUIFP9xSg s9fusyd-9 TFJUf">
+                                        <a class="subreddit s1i3ufq7-0 bsfRLa" data-click-id="subreddit" href="http://www.reddit.com/${permalink.subreddit}" target="_blank">${permalink.subreddit}</a>
+                                        <span class="s106g12-0 hFyNNd" role="presentation"> &middot; </span>
+                                        <span class="posted-by _2fCzxBE1dlMh4OFc7B3Dun">Posted by</span>
+                                        <div class="user wx076j-0 hPglCh">
+                                            <a class="user-link _2tbHP6ZydRpjI44J3syuqC s1461iz-1 gWXVVu" href="https://www.reddit.com/user/${permalink.author}" target="_blank">u/${permalink.author}</a>
                                             <div id="UserInfoTooltip--${permalink.id}"></div>
                                         </div>
-                                        <a class="age" data-click-id="timestamp" href="${buildCommentUrl(permalink)}" id="PostTopMeta--Created--false--${permalink.id}" rel="nofollow noopener">${getAge(permalink.created_utc)}</a>
+                                        <a class="age _3jOxDPIQ0KaOWpzvSQo-1s" data-click-id="timestamp" href="${buildCommentUrl(permalink)}" id="PostTopMeta--Created--false--${permalink.id}" rel="nofollow noopener">${getAge(permalink.created_utc)}</a>
                                     </div>
                                     <div></div>
                                 </div>
-                                <div class="col-right">
-                                    <a rel="nofollow" data-click-id="comments" data-test-id="comments-page-link-num-comments" class="comments-page-link" href="${buildCommentUrl(permalink)}">
-                                        <i class="tiny material-icons" role="presentation">mode_comment</i>
-                                        <span>${numToString(permalink.comments)}</span>
+                                <div class="col-right s9fusyd-11 fZehHr">
+                                    <a rel="nofollow" data-click-id="comments" data-test-id="comments-page-link-num-comments" class="comments-page-link _1UoeAeSRhOKSNdY_h3iS1O _1Hw7tY9pMr-T1F4P1C-xNU s9fusyd-13 dQlfjM" href="${buildCommentUrl(permalink)}">
+                                        <i class="icon icon-comment _3ch9jJ0painNf41PmU4F9i _3DVrpDrMM9NLT6TlsTUMxC" role="presentation"></i>
+                                        <span class="FHCV02u6Cp2zYL0fhQPsO">${numToString(permalink.comments)}</span>
                                     </a>
-                                    <div></div>
+                                    <div class="s9fusyd-12 gXQfqP s1o43ulv-1 fGjVuX"></div>
                                     <div>
-                                        <button class="more-options" aria-expanded="false" aria-haspopup="true" aria-label="more options" id="${permalink.id}-overflow-menu">
-                                            <i class="small material-icons more-options-icon">more_horiz</i>
+                                        <button class="more-options s6epw68-15 jxTuag mpc6lx-1 iheKDM" aria-expanded="false" aria-haspopup="true" aria-label="more options" id="${permalink.id}-overflow-menu">
+                                            <i class="icon icon-menu mpc6lx-2 ebwjqI"></i>
                                         </button>
                                     </div>
                                 </div>
