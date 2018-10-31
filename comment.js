@@ -174,7 +174,7 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
     console.log('Reply to ' + comment_id);
 
     if ($form.children().length == 0) {
-        $form.append(renderReplyComment(comment_id));
+        $form.append(renderReplyComment(comment_id, replyable_content_type));
         const converter = new Markdown.getSanitizingConverter();
         const editor = new Markdown.Editor(converter, '-' + comment_id);
         editor.run();
@@ -182,7 +182,7 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
         $('.cancel_reply').click(function(event) {
             const $this = $( this );
             event.preventDefault();
-            $this.parent().toggle();
+            $this.closest('form').toggle();
         });
         // TODO: better handling of this function
         $form.submit(function(event) {
@@ -208,7 +208,7 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
     }
 }
 
-function renderReplyComment(comment_id) {
+function renderReplyComment(comment_id, replyable_content_type) {
     return `
         <div id="wmd-button-bar-${comment_id}"></div>
         <textarea id="wmd-input-${comment_id}" class="wmd-input" placeholder="Write your comment here using Markdown. You'll see a live preview of how your comment will look below this box."></textarea>
@@ -226,8 +226,15 @@ function renderReplyComment(comment_id) {
                 </div>
             </div>
         </div>
-        <button class="btn waves-effect waves-light" type="submit">REPLY</button>
-        <button class="btn waves-effect waves-light transparent grey-text cancel_reply">CANCEL</button>`;
+        <div class="s1htkqit-4 kALOUK">
+            <button class="s1htkqit-1 htkhll" type="submit">Reply</button>
+            ${replyable_content_type=='comment' ? `
+                <button class="s1htkqit-3 lcYWzy cancel_reply" type="reset">
+                    CANCEL
+                </button>`: ''
+            }
+        </div>
+        `;
 }
 
 function renderPostContent(submission) {
