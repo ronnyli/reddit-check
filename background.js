@@ -288,7 +288,7 @@ function backgroundSnoowrap() {
             // search for multiple URLs by using url:(link1 OR link2 OR...)
             // Do not include http[s]:// or Reddit will return an error
             // see this query for an example https://www.reddit.com/search?q=url%3A%28imgur.com%2FhyLlADL+OR+en.wikipedia.org%2Fwiki%2FBankruptcy_barrel+OR+en.wikipedia.org%2Fwiki%2FExertional_rhabdomyolysis%29&restrict_sr=&sort=relevance&t=all
-            var urls_query = '(' + urls.join(' OR ') + ')';
+            var urls_query = '(' + urls.map(url => `"${url}"`).join(' OR ') + ')';
 
             return requester.search({
                 query: "url:" + urls_query + " OR selftext:" + urls_query,
