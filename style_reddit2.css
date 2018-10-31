@@ -1040,6 +1040,147 @@
     transition: opacity 0.2s ease 0s;
 }
 
+.wmd-preview strong, .ckueCN strong {
+    font-weight: 700;
+}
+
+.wmd-preview em, .ckueCN em {
+    font-style: italic;
+}
+
+.wmd-preview a, .ckueCN a {
+    color: rgb(0, 121, 211);
+    text-decoration: underline;
+}
+
+.wmd-preview blockquote, .ckueCN blockquote {
+    padding-left: 8px;
+    border-left: 4px solid rgba(28, 28, 28, 0.2);
+    margin: 4px 0px 4px 8px;
+}
+
+.wmd-preview pre, .ckueCN pre {
+    display: grid;
+    line-height: 1.4;
+    max-width: 100%;
+    background: rgba(238, 238, 238, 0.8);
+    margin: 4px 0px;
+    overflow: auto;
+    padding: 8px;
+}
+
+.wmd-preview code, .ckueCN code {
+    font-family: "Noto Mono", Menlo, Consolas, "Courier New", monospace;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    color: rgb(255, 0, 109);
+    max-width: 100%;
+    background: rgba(238, 238, 238, 0.8);
+    margin: 0px 2px;
+    overflow: auto;
+}
+
+.wmd-preview pre > code, .ckueCN pre > code {
+    background-color: transparent;
+    color: rgb(34, 34, 34);
+    margin: 0px;
+}
+
+.wmd-preview ol, .ckueCN ol {
+    list-style: decimal outside;
+    margin: 4px 0px 4px 8px;
+}
+
+.wmd-preview ul, .ckueCN ul {
+    list-style: disc outside;
+    margin: 4px 0px 4px 8px;
+}
+
+.wmd-preview li, .ckueCN li {
+    margin: 0.4em 1em;
+}
+
+.wmd-preview hr, .ckueCN hr {
+    border-right-style: initial;
+    border-bottom-style: initial;
+    border-left-style: initial;
+    border-right-color: initial;
+    border-bottom-color: initial;
+    border-left-color: initial;
+    height: 1px;
+    border-width: 1px 0px 0px;
+    border-image: initial;
+    border-top: 1px solid rgba(28, 28, 28, 0.2);
+    margin: 8px 0px;
+}
+
+.wmd-preview h1, .ckueCN h1 {
+    font-family: "Noto Sans", "Helvetica Neue", "Segoe UI", Helvetica, Verdana, Arial, sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 26px;
+    margin-bottom: 8px;
+    margin-top: 1.4em;
+}
+
+.wmd-preview h2, .ckueCN h2 {
+    display: block;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-family: "Noto Sans", "Helvetica Neue", "Segoe UI", Helvetica, Verdana, Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+    margin-bottom: 8px;
+    margin-top: 1.4em;
+}
+
+.wmd-preview table, .ckueCN table {
+    border-collapse: collapse;
+    display: inline-block;
+    margin-bottom: 4px;
+    margin-top: 4px;
+    overflow-x: auto;
+    word-break: normal;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(238, 238, 238);
+    border-image: initial;
+}
+
+.wmd-preview tr, .ckueCN tr {
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(238, 238, 238);
+    border-image: initial;
+}
+
+.wmd-preview tr:nth-child(2n+1), .ckueCN tr:nth-child(2n+1) {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.wmd-preview th, .ckueCN th {
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(238, 238, 238);
+    border-image: initial;
+    padding: 4px 8px;
+}
+
+.wmd-preview td, .ckueCN td {
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: left;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(238, 238, 238);
+    border-image: initial;
+    padding: 4px 8px;
+}
+
 @font-face {
     font-family: IBMPlexSans;
     font-weight: 400;
