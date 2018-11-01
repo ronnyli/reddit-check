@@ -25,13 +25,31 @@ function parsePosts(globalPage, tab) {
 }
 
 function processPosts(redditPosts, encodedUrl, title) {
+    $("header").append(`
+        <div class="header">
+            <span class="page-header s6tnjvv-7 dScugc">Home</span>
+            <div class="header-content">
+                <div class="header-text">
+                    ${redditPosts.length == 0 ? `
+                        <p class="s6tnjvv-14 bPUliZ">
+                            No posts found for this page. Click the button to make one!
+                        </p>
+                    ` : `
+                        <p class="s6tnjvv-14 bPUliZ">
+                            ${redditPosts.length} Reddit posts are discussing this page!
+                        </p>
+                        <p class="s6tnjvv-14 bPUliZ">
+                            Click a post below to see what people are saying or Create a Post of your own!
+                        </p>
+                    `}
+                </div>
+                <a class="s6tnjvv-17 cvgsde pbxmwi-2 bmmzQa" href="post.html">
+                    Create Post
+                </a>
+            </div>
+        </div>
+    `);
     if (redditPosts.length === 0) {
-        $("#data").append("<span id='title'>"+cropTitle(title)+"</span>&nbsp;&nbsp;&nbsp;");
-
-        $("#data").append("<span><a title='Post to reddit'"+
-            " href='post.html'>Post</a></span>");
-
-        $("#links").append("<span>No posts found for this page. Click the button to make one!</span>")
         return;
     }
     makeDisplay(redditPosts, encodedUrl, title)
@@ -53,14 +71,6 @@ function makeDisplay(redditPosts, encodedUrl, title) {
                 author: entry.author
             };
     }
-
-    // showPosts:
-    title = cropTitle(title);
-    $("#data").append("<span id='title'>"+title+"</span>&nbsp;&nbsp;&nbsp;");
-    
-    $("#data").append("<span><a title='Post to reddit'"+
-        " href='post.html'>Repost</a></span>");
-    
     $.each(permalinks, postHtml);
 }
 
@@ -163,12 +173,6 @@ function cropTitle(title) {
         title = title.substring (0, maxTitleLength) + "...";
     return title;
 }
-       
-document.addEventListener('DOMContentLoaded',function () {
-    $("#close").click(function() {
-      window.close();
-    });
-});
 
 chrome.runtime.getBackgroundPage(function (global) {
     chrome.tabs.getSelected(null, function(tab){

@@ -3,8 +3,6 @@
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML
 1. Add ability to remove/edit your own posts
-1. Reply to comments within posts
-    - Add an expiration time to comments in lscache
 1. Think about actions for:
     - pages without posts
     - people who don't want to post/comment
