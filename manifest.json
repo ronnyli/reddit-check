@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "background": {
         "page":"background.html",
         "persistent": true
@@ -7,7 +7,7 @@
     "browser_action": {
        "default_icon": { "19": "images/alien19.png", "38": "images/alien38.png" },
        "default_popup": "popup.html",
-       "default_title": "Reddited"
+       "default_title": "Thredd"
     },
     "description": "Check if current URL is submitted on reddit. Submit link or join the discussion.",
     "options_page": "options.html",
@@ -19,12 +19,12 @@
        "64": "images/alien64.png",
        "128": "images/alien128.png"
     },
-    "name": "Reddit Check",
+    "name": "Thredd",
     "permissions": [
         "identity",
         "tabs",
         "http://www.reddit.com/*",
         "storage"],
     "update_url": "http://clients2.google.com/service/update2/crx",
-    "version": "0.8.1"
+    "version": "0.8.2"
 }
