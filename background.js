@@ -75,7 +75,7 @@ function getURLInfo(tab){
         return;
     } else {
         console.log('getURLInfo: calling reddit API')
-        Promise.all([snoo.searchCommentsForURL(url), snoo.searchSubmissionsForURL(url)])
+        return Promise.all([snoo.searchCommentsForURL(url), snoo.searchSubmissionsForURL(url)])
         .then(values => {
             console.log(values);
             return [].concat.apply([], values);
@@ -83,11 +83,8 @@ function getURLInfo(tab){
         .then(function(listing) {
             updateBadge(listing.length, tab);
             lscache.set(POST_STORAGE_KEY + url, listing, 5);
+            return listing;
         });
-        // snoo.searchRedditForURL(url, function(listing) {
-        //     updateBadge(listing.length, tab);
-        //     lscache.set(POST_STORAGE_KEY + url, listing, 5);
-        // });
     }
 }
 
