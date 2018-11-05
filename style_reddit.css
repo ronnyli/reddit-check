@@ -1486,7 +1486,7 @@
     overflow-wrap: break-word;
 }
 
-#links {
+.links-background {
     padding: 2%;
     background-color: rgb(228, 231, 240);
 }

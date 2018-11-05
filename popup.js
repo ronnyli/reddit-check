@@ -4,23 +4,24 @@ function parsePosts(globalPage, tab) {
     var title = tab.title
     var encodedUrl = encodeURIComponent(url)
 
-    $("div#timeout").hide(0);
     var redditPosts = lscache.get(globalPage.POST_STORAGE_KEY + tab.url)
     if (redditPosts != null && redditPosts != []) {
+        $("div#timeout").hide(0);
         processPosts(redditPosts, encodedUrl, title)
     } else {
-        // TODO: modify this else statement since it uses the old way of getting redditPosts
-        var promises = globalPage.gUrlToAsyncMap[tab.url]
-        redditPosts = []
-        if (promises != null) {
-            Promise.all(promises).then(values => {
-                console.log("values " + JSON.stringify(values))
-                values.forEach(function(jsonData) { 
-                    redditPosts = redditPosts.concat(jsonData.data.children)
-                });
-                processPosts(redditPosts, encodedUrl, title)
-            });
-        }
+        // redditPosts can be empty if the entry expired in lscache
+        globalPage.getURLInfo(tab)
+        .then(function(listing) {
+            $("div#timeout").hide(0);
+            return listing;
+        })
+        .then(function(listing) {
+            processPosts(
+                listing,
+                encodedUrl,
+                title
+            );
+        });
     }
 }
 
@@ -51,6 +52,8 @@ function processPosts(redditPosts, encodedUrl, title) {
     `);
     if (redditPosts.length === 0) {
         return;
+    } else {
+        $('#links').addClass('links-background');
     }
     makeDisplay(redditPosts, encodedUrl, title)
 }
