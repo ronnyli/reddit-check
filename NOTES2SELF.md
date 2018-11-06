@@ -12,6 +12,7 @@
 1. Not obvious how to log in
     - right-click extension and click "log in/sign up"
         - https://stackoverflow.com/q/9863721
+        - https://stackoverflow.com/a/9863255
     - even less obvious to log out
 1. Add ability to upvote/downvote, share/save, etc.
 1. Add ability to remove/edit your own posts
