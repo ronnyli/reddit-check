@@ -22,9 +22,10 @@
     "name": "Thredd",
     "permissions": [
         "identity",
+        "contextMenus",
         "tabs",
         "http://www.reddit.com/*",
         "storage"],
     "update_url": "http://clients2.google.com/service/update2/crx",
-    "version": "0.8.4"
+    "version": "0.8.5"
 }

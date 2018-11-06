@@ -201,6 +201,7 @@ function backgroundSnoowrap() {
                     lscache.set('snoowrap_requester_json', r);
                     snoowrap_requester_json = JSON.stringify(r);
                     snoowrap_requester = r;
+                    logoutContextMenu(first_run=false);
                     callback('Success');
                 });
             }
