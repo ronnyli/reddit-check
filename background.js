@@ -3,12 +3,6 @@ var DEDUPE_KEY = "Dedupe:"
 var POST_STORAGE_KEY = "Posts:"
 var COMMENT_STORAGE_KEY = "Comments:"
 
-chrome.contextMenus.create({
-  "title": "Logout",
-  "contexts": ["browser_action"],
-  "onclick": function() {console.log('clicked logout')}
-});
-
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
     console.log('onUpdated: ' + tabId)
@@ -207,6 +201,7 @@ function backgroundSnoowrap() {
                     lscache.set('snoowrap_requester_json', r);
                     snoowrap_requester_json = JSON.stringify(r);
                     snoowrap_requester = r;
+                    logoutContextMenu(first_run=false);
                     callback('Success');
                 });
             }
