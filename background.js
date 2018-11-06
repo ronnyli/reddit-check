@@ -3,6 +3,12 @@ var DEDUPE_KEY = "Dedupe:"
 var POST_STORAGE_KEY = "Posts:"
 var COMMENT_STORAGE_KEY = "Comments:"
 
+chrome.contextMenus.create({
+  "title": "Logout",
+  "contexts": ["browser_action"],
+  "onclick": function() {console.log('clicked logout')}
+});
+
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
     console.log('onUpdated: ' + tabId)
