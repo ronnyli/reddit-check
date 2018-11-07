@@ -8,7 +8,6 @@
         - CORS missing headers
             - Snoowrap
             - Pushshift
-        - links within post/comment text don't work
 1. Auto-refresh after user makes a post or comment
     - looks like Reddit doesn't refresh, just inserts the comment into the DOM
 1. Consistent UI for post.html
