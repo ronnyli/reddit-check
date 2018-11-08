@@ -70,14 +70,13 @@ function getURLInfo(tab){
     var url = tab.url
     var posts = lscache.get(POST_STORAGE_KEY + url)
     if (posts != null) {
-        console.log('cached.')
+        console.log('getURLInfo: cached.')
         updateBadge(posts.length, tab);
         return;
     } else {
         console.log('getURLInfo: calling reddit API')
         return Promise.all([snoo.searchCommentsForURL(url), snoo.searchSubmissionsForURL(url)])
         .then(values => {
-            console.log(values);
             return [].concat.apply([], values);
         })
         .then(function(listing) {
@@ -213,7 +212,28 @@ function backgroundSnoowrap() {
                 title: title,
                 url: url
             })
+            .then(submission => submission.name)  //ID of new submission
+            .then(id => snoowrap_requester.getSubmission(id))
+            .fetch()
             .then(function(submission) {
+                // add submission to lscache
+                lscache.set(COMMENT_STORAGE_KEY + submission.id, submission, 5);
+                chrome.tabs.query({
+                    active: true,
+                    currentWindow: true
+                }, function(tabs) {
+                    var tab = tabs[0];
+                    var url_raw = tab.url;
+                    let redditPosts = lscache.get(POST_STORAGE_KEY + url_raw);
+                    redditPosts = redditPosts ? redditPosts : [];
+                    redditPosts.push(submission);
+                    updateBadge(redditPosts.length, tab);
+                    lscache.set(
+                        POST_STORAGE_KEY + url_raw,
+                        redditPosts,
+                        5
+                    );
+                });
                 callback('Success');
             })
             .catch(function(err) {
@@ -258,14 +278,41 @@ function backgroundSnoowrap() {
             if (replyable_content_type == 'submission') {
                 snoowrap_requester.getSubmission(id)
                 .reply(text)
-                .then(() => callback('Success'))
+                .then(comment => {
+                    let submission = lscache.get(COMMENT_STORAGE_KEY + id);
+                    submission.comments.push(comment);
+                    lscache.set(COMMENT_STORAGE_KEY + id, submission, 5);
+                    // TODO: increment number of comments on popup.html
+                    // TODO: increment number of comments on comment.html
+                    // TODO: append comment to comment.html
+                    callback('Success')
+                })
                 .catch(function(err) {
                     callback(err.toString())
                 });
             } else if (replyable_content_type == 'comment') {
                 snoowrap_requester.getComment(id)
                 .reply(text)
-                .then(() => callback('Success'))
+                .then(comment => snoowrap_requester.getSubmission(comment.link_id))
+                .fetch()  // TODO: dude what the fuck this doesn't have the comment in it
+                .then(submission => {
+                    console.log('hey asshole look here');
+                    console.log(submission);
+                    // let submission = lscache.get(COMMENT_STORAGE_KEY + submission_id);
+                    // function findParent(entry) {
+                    //     if (entry.name == comment.parent_id) {
+                    //         return true;
+                    //     } else if (entry.replies.length > 0) {
+                    //         entry.replies.filter(findParent);
+                    //     } else {
+                    //     return false;
+                    //     }
+                    // }
+                    // let parent_comment = submission.comments.filter(findParent);
+                    // parent_comment.replies.push(comment);
+                    lscache.set(COMMENT_STORAGE_KEY + submission.id, submission, 5);
+                    callback('Success')
+                })
                 .catch(function(err) {
                     callback(err.toString())
                 });
