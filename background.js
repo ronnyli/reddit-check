@@ -279,42 +279,44 @@ function backgroundSnoowrap() {
                 snoowrap_requester.getSubmission(id)
                 .reply(text)
                 .then(comment => {
+                    // inject comment into submission object
                     let submission = lscache.get(COMMENT_STORAGE_KEY + id);
                     submission.comments.push(comment);
                     lscache.set(COMMENT_STORAGE_KEY + id, submission, 5);
                     // TODO: increment number of comments on popup.html
                     // TODO: increment number of comments on comment.html
                     // TODO: append comment to comment.html
-                    callback('Success')
+                    callback(comment);
                 })
                 .catch(function(err) {
-                    callback(err.toString())
+                    callback(err.toString());
                 });
             } else if (replyable_content_type == 'comment') {
                 snoowrap_requester.getComment(id)
                 .reply(text)
-                .then(comment => snoowrap_requester.getSubmission(comment.link_id))
-                .fetch()  // TODO: dude what the fuck this doesn't have the comment in it
-                .then(submission => {
-                    console.log('hey asshole look here');
-                    console.log(submission);
-                    // let submission = lscache.get(COMMENT_STORAGE_KEY + submission_id);
-                    // function findParent(entry) {
-                    //     if (entry.name == comment.parent_id) {
-                    //         return true;
-                    //     } else if (entry.replies.length > 0) {
-                    //         entry.replies.filter(findParent);
-                    //     } else {
-                    //     return false;
-                    //     }
-                    // }
-                    // let parent_comment = submission.comments.filter(findParent);
-                    // parent_comment.replies.push(comment);
+                .then(comment => {
+                    // inject comment into submission object
+                    const submission_id = comment.link_id.split('_')[1];
+                    let submission = lscache.get(COMMENT_STORAGE_KEY + submission_id);
+                    function findParent(entry) {
+                        if (entry.name == comment.parent_id) {
+                            return true;
+                        } else if (entry.replies.length > 0) {
+                            entry.replies.filter(findParent);
+                        } else {
+                        return false;
+                        }
+                    }
+                    let parent_comment = submission.comments.filter(findParent)[0];
+                    parent_comment.replies.push(comment);
                     lscache.set(COMMENT_STORAGE_KEY + submission.id, submission, 5);
-                    callback('Success')
+                    // TODO: increment number of comments on popup.html
+                    // TODO: increment number of comments on comment.html
+                    // TODO: append comment to comment.html
+                    callback(comment);
                 })
                 .catch(function(err) {
-                    callback(err.toString())
+                    callback(err.toString());
                 });
             }
         },

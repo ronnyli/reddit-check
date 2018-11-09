@@ -190,16 +190,28 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
             leaveComment(comment_id,
                 $(`#wmd-input-${comment_id}`).val(),
                 replyable_content_type,
-                function (status) {
-                if (status == 'Success') {
-                    $form.hide(0);
-                    // TODO: individual status div per reply box
-                    $("#status").append("<span>Successful post</span>")
-                } else {
-                    // TODO: better error handling
-                    $form.hide(0);
-                    console.log('Status of failed post:');
-                    console.log(status);
+                function (response) {
+                    if (response.id) {
+                        // TODO: bug when making a top-level comment
+                        // TODO: cannot reply to comments you just made
+                        // TODO: sometimes fails to reply with TypeError: Cannot read property 'replies' of undefined
+                        $form.hide(0);
+                        const parent_id = comment_id;
+                        let $parent_comment = $('#' + parent_id);
+                        if ($parent_comment.children('ul').length == 0) {
+                            $parent_comment.append('<ul></ul>');
+                        }
+                        $parent_comment
+                        .children('ul')
+                        .append(`${renderComment(response, false)}</li>`);
+                        // TODO: individual status div per reply box
+                        $("#status").html("<span>Successful post</span>")
+                    } else {
+                        // TODO: better error handling
+                        $form.hide(0);
+                        $("#status").html(`<span>${response}</span>`);
+                        console.log('Status of failed post:');
+                        console.log(response);
                 }
             });
         });
