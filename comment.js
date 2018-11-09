@@ -114,6 +114,32 @@ function renderComment(comment, archived, parent_ids) {
     ;
 }
 
+function appendComment(index, comment, archived, $element) {
+    $element.append(iterateComments(index, comment, archived));
+
+    $('.reply_button').off('click').click(function() {
+        const $this = $( this );
+        isLoggedIn($this, function() {
+            logInReddit(function(status) {
+                console.log('Login status: ' + status);
+                isLoggedIn($this, function() {
+                    $("#status").append("<span>Problem logging in. Try again.</span>");
+                })
+            });
+        });
+    });
+    $('.threadline').off('click').click(function() {
+        const comment_id = $( this ).parent()[0].classList[0];
+        $('#' + comment_id).hide();
+        $('#' + comment_id + '-collapsed').show();
+    });
+    $('.icon-expand').off('click').click(function() {
+        const comment_id = $( this ).parent()[0].classList[0];
+        $('#' + comment_id).show();
+        $('#' + comment_id + '-collapsed').hide();
+    });
+}
+
 function makeDisplay(submission) {
     var redditComments = submission.comments;
     var archived = submission.archived;
@@ -127,33 +153,9 @@ function makeDisplay(submission) {
         $("#no_results").hide();
 
         $.each(redditComments, function(index, comment) {
-            $("#comments").append(
-                iterateComments(index, comment, archived)
-            );
-        });
-
-        $('.reply_button').click(function() {
-            const $this = $( this );
-            isLoggedIn($this, function() {
-                logInReddit(function(status) {
-                    console.log('Login status: ' + status);
-                    isLoggedIn($this, function() {
-                        $("#status").append("<span>Problem logging in. Try again.</span>");
-                    })
-                });
-            });
+            appendComment(index, comment, archived, $('#comments'));
         });
     }
-    $('.threadline').click(function() {
-        const comment_id = $( this ).parent()[0].classList[0];
-        $('#' + comment_id).hide();
-        $('#' + comment_id + '-collapsed').show();
-    })
-    $('.icon-expand').click(function() {
-        const comment_id = $( this ).parent()[0].classList[0];
-        $('#' + comment_id).show();
-        $('#' + comment_id + '-collapsed').hide();
-    })
 
     if (!archived) {
         // TODO: unify log-in logic that is getting a bit out of hand
@@ -192,18 +194,18 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
                 replyable_content_type,
                 function (response) {
                     if (response.id) {
-                        // TODO: bug when making a top-level comment
-                        // TODO: cannot reply to comments you just made
-                        // TODO: sometimes fails to reply with TypeError: Cannot read property 'replies' of undefined
                         $form.hide(0);
                         const parent_id = comment_id;
-                        let $parent_comment = $('#' + parent_id);
-                        if ($parent_comment.children('ul').length == 0) {
-                            $parent_comment.append('<ul></ul>');
+                        let $parent;
+                        if (replyable_content_type == 'comment') {
+                            if ($('#' + parent_id).children('ul').length == 0) {
+                                $('#' + parent_id).append('<ul></ul>');
+                            }
+                            $parent = $('#' + parent_id).children('ul');
+                        } else if (replyable_content_type == 'submission') {
+                            $parent = $('#comments');
                         }
-                        $parent_comment
-                        .children('ul')
-                        .append(`${renderComment(response, false)}</li>`);
+                        appendComment(-1, response, false, $parent);
                         // TODO: individual status div per reply box
                         $("#status").html("<span>Successful post</span>")
                     } else {

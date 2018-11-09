@@ -300,19 +300,16 @@ function backgroundSnoowrap() {
                     let submission = lscache.get(COMMENT_STORAGE_KEY + submission_id);
                     function findParent(entry) {
                         if (entry.name == comment.parent_id) {
+                            entry.replies.push(comment);
                             return true;
-                        } else if (entry.replies.length > 0) {
-                            entry.replies.filter(findParent);
                         } else {
-                        return false;
+                            return entry.replies.filter(findParent);
                         }
                     }
                     let parent_comment = submission.comments.filter(findParent)[0];
-                    parent_comment.replies.push(comment);
                     lscache.set(COMMENT_STORAGE_KEY + submission.id, submission, 5);
                     // TODO: increment number of comments on popup.html
                     // TODO: increment number of comments on comment.html
-                    // TODO: append comment to comment.html
                     callback(comment);
                 })
                 .catch(function(err) {
