@@ -285,7 +285,6 @@ function backgroundSnoowrap() {
                     lscache.set(COMMENT_STORAGE_KEY + id, submission, 5);
                     // TODO: increment number of comments on popup.html
                     // TODO: increment number of comments on comment.html
-                    // TODO: append comment to comment.html
                     callback(comment);
                 })
                 .catch(function(err) {
