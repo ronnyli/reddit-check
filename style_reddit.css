@@ -279,6 +279,18 @@
     transition: background-color 0.1s ease 0s;
 }
 
+.buaDRo:hover, .buaDRo:focus {
+    outline: none;
+}
+
+.buaDRo:hover {
+    color: rgb(204, 55, 0);
+}
+
+.buaDRo:active {
+    color: rgb(255, 106, 50);
+}
+
 ._2q7IQ0BUOWeEZoeAxN555e {
     display: inline-block;
     overflow: hidden;
@@ -347,6 +359,18 @@
     transition: background-color 0.1s ease 0s;
 }
 
+.hxcKpF:hover, .hxcKpF:focus {
+    outline: none;
+}
+
+.hxcKpF:hover {
+    color: rgb(90, 117, 204);
+}
+
+.hxcKpF:active {
+    color: rgb(141, 168, 255);
+}
+
 ._1iKd82bq_nqObFvSH1iC_Q {
     display: inline-block;
     overflow: hidden;
@@ -400,6 +424,10 @@
     text-decoration: none;
 }
 
+.bsfRLa:hover {
+    text-decoration: underline;
+}
+
 .hFyNNd {
     color: rgb(124, 124, 124);
     font-size: 6px;
@@ -440,6 +468,10 @@
 ._2tbHP6ZydRpjI44J3syuqC, ._3V0C4FGg6153xIBQjwsycq {
     margin-right: 3px;
     text-decoration: none;
+}
+
+._2tbHP6ZydRpjI44J3syuqC:hover, ._3V0C4FGg6153xIBQjwsycq:hover {
+    text-decoration: underline;
 }
 
 .gWXVVu {
@@ -595,6 +627,11 @@
     padding: 4px;
 }
 
+.hlpDWs:hover, .hlpDWs:focus {
+    background-color: rgba(26, 26, 27, 0.1);
+    outline: none;
+}
+
 ._1GQDWqbF-wkYWbrpmOvjqJ {
     margin-right: 4px;
     vertical-align: middle;
@@ -679,6 +716,11 @@
     word-break: initial;
     border-radius: 2px;
     transition: background-color 0.1s ease 0s;
+}
+
+.hbyVDo:hover, .hbyVDo:focus {
+    background-color: rgba(26, 26, 27, 0.1);
+    outline: none;
 }
 
 .bhGJjs {
@@ -818,6 +860,10 @@
     color: rgb(0, 121, 211);
 }
 
+.RVnoX:hover {
+    text-decoration: underline;
+}
+
 .clkVGJ .h5svje-0 {
     padding-left: 8px;
     flex: 0 0 auto;
@@ -841,6 +887,10 @@
 
 .hsxhRU:last-child {
     padding-right: 8px;
+}
+
+.hsxhRU:hover {
+    text-decoration: underline;
 }
 
 .eCeBkc {
@@ -871,6 +921,10 @@
     display: inline-block;
     margin-right: 12px;
     transition: color 0.1s ease 0s;
+}
+
+.hNSNDN:hover {
+    text-decoration: underline;
 }
 
 .domCcm {
@@ -965,6 +1019,11 @@
     height: 24px;
     border-radius: 2px;
     transition: background-color 0.1s ease 0s;
+}
+
+.iheKDM:hover, .iheKDM:focus {
+    background-color: rgba(26, 26, 27, 0.1);
+    outline: none;
 }
 
 .ksTfYp {
@@ -1375,6 +1434,10 @@
     color: rgb(120, 124, 126);
 }
 
+._3jOxDPIQ0KaOWpzvSQo-1s:hover {
+    text-decoration: underline;
+}
+
 .fZehHr {
     -webkit-box-align: center;
     align-items: center;
@@ -1401,6 +1464,11 @@
 .eHSpeV ._1Hw7tY9pMr-T1F4P1C-xNU {
     border-radius: 2px;
     transition: background-color 0.1s ease 0s;
+}
+
+.eHSpeV ._1Hw7tY9pMr-T1F4P1C-xNU:hover, .eHSpeV ._1Hw7tY9pMr-T1F4P1C-xNU:focus {
+    background-color: rgba(26, 26, 27, 0.1);
+    outline: none;
 }
 
 .jxTuag {
