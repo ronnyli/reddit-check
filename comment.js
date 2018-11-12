@@ -1,18 +1,5 @@
 
 
-function isLoggedIn($this, callback) {
-    // TODO: need to generalize this function b/c it needs to at least work with top-level comment box as well
-    // TODO: or I could handle this logic in background.js (wrapping every function that requires login by default)
-    const snoo_json = lscache.get('snoowrap_requester_json');
-    if (snoo_json) {
-        var comment_id = $this.closest('li').attr('id');
-        const $form = $this.parents().eq(1).siblings('form');;
-        displayReplyComment(comment_id, $form, 'comment');
-    } else {
-        callback();
-    }
-}
-
 function parseCurrentUrl(callback) {
     var window_url = new URI(window.location.href);
     var query = window_url.search(true);
@@ -119,13 +106,10 @@ function appendComment(index, comment, archived, $element) {
 
     $('.reply_button').off('click').click(function() {
         const $this = $( this );
-        isLoggedIn($this, function() {
-            logInReddit(function(status) {
-                console.log('Login status: ' + status);
-                isLoggedIn($this, function() {
-                    $("#status").append("<span>Problem logging in. Try again.</span>");
-                })
-            });
+        logInReddit(function(status) {
+            var comment_id = $this.closest('li').attr('id');
+            const $form = $this.parents().eq(1).siblings('form');;
+            displayReplyComment(comment_id, $form, 'comment');
         });
     });
     $('.threadline').off('click').click(function() {
@@ -162,15 +146,10 @@ function makeDisplay(submission) {
     }
 
     if (!archived) {
-        // TODO: unify log-in logic that is getting a bit out of hand
         const $form = $('#reply_post');
-        if (lscache.get('snoowrap_requester_json') == null) {
-            $form.click(function () {
-                logInReddit(function(status) {
-                    console.log('Login status: ' + status);
-                })
-            });
-        }
+        $form.click(function () {
+            logInReddit(status => {});
+        });
         displayReplyComment(submission_id, $form, 'submission');
     }
     $('#post').append(renderPostContent(submission));
