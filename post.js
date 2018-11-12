@@ -26,10 +26,10 @@ function showSubmitForm() {
         submitPost(function (status) {
             if (status == 'Success') {
                 $("#form").hide(0);
-                $("#status").append("<span>Successful post</span>")
+                $("#status").append("<span>Successful post</span>");
             } else {
                 $("#form").hide(0);
-                $("#back").attr("href", "post.html")
+                $("#back").attr("href", "post.html");
                 $("#status").append("<span>" + status + "</span>");
                 console.log('Status of failed post:');
                 console.log(status);

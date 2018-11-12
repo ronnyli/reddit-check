@@ -8,8 +8,9 @@
         - CORS missing headers
             - Snoowrap
             - Pushshift
-1. Auto-refresh after user makes a post or comment
-    - looks like Reddit doesn't refresh, just inserts the comment into the DOM
+1. CSS tweaks
+    - hover over links, buttons, etc
+    - color change after upvoting/downvoting
 1. Consistent UI for post.html
 1. Add ability to upvote/downvote, share/save, etc.
 1. Add ability to remove/edit your own posts
