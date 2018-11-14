@@ -55,7 +55,7 @@ function renderComment(comment, archived, parent_ids) {
         <div class="Comment ${comment.id} c497l3-5 MAIAY">
             <div class="c497l3-2 eUvHWc">
                 <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
-                    <div class="_3wVayy5JvIMI67DheMYra2 dplx91-0 buaDRo"><i class="icon icon-upvote _2Jxk822qXs4DaXwsN7yyHA _39UOLMgvssWenwbRxz_iEn"></i></div>
+                    <div class="_2q7IQ0BUOWeEZoeAxN555e dplx91-0 buaDRo"><i class="icon icon-upvote _2Jxk822qXs4DaXwsN7yyHA _39UOLMgvssWenwbRxz_iEn"></i></div>
                 </button>
                 <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
                     <div class="jR747Vd1NbfaLusf5bHre s1y8gf4b-0 hxcKpF"><i class="icon icon-downvote ZyxIIl4FP5gHGrJDzNpUC _2GCoZTwJW7199HSwNZwlHk"></i></div>
@@ -156,6 +156,8 @@ function makeDisplay(submission) {
     $('.ckueCN a').each(function () {
         $( this ).attr('title', $( this ).attr('href'));
     });
+    upvoteButtonTemplate($('.s1loulka-0.glokqy'), submission, 'submission');
+    downvoteButtonTemplate($('.s1loulka-0.glokqy'), submission, 'submission');
 }
 
 function displayReplyComment(comment_id, $form, replyable_content_type) {
@@ -244,13 +246,7 @@ function renderPostContent(submission) {
             <div class="_1KNG36IrXcP5X-eLQsMjZb">
                 <div class="_23h0-EcaBUorIHC-JZyh6J" style="width: 40px; border-left: 4px solid transparent;">
                     <div class="s1loulka-0 glokqy">
-                        <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="upvote" aria-pressed="false" data-click-id="upvote" id="vote-button-${submission.id}">
-                            <div class="_2q7IQ0BUOWeEZoeAxN555e dplx91-0 buaDRo"><i class="icon icon-upvote _2Jxk822qXs4DaXwsN7yyHA"></i></div>
-                        </button>
                         <div class="_1rZYMD_4xY3gRcSS3p8ODO" style="color: rgb(26, 26, 27);">${numToString(submission.score)}</div>
-                        <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
-                            <div class="_1iKd82bq_nqObFvSH1iC_Q s1y8gf4b-0 hxcKpF"><i class="icon icon-downvote ZyxIIl4FP5gHGrJDzNpUC"></i></div>
-                        </button>
                     </div>
                 </div>
                 <div class="s11bh4ne-0 kESrVn">
