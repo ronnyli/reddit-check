@@ -7,6 +7,9 @@
     - bug fixin'
         - CORS missing headers
             - Snoowrap
+                - THIS IS MOST LIKELY DUE TO ANONYMOUS_REQUESTER ACESSS TOKENS EXPIRING AFTER 1 HOUR
+                - set `anonymous_requester_json` to expire
+                - create function `getSnoowrapRequester` that returns appropriate requester if available and runs `fetchAnonymousToken()` otherwise
             - Pushshift
 1. CSS tweaks
     - hover over links, buttons, etc
