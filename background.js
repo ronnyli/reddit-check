@@ -177,6 +177,8 @@ function backgroundSnoowrap() {
     }
 
     function getSnoowrapRequester() {
+        // return whatever snoowrap requester is available
+        // create a new anonymous requester if needed
         return new Promise(function(resolve, reject) {
             if (snoowrap_requester) {
                 console.log('using logged in requester');
@@ -293,8 +295,7 @@ function backgroundSnoowrap() {
 
         getSubmission: function(id, callback) {
             getSnoowrapRequester()
-            .then(r => r.getSubmission(id))
-            .fetch()
+            .then(r => r.getSubmission(id).fetch())
             .then(submission => {
                 lscache.set(COMMENT_STORAGE_KEY + id, submission, 5);
                 callback(submission);
