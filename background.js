@@ -154,12 +154,48 @@ function backgroundSnoowrap() {
         }
     }
 
+    function fetchAnonymousToken() {
+        const form = new FormData();
+        form.set('grant_type', 'https://oauth.reddit.com/grants/installed_client');
+        form.set('device_id', 'DO_NOT_TRACK_THIS_DEVICE');
+        return fetch('https://www.reddit.com/api/v1/access_token', {
+            method: 'post',
+            body: form,
+            headers: { authorization: `Basic ${btoa(clientId + ':')}` },
+            credentials: 'omit',
+        }).then(response => response.text())
+          .then(JSON.parse)
+          .then(tokenInfo => tokenInfo.access_token)
+          .then(anonymousToken => {
+              const anonymousSnoowrap = new snoowrap({ accessToken: anonymousToken });
+              anonymousSnoowrap.config({ proxies: false, requestDelay: 1000 });
+              anonymous_requester = anonymousSnoowrap;
+              // anonymous_requester must be refreshed after 1 hour
+              lscache.set('anonymous_requester_json', anonymousSnoowrap, 59);
+              return anonymous_requester;
+          });
+    }
+
+    function getSnoowrapRequester() {
+        return new Promise(function(resolve, reject) {
+            if (snoowrap_requester) {
+                console.log('using logged in requester');
+                resolve(snoowrap_requester);
+            } else if (lscache.get('anonymous_requester_json')) {
+                console.log('using anonymous requester');
+                resolve(anonymous_requester);
+            } else {
+                console.log('anonymous requester expired. Fetching new one...');
+                resolve(fetchAnonymousToken());
+            }
+        })
+    }
+
     return {
 
         logInReddit: function(interactive, callback) {
             // In case we already have a snoowrap requester cached, simply return it.
             if (lscache.get('snoowrap_requester_json')) {
-                callback('Success');
                 return;
             }
 
@@ -201,7 +237,6 @@ function backgroundSnoowrap() {
                     snoowrap_requester_json = JSON.stringify(r);
                     snoowrap_requester = r;
                     logoutContextMenu(first_run=false);
-                    callback('Success');
                 });
             }
         },
@@ -257,16 +292,8 @@ function backgroundSnoowrap() {
         },
 
         getSubmission: function(id, callback) {
-            var requester;
-            if (snoowrap_requester) {
-                console.log('using logged in requester');
-                requester = snoowrap_requester;
-            } else if (anonymous_requester) {
-                console.log('using anonymous requester');
-                requester = anonymous_requester;
-            }
-
-            requester.getSubmission(id)
+            getSnoowrapRequester()
+            .then(r => r.getSubmission(id))
             .fetch()
             .then(submission => {
                 lscache.set(COMMENT_STORAGE_KEY + id, submission, 5);
@@ -318,28 +345,20 @@ function backgroundSnoowrap() {
         },
 
         searchSubmissionsForURL: function(url) {
-            var requester;
-            if (snoowrap_requester) {
-                console.log('using logged in requester');
-                requester = snoowrap_requester;
-            } else if (anonymous_requester) {
-                console.log('using anonymous requester');
-                requester = anonymous_requester;
-            }
-
             var urls = constructURLs(url);
             // search for multiple URLs by using url:(link1 OR link2 OR...)
             // Do not include http[s]:// or Reddit will return an error
             // see this query for an example https://www.reddit.com/search?q=url%3A%28imgur.com%2FhyLlADL+OR+en.wikipedia.org%2Fwiki%2FBankruptcy_barrel+OR+en.wikipedia.org%2Fwiki%2FExertional_rhabdomyolysis%29&restrict_sr=&sort=relevance&t=all
             var urls_query = '(' + urls.map(url => `"${url}"`).join(' OR ') + ')';
 
-            return requester.search({
+            return getSnoowrapRequester()
+              .then(r => r.search({
                 query: "url:" + urls_query + " OR selftext:" + urls_query,
                 restrictSr: false,
                 time: 'all',
                 sort: 'relevance',
                 syntax: 'lucene'
-              })
+              }))
               .then(listing => {
                 let listing_filtered = listing;
                 // Filter out NSFW results
@@ -409,26 +428,9 @@ function backgroundSnoowrap() {
             });
         },
 
-        fetchAnonymousToken: function() {
-            const form = new FormData();
-            form.set('grant_type', 'https://oauth.reddit.com/grants/installed_client');
-            form.set('device_id', 'DO_NOT_TRACK_THIS_DEVICE');
-            return fetch('https://www.reddit.com/api/v1/access_token', {
-                method: 'post',
-                body: form,
-                headers: { authorization: `Basic ${btoa(clientId + ':')}` },
-                credentials: 'omit',
-            }).then(response => response.text())
-              .then(JSON.parse)
-              .then(tokenInfo => tokenInfo.access_token)
-              .then(anonymousToken => {
-                  const anonymousSnoowrap = new snoowrap({ accessToken: anonymousToken });
-                  anonymousSnoowrap.config({ proxies: false, requestDelay: 1000 });
-                  anonymous_requester = anonymousSnoowrap;
-                  lscache.set('anonymous_requester_json', anonymousSnoowrap);
-                  console.log('Got anonymous snoowrap requester');
-              });
-        }
+        fetchAnonymousToken: fetchAnonymousToken,
+
+        getSnoowrapRequester: getSnoowrapRequester
     }
 }
 
