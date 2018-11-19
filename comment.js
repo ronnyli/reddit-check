@@ -138,6 +138,10 @@ function appendComment(index, comment, archived, $element) {
         $('#' + comment_id).show();
         $('#' + comment_id + '-collapsed').hide();
     });
+
+    $('.ckueCN a').each(function () {
+        $( this ).attr('title', $( this ).attr('href'));
+    });
 }
 
 function makeDisplay(submission) {
@@ -170,6 +174,9 @@ function makeDisplay(submission) {
         displayReplyComment(submission_id, $form, 'submission');
     }
     $('#post').append(renderPostContent(submission));
+    $('.ckueCN a').each(function () {
+        $( this ).attr('title', $( this ).attr('href'));
+    });
 }
 
 function displayReplyComment(comment_id, $form, replyable_content_type) {
