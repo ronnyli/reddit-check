@@ -198,7 +198,15 @@ function backgroundSnoowrap() {
 
             var authenticationUrl = snoowrap.getAuthUrl({
                 clientId: clientId,
-                scope: ['identity', 'read', 'submit'],
+                scope: [
+                    'edit',
+                    'identity',
+                    'read',
+                    'report',
+                    'save',
+                    'submit',
+                    'vote'
+                ],
                 redirectUri: redirectUri,
                 permanent: true,
                 state: 'fe211bebc52eb3da9bef8db6e63104d3' // TODO: bogus state

@@ -6,13 +6,9 @@
     - bogus user agents, state, large blocks of HTML
     - bug fixin'
         - CORS missing headers
-            - Snoowrap
-                - THIS IS MOST LIKELY DUE TO ANONYMOUS_REQUESTER ACESSS TOKENS EXPIRING AFTER 1 HOUR
-                - set `anonymous_requester_json` to expire
-                - create function `getSnoowrapRequester` that returns appropriate requester if available and runs `fetchAnonymousToken()` otherwise
             - Pushshift
 1. CSS tweaks
-    - hover over links, buttons, etc
+    - remove misleading pointer cursor on post.html
     - color change after upvoting/downvoting
 1. Consistent UI for post.html
 1. Add ability to upvote/downvote, share/save, etc.
@@ -22,6 +18,9 @@
 1. Not obvious how to log in
     - even less obvious to log out
 1. Build website for Thredd
+    - context menu link to provide feedback can go to website
+1. Merge lscache submissions so they're not in multiple places??
+    - ideally would have a Relational DB-style relationship between URLs and Submissions
 ### After release
 1. Move ALL HTML into Javascript b/c otherwise you have to remember which HTML goes where
 1. Think about actions for:
