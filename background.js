@@ -1,7 +1,3 @@
-const DEDUPE_KEY = "Dedupe_URL:";
-      URL_STORAGE_KEY = "URL:";
-      SUBMISSION_STORAGE_KEY = "Submission:";
-
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
     console.log('onUpdated: ' + tabId)
@@ -80,55 +76,9 @@ function getURLInfo(tab){
         })
         .then(function(listing) {
             updateBadge(listing.length, tab);
-            lscache.set(URL_STORAGE_KEY + url, listing, 5);
+            SubmissionModel.insert(listing, url);
             return listing;
         });
-    }
-}
-
-function SubmissionCollection() {
-    this.EXPIRATION_TIME = 5;  // minutes
-    return {
-        init: function() {
-            $('body').on('url-replace', function(e, newdata) {
-                this.replace(newdata.url, newdata.ids);
-            });
-            $('body').on('url-insert-ids', function(e, newdata) {
-                this.insertIDs(newdata.url, newdata.ids);
-            });
-        },
-        replace: function(url, ids) {
-            lscache.set(
-                URL_STORAGE_KEY + url,
-                typeof ids === "string"? [ids] : ids,
-                this.EXPIRATION_TIME);
-        },
-        insertIDs: function(url, new_ids) {
-            const ID_array = typeof new_ids === "string"? [new_ids] : new_ids;
-            let all_ids = lscache.get(URL_STORAGE_KEY + url);
-            if (all_ids) {
-                ID_array.forEach(function(id) {
-                    if (all_ids.indexOf(id) < 0) {
-                        all_ids.push(id);
-                    }
-                });
-                this.replace(url, all_ids);
-            } else {
-                this.replace(url, new_ids);
-            }
-        }
-    }
-}
-
-function SubmissionModel() {
-    this.EXPIRATION_TIME = 5;  // minutes
-    return {
-        init: function() {
-            $('body').on('submission-update', function(e, newdata) {
-
-            });
-        },
-        
     }
 }
 
@@ -306,15 +256,7 @@ function backgroundSnoowrap() {
                 }, function(tabs) {
                     var tab = tabs[0];
                     var url_raw = tab.url;
-                    let redditPosts = lscache.get(URL_STORAGE_KEY + url_raw);
-                    redditPosts = redditPosts ? redditPosts : [];
-                    redditPosts.push(submission);
-                    updateBadge(redditPosts.length, tab);
-                    lscache.set(
-                        URL_STORAGE_KEY + url_raw,
-                        redditPosts,
-                        5
-                    );
+                    SubmissionModel.insert([submission], url_raw);
                 });
                 callback('Success');
             })
@@ -354,9 +296,9 @@ function backgroundSnoowrap() {
                 .then(comment => {
                     // inject comment into submission object
                     let submission = lscache.get(SUBMISSION_STORAGE_KEY + id);
+                    submission.num_comments += 1;
                     submission.comments.push(comment);
-                    lscache.set(SUBMISSION_STORAGE_KEY + id, submission, 5);
-                    // TODO: increment number of comments on popup.html
+                    SubmissionModel.update([submission]);
                     // TODO: increment number of comments on comment.html
                     callback(comment);
                 })
@@ -370,6 +312,7 @@ function backgroundSnoowrap() {
                     // inject comment into submission object
                     const submission_id = comment.link_id.split('_')[1];
                     let submission = lscache.get(SUBMISSION_STORAGE_KEY + submission_id);
+                    submission.num_comments += 1;
                     function findParent(entry) {
                         if (entry.name == comment.parent_id) {
                             entry.replies.push(comment);
@@ -379,8 +322,7 @@ function backgroundSnoowrap() {
                         }
                     }
                     let parent_comment = submission.comments.filter(findParent)[0];
-                    lscache.set(SUBMISSION_STORAGE_KEY + submission.id, submission, 5);
-                    // TODO: increment number of comments on popup.html
+                    SubmissionModel.update([submission]);
                     // TODO: increment number of comments on comment.html
                     callback(comment);
                 })

@@ -4,10 +4,14 @@ function parsePosts(globalPage, tab) {
     var title = tab.title
     var encodedUrl = encodeURIComponent(url)
 
-    var redditPosts = lscache.get(globalPage.POST_STORAGE_KEY + tab.url)
+    var redditPosts = lscache.get(URL_STORAGE_KEY + tab.url);
     if (redditPosts != null && redditPosts != []) {
         $("div#timeout").hide(0);
-        processPosts(redditPosts, encodedUrl, title)
+        processPosts(
+            SubmissionCollection.get(tab.url),
+            encodedUrl,
+            title
+        );
     } else {
         // redditPosts can be empty if the entry expired in lscache
         globalPage.getURLInfo(tab)
