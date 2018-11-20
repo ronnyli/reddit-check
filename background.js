@@ -249,7 +249,6 @@ function backgroundSnoowrap() {
             .fetch()
             .then(function(submission) {
                 // add submission to lscache
-                lscache.set(SUBMISSION_STORAGE_KEY + submission.id, submission, 5);
                 chrome.tabs.query({
                     active: true,
                     currentWindow: true
@@ -284,7 +283,7 @@ function backgroundSnoowrap() {
             getSnoowrapRequester()
             .then(r => r.getSubmission(id).fetch())
             .then(submission => {
-                lscache.set(SUBMISSION_STORAGE_KEY + id, submission, 5);
+                SubmissionModel.update([submission])
                 callback(submission);
             });
         },
