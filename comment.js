@@ -311,7 +311,7 @@ function renderPostContent(submission) {
                     <div class="_3-miAEojrCvx_4FQ8x3P-s s1o44igr-2 hbJPLi">
                         <div class="_1UoeAeSRhOKSNdY_h3iS1O _3m17ICJgx45k_z-t82iVuO _2qww3J5KKzsD7e5DO0BvvU">
                             <i class="icon icon-comment _3ch9jJ0painNf41PmU4F9i _3DVrpDrMM9NLT6TlsTUMxC" role="presentation"></i>
-                            <span class="FHCV02u6Cp2zYL0fhQPsO">${numToString(submission.comments.length)} comments</span>
+                            <span class="FHCV02u6Cp2zYL0fhQPsO">${numToString(submission.num_comments)} comments</span>
                         </div>
                         <div class="s1o44igr-1 hNfrQO" id="${submission.id}-overlay-share-menu">
                             <button class="s1o44igr-0 hlpDWs" data-click-id="share">

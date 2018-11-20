@@ -1,8 +1,3 @@
-var gUrlToAsyncMap = {}
-var DEDUPE_KEY = "Dedupe:"
-var POST_STORAGE_KEY = "Posts:"
-var COMMENT_STORAGE_KEY = "Comments:"
-
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
     console.log('onUpdated: ' + tabId)
@@ -68,7 +63,7 @@ function constructURLs(url){
 // get URL info json
 function getURLInfo(tab){
     var url = tab.url
-    var posts = lscache.get(POST_STORAGE_KEY + url)
+    var posts = lscache.get(URL_STORAGE_KEY + url)
     if (posts != null) {
         console.log('getURLInfo: cached.')
         updateBadge(posts.length, tab);
@@ -81,7 +76,7 @@ function getURLInfo(tab){
         })
         .then(function(listing) {
             updateBadge(listing.length, tab);
-            lscache.set(POST_STORAGE_KEY + url, listing, 5);
+            SubmissionModel.insert(listing, url);
             return listing;
         });
     }
@@ -254,22 +249,13 @@ function backgroundSnoowrap() {
             .fetch()
             .then(function(submission) {
                 // add submission to lscache
-                lscache.set(COMMENT_STORAGE_KEY + submission.id, submission, 5);
                 chrome.tabs.query({
                     active: true,
                     currentWindow: true
                 }, function(tabs) {
                     var tab = tabs[0];
                     var url_raw = tab.url;
-                    let redditPosts = lscache.get(POST_STORAGE_KEY + url_raw);
-                    redditPosts = redditPosts ? redditPosts : [];
-                    redditPosts.push(submission);
-                    updateBadge(redditPosts.length, tab);
-                    lscache.set(
-                        POST_STORAGE_KEY + url_raw,
-                        redditPosts,
-                        5
-                    );
+                    SubmissionModel.insert([submission], url_raw);
                 });
                 callback('Success');
             })
@@ -297,7 +283,7 @@ function backgroundSnoowrap() {
             getSnoowrapRequester()
             .then(r => r.getSubmission(id).fetch())
             .then(submission => {
-                lscache.set(COMMENT_STORAGE_KEY + id, submission, 5);
+                SubmissionModel.update([submission])
                 callback(submission);
             });
         },
@@ -308,10 +294,10 @@ function backgroundSnoowrap() {
                 .reply(text)
                 .then(comment => {
                     // inject comment into submission object
-                    let submission = lscache.get(COMMENT_STORAGE_KEY + id);
+                    let submission = lscache.get(SUBMISSION_STORAGE_KEY + id);
+                    submission.num_comments += 1;
                     submission.comments.push(comment);
-                    lscache.set(COMMENT_STORAGE_KEY + id, submission, 5);
-                    // TODO: increment number of comments on popup.html
+                    SubmissionModel.update([submission]);
                     // TODO: increment number of comments on comment.html
                     callback(comment);
                 })
@@ -324,7 +310,8 @@ function backgroundSnoowrap() {
                 .then(comment => {
                     // inject comment into submission object
                     const submission_id = comment.link_id.split('_')[1];
-                    let submission = lscache.get(COMMENT_STORAGE_KEY + submission_id);
+                    let submission = lscache.get(SUBMISSION_STORAGE_KEY + submission_id);
+                    submission.num_comments += 1;
                     function findParent(entry) {
                         if (entry.name == comment.parent_id) {
                             entry.replies.push(comment);
@@ -334,8 +321,7 @@ function backgroundSnoowrap() {
                         }
                     }
                     let parent_comment = submission.comments.filter(findParent)[0];
-                    lscache.set(COMMENT_STORAGE_KEY + submission.id, submission, 5);
-                    // TODO: increment number of comments on popup.html
+                    SubmissionModel.update([submission]);
                     // TODO: increment number of comments on comment.html
                     callback(comment);
                 })
