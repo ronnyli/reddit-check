@@ -1,7 +1,6 @@
-var gUrlToAsyncMap = {}
-var DEDUPE_KEY = "Dedupe:"
-var POST_STORAGE_KEY = "Posts:"
-var COMMENT_STORAGE_KEY = "Comments:"
+const DEDUPE_KEY = "Dedupe_URL:";
+      URL_STORAGE_KEY = "URL:";
+      SUBMISSION_STORAGE_KEY = "Submission:";
 
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
@@ -68,7 +67,7 @@ function constructURLs(url){
 // get URL info json
 function getURLInfo(tab){
     var url = tab.url
-    var posts = lscache.get(POST_STORAGE_KEY + url)
+    var posts = lscache.get(URL_STORAGE_KEY + url)
     if (posts != null) {
         console.log('getURLInfo: cached.')
         updateBadge(posts.length, tab);
@@ -81,9 +80,55 @@ function getURLInfo(tab){
         })
         .then(function(listing) {
             updateBadge(listing.length, tab);
-            lscache.set(POST_STORAGE_KEY + url, listing, 5);
+            lscache.set(URL_STORAGE_KEY + url, listing, 5);
             return listing;
         });
+    }
+}
+
+function SubmissionCollection() {
+    this.EXPIRATION_TIME = 5;  // minutes
+    return {
+        init: function() {
+            $('body').on('url-replace', function(e, newdata) {
+                this.replace(newdata.url, newdata.ids);
+            });
+            $('body').on('url-insert-ids', function(e, newdata) {
+                this.insertIDs(newdata.url, newdata.ids);
+            });
+        },
+        replace: function(url, ids) {
+            lscache.set(
+                URL_STORAGE_KEY + url,
+                typeof ids === "string"? [ids] : ids,
+                this.EXPIRATION_TIME);
+        },
+        insertIDs: function(url, new_ids) {
+            const ID_array = typeof new_ids === "string"? [new_ids] : new_ids;
+            let all_ids = lscache.get(URL_STORAGE_KEY + url);
+            if (all_ids) {
+                ID_array.forEach(function(id) {
+                    if (all_ids.indexOf(id) < 0) {
+                        all_ids.push(id);
+                    }
+                });
+                this.replace(url, all_ids);
+            } else {
+                this.replace(url, new_ids);
+            }
+        }
+    }
+}
+
+function SubmissionModel() {
+    this.EXPIRATION_TIME = 5;  // minutes
+    return {
+        init: function() {
+            $('body').on('submission-update', function(e, newdata) {
+
+            });
+        },
+        
     }
 }
 
@@ -254,19 +299,19 @@ function backgroundSnoowrap() {
             .fetch()
             .then(function(submission) {
                 // add submission to lscache
-                lscache.set(COMMENT_STORAGE_KEY + submission.id, submission, 5);
+                lscache.set(SUBMISSION_STORAGE_KEY + submission.id, submission, 5);
                 chrome.tabs.query({
                     active: true,
                     currentWindow: true
                 }, function(tabs) {
                     var tab = tabs[0];
                     var url_raw = tab.url;
-                    let redditPosts = lscache.get(POST_STORAGE_KEY + url_raw);
+                    let redditPosts = lscache.get(URL_STORAGE_KEY + url_raw);
                     redditPosts = redditPosts ? redditPosts : [];
                     redditPosts.push(submission);
                     updateBadge(redditPosts.length, tab);
                     lscache.set(
-                        POST_STORAGE_KEY + url_raw,
+                        URL_STORAGE_KEY + url_raw,
                         redditPosts,
                         5
                     );
@@ -297,7 +342,7 @@ function backgroundSnoowrap() {
             getSnoowrapRequester()
             .then(r => r.getSubmission(id).fetch())
             .then(submission => {
-                lscache.set(COMMENT_STORAGE_KEY + id, submission, 5);
+                lscache.set(SUBMISSION_STORAGE_KEY + id, submission, 5);
                 callback(submission);
             });
         },
@@ -308,9 +353,9 @@ function backgroundSnoowrap() {
                 .reply(text)
                 .then(comment => {
                     // inject comment into submission object
-                    let submission = lscache.get(COMMENT_STORAGE_KEY + id);
+                    let submission = lscache.get(SUBMISSION_STORAGE_KEY + id);
                     submission.comments.push(comment);
-                    lscache.set(COMMENT_STORAGE_KEY + id, submission, 5);
+                    lscache.set(SUBMISSION_STORAGE_KEY + id, submission, 5);
                     // TODO: increment number of comments on popup.html
                     // TODO: increment number of comments on comment.html
                     callback(comment);
@@ -324,7 +369,7 @@ function backgroundSnoowrap() {
                 .then(comment => {
                     // inject comment into submission object
                     const submission_id = comment.link_id.split('_')[1];
-                    let submission = lscache.get(COMMENT_STORAGE_KEY + submission_id);
+                    let submission = lscache.get(SUBMISSION_STORAGE_KEY + submission_id);
                     function findParent(entry) {
                         if (entry.name == comment.parent_id) {
                             entry.replies.push(comment);
@@ -334,7 +379,7 @@ function backgroundSnoowrap() {
                         }
                     }
                     let parent_comment = submission.comments.filter(findParent)[0];
-                    lscache.set(COMMENT_STORAGE_KEY + submission.id, submission, 5);
+                    lscache.set(SUBMISSION_STORAGE_KEY + submission.id, submission, 5);
                     // TODO: increment number of comments on popup.html
                     // TODO: increment number of comments on comment.html
                     callback(comment);
