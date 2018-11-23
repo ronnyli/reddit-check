@@ -5,8 +5,10 @@
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML
     - bug fixin'
-        - CORS missing headers
-            - Pushshift
+        - Raph still has "Loading..." bug
+        - Display a Loading... message when loading comments
+            - Josh thought that there were actually no comments b/c it was a long load time
+        - could right-clicking Open In New Tab somehow keep popup window open?
 1. CSS tweaks
     - remove misleading pointer cursor on post.html
     - color change after upvoting/downvoting
@@ -19,8 +21,9 @@
     - even less obvious to log out
 1. Build website for Thredd
     - context menu link to provide feedback can go to website
-1. Merge lscache submissions so they're not in multiple places??
-    - ideally would have a Relational DB-style relationship between URLs and Submissions
+1. How to position Thredd in the minds of users?
+    - serendipitous connections, "water cooler moments" on the internet
+    - look at Hypothesis then do the opposite of what they do
 ### After release
 1. Move ALL HTML into Javascript b/c otherwise you have to remember which HTML goes where
 1. Think about actions for:
