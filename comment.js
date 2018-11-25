@@ -359,8 +359,9 @@ $(document).ready(function(){
     var query = window_url.search(true);
 
     parseCurrentUrl(function(query) {
-        var submission = lscache.get("Comments:" + query.id);
-        if (submission != null) {
+        var submission = lscache.get("Submission:" + query.id);
+        if ((submission.comments && submission.comments.length > 0) ||
+             query.num_comments === 0) {
             makeDisplay(submission);
         } else {
             getSubmission(query.id, makeDisplay);
