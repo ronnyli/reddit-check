@@ -6,27 +6,21 @@ function parseCurrentUrl(callback) {
     callback(query)
 }
 
-function iterateComments(index, comment, archived, parent_ids=[]) {
-    var commentHTML = renderComment(comment, archived, parent_ids);
-
+function iterateComments(index, comment, archived, $element) {
+    const $collapsed = renderCollapsedComment(comment);
+    const $comment = renderComment(comment, archived);
     if (comment.replies.length > 0) {
-        commentHTML += `<ul>`;
+        $children = $('<ul>');
         $.each(comment.replies, (index, child) =>{
-            if (parent_ids.length < child.depth) {
-                parent_ids = parent_ids.concat(comment.id)
-            } else {
-                parent_ids = parent_ids.slice(0, child.depth)
-            }
-            commentHTML += iterateComments(index, child, archived, parent_ids);
+            iterateComments(index, child, archived, $children);
         });
-        commentHTML += `</ul>`;
+        $comment.append($children);
     }
-    commentHTML += '</li>';
-    return commentHTML;
+    $element.append($collapsed).append($comment);
 }
 
-function renderComment(comment, archived, parent_ids) {
-    return `
+function renderCollapsedComment(comment) {
+    return $(`
     <li class="s136il31-0 cMWqxb" id="${comment.id}-collapsed" tabindex="-1" style="display:none">
         <div class="Comment ${comment.id} c497l3-5 MAIAY">
             <button class="${comment.id} c497l3-0 jtKgEe">
@@ -46,6 +40,11 @@ function renderComment(comment, archived, parent_ids) {
             </div>
         </div>
     </li>
+    `)
+}
+
+function renderComment(comment, archived) {
+    let $comment = $(`
     <li id='${comment.id}' class="s136il31-0 cMWqxb" tabindex="-1">
         <div class="fxv3b9-1 jDSCcP">
             <div class="fxv3b9-2 czhQfm">
@@ -54,12 +53,6 @@ function renderComment(comment, archived, parent_ids) {
         </div>
         <div class="Comment ${comment.id} c497l3-5 MAIAY">
             <div class="c497l3-2 eUvHWc">
-                <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
-                    <div class="_2q7IQ0BUOWeEZoeAxN555e dplx91-0 buaDRo"><i class="icon icon-upvote _2Jxk822qXs4DaXwsN7yyHA _39UOLMgvssWenwbRxz_iEn"></i></div>
-                </button>
-                <button class="cYUyoUM3wmgRXEHv1LlZv" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
-                    <div class="jR747Vd1NbfaLusf5bHre s1y8gf4b-0 hxcKpF"><i class="icon icon-downvote ZyxIIl4FP5gHGrJDzNpUC _2GCoZTwJW7199HSwNZwlHk"></i></div>
-                </button>
             </div>
             <div class="c497l3-4 jHfOJm">
                 <span class="s1dqr9jy-0 imyGpC">level 1</span>
@@ -96,13 +89,18 @@ function renderComment(comment, archived, parent_ids) {
                 </div>
             </div>
             <form></form>
-        </div>`
-    // missing </li> tag because I need to delay closing until later
-    ;
+        </div>
+    </li>`);
+    $vote_arrows_div = $comment.find('.c497l3-2');
+    let upvote_button = new upvoteButtonTemplate($vote_arrows_div, comment, 'comment');
+        downvote_button = new downvoteButtonTemplate($vote_arrows_div, comment, 'comment');
+    upvote_button.init();
+    downvote_button.init();
+    return $comment
 }
 
 function appendComment(index, comment, archived, $element) {
-    $element.append(iterateComments(index, comment, archived));
+    iterateComments(index, comment, archived, $element);
 
     $('.reply_button').off('click').click(function() {
         const $this = $( this );
@@ -156,8 +154,12 @@ function makeDisplay(submission) {
     $('.ckueCN a').each(function () {
         $( this ).attr('title', $( this ).attr('href'));
     });
-    upvoteButtonTemplate($('.s1loulka-0.glokqy'), submission, 'submission');
-    downvoteButtonTemplate($('.s1loulka-0.glokqy'), submission, 'submission');
+    let upvote_button = new upvoteButtonTemplate($('.s1loulka-0.glokqy'), submission, 'submission');
+        score = new scoreTemplate($('.s1loulka-0.glokqy'), submission);
+        downvote_button = new downvoteButtonTemplate($('.s1loulka-0.glokqy'), submission, 'submission');
+    upvote_button.init();
+    score.init();
+    downvote_button.init();
 }
 
 function displayReplyComment(comment_id, $form, replyable_content_type) {
@@ -246,7 +248,6 @@ function renderPostContent(submission) {
             <div class="_1KNG36IrXcP5X-eLQsMjZb">
                 <div class="_23h0-EcaBUorIHC-JZyh6J" style="width: 40px; border-left: 4px solid transparent;">
                     <div class="s1loulka-0 glokqy">
-                        <div class="_1rZYMD_4xY3gRcSS3p8ODO" style="color: rgb(26, 26, 27);">${numToString(submission.score)}</div>
                     </div>
                 </div>
                 <div class="s11bh4ne-0 kESrVn">
