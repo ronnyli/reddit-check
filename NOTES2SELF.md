@@ -8,13 +8,20 @@
         - Raph still has "Loading..." bug
         - Display a Loading... message when loading comments
             - Josh thought that there were actually no comments b/c it was a long load time
+        - Blacklisted element appears for some reason
         - could right-clicking Open In New Tab somehow keep popup window open?
+            - or make the extension an overlay so it doesn't keep closing
+        - **looks like it's still not using cached comment data**
+        - Youtube searching is bugged.
+            - test https://www.youtube.com/watch?time_continue=6647&v=qLgj6zm6XoA
 1. CSS tweaks
     - remove misleading pointer cursor on post.html
     - color change after upvoting/downvoting
 1. Consistent UI for post.html
-1. Add ability to upvote/downvote, share/save, etc.
-1. Add ability to remove/edit your own posts
+1. **MVC stuff**
+    - Add ability to upvote/downvote, share/save, etc.
+    - Add ability to remove/edit your own posts
+    - keep the state synced between lscache and frontend?
 1. Options
     - turn off auto-search
 1. Not obvious how to log in

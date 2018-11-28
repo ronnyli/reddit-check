@@ -43,6 +43,10 @@ const SubmissionCollection = {
 
 const SubmissionModel = {
     EXPIRATION_TIME: 5,  // minutes
+    get: function(id) {
+        const id_ = id.includes('_') ? id.split('_')[1] : id;
+        return lscache.get(SUBMISSION_STORAGE_KEY + id_);
+    },
     init: function() {
         $(document).on('submission-update', function(e, submissions) {
             // let front-facing pages know that submission was updated
@@ -72,6 +76,19 @@ const SubmissionModel = {
         $(document).trigger('submission-update', {
             submissions: submissions
         });
+    },
+    updateComment: function(submission, comment_id, newdata) {
+        const id_ = comment_id.includes('_') ? comment_id.split('_')[1] : comment_id;
+        function updateRecursive(entry) {
+            if (entry.id === id_) {
+                Object.assign(entry, newdata);
+                return true;
+            } else {
+                return entry.replies.filter(updateRecursive);
+            }
+        }
+        submission.comments.filter(updateRecursive);
+        this.update([submission]);
     }
 };
 

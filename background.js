@@ -193,6 +193,7 @@ function backgroundSnoowrap() {
         logInReddit: function(interactive, callback) {
             // In case we already have a snoowrap requester cached, simply return it.
             if (lscache.get('snoowrap_requester_json')) {
+                callback('Success');
                 return;
             }
 
@@ -242,6 +243,7 @@ function backgroundSnoowrap() {
                     snoowrap_requester_json = JSON.stringify(r);
                     snoowrap_requester = r;
                     logoutContextMenu(first_run=false);
+                    callback('Success');
                 });
             }
         },
@@ -423,6 +425,54 @@ function backgroundSnoowrap() {
             });
         },
 
+        voteReddit: function(id, vote_type, replyable_content_type, callback) {
+            getSnoowrapRequester()
+            .then(r => {
+                switch(replyable_content_type) {
+                    case 'submission':
+                        return r.getSubmission(id);
+                        break;
+                    case 'comment':
+                        return r.getComment(id);
+                        break;
+                }
+            }).then(content => {
+                switch(vote_type) {
+                    case 'upvote':
+                        return content.upvote();
+                        break;
+                    case 'unvote':
+                        return content.unvote();
+                        break;
+                    case 'downvote':
+                        return content.downvote();
+                        break;
+                }
+            }).then(content => content.fetch())
+            .then(content => {
+                // update current data with new scores
+                const newdata = {
+                    likes: content.likes,
+                    score: content.score,
+                    downs: content.downs,
+                    ups: content.ups,
+                    upvote_ratio: content.upvote_ratio
+                };
+                const submission_id = content.link_id || content.id;
+                let submission = SubmissionModel.get(submission_id);
+                switch (replyable_content_type) {
+                    case 'submission':
+                        Object.assign(submission, newdata);
+                        SubmissionModel.update([submission]);
+                        break;
+                    case 'comment':
+                        SubmissionModel.updateComment(submission, content.id, newdata);
+                        break;
+                }
+                return content
+            }).then(content => callback(content))
+        },
+
         fetchAnonymousToken: fetchAnonymousToken,
 
         getSnoowrapRequester: getSnoowrapRequester
@@ -452,6 +502,12 @@ function onRequest(request, sender, callback) {
     } else if (request.action == 'leaveComment') {
         snoo.leaveComment(request.id,
             request.text,
+            request.replyable_content_type,
+            callback);
+        return true;
+    } else if (request.action == 'voteReddit') {
+        snoo.voteReddit(request.id,
+            request.vote_type,
             request.replyable_content_type,
             callback);
         return true;

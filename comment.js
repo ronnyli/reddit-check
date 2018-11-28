@@ -10,8 +10,9 @@ function iterateComments(index, comment, archived, $element) {
     const $collapsed = renderCollapsedComment(comment);
     const $comment = renderComment(comment, archived);
     if (comment.replies.length > 0) {
-        $children = $('<ul>');
-        $.each(comment.replies, (index, child) =>{
+        $comment.append('<ul>');
+        let $children = $comment.children('ul');
+        $.each(comment.replies, (index, child) => {
             iterateComments(index, child, archived, $children);
         });
         $comment.append($children);
@@ -158,7 +159,7 @@ function makeDisplay(submission) {
         score = new scoreTemplate($('.s1loulka-0.glokqy'), submission);
         downvote_button = new downvoteButtonTemplate($('.s1loulka-0.glokqy'), submission, 'submission');
     upvote_button.init();
-    score.init();
+    score.init(score.getStatus(submission), submission.score);
     downvote_button.init();
 }
 

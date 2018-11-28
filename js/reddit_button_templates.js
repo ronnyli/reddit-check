@@ -2,10 +2,9 @@ function upvoteButtonTemplate($element, content, replyable_content_type) {
     const $parent = $element;
     let $button = $('<button>');
     $parent.prepend($button);
-
     let button_class;
     const liked_class = 'gwerfb';
-    const null_class = 'buaDRo';  // TODO: this is not the same as null_class for downvote arrow
+    const null_class = 'buaDRo';
     if ('likes' in content) {
         if (content.likes) {
             button_class = liked_class;
@@ -27,15 +26,24 @@ function upvoteButtonTemplate($element, content, replyable_content_type) {
         const current_class = button_class;
         button_class = current_class === liked_class ? null_class : liked_class;
         if (button_class === liked_class) {
-            // send vote to Reddit
+            logInReddit(function(status) {
+                voteReddit(content.id, 'upvote', replyable_content_type,
+                    function(newcontent) {
+                        $button.siblings().trigger('click-upvote', ['liked', newcontent.score]);
+                    });
+            });
         } else {
-            // send unvote to Reddit
+            logInReddit(function(status) {
+                voteReddit(content.id, 'unvote', replyable_content_type,
+                    function(newcontent) {
+                        $button.siblings().trigger('click-upvote', ['neutral', newcontent.score]);
+                    });
+            });
         }
-        $( this ).siblings().trigger('click-upvote');
         render();
 
     });
-    $button.on('click-downvote', function() {
+    $button.on('click-downvote', function(e, status, score) {
         const current_class = button_class;
         button_class = null_class;
         if (button_class !== current_class) {
@@ -82,16 +90,16 @@ function scoreTemplate($element, content) {
         }
         return 'neutral'
     }
-    function render() {
-        const content_ = lscache.get('Submission:' + id);  // TODO: typically done through a controller?
-              style = getLikedStatus(content_);
-        $score.html(`${numToString(content_.score)}`);
-        $score.attr('style', styles[style]);
+    function render(status, score) {
+        $score.html(`${numToString(score)}`);
+        $score.attr('style', styles[status]);
     }
-    $score.on('click-upvote', render);
-    $score.on('click-downvote', render);
+    $score.on('click-upvote click-downvote', function(_, status, score) {
+        render(status, score);
+    });
     return {
-        init: render
+        init: render,
+        getStatus: getLikedStatus
     }
 }
 
@@ -125,15 +133,24 @@ function downvoteButtonTemplate($element, content, replyable_content_type) {
         const current_class = button_class;
         button_class = current_class === disliked_class ? null_class : disliked_class;
         if (button_class === disliked_class) {
-            // send downvote to Reddit
+            logInReddit(function(status) {
+                voteReddit(content.id, 'downvote', replyable_content_type,
+                    function(newcontent) {
+                        $button.siblings().trigger('click-downvote', ['disliked', newcontent.score]);
+                    });
+            });
         } else {
-            // send unvote to Reddit
+            logInReddit(function(status) {
+                voteReddit(content.id, 'unvote', replyable_content_type,
+                    function(newcontent) {
+                        $button.siblings().trigger('click-downvote', ['neutral', newcontent.score]);
+                    });
+            });
         }
-        $( this ).siblings().trigger('click-downvote');
         render();
 
     });
-    $button.on('click-upvote', function() {
+    $button.on('click-upvote', function(e, status, score) {
         const current_class = button_class;
         button_class = null_class;
         if (button_class !== current_class) {
