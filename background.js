@@ -76,7 +76,7 @@ function getURLInfo(tab){
         })
         .then(function(listing) {
             updateBadge(listing.length, tab);
-            SubmissionModel.insert(listing, url);
+            SubmissionLscache.insert(listing, url);
             return listing;
         });
     }
@@ -253,19 +253,18 @@ function backgroundSnoowrap() {
                 subredditName: subreddit,
                 title: title,
                 url: url
-            })
-            .then(submission => submission.name)  //ID of new submission
-            .then(id => snoowrap_requester.getSubmission(id))
-            .fetch()
+            }).fetch()
             .then(function(submission) {
                 // add submission to lscache
                 chrome.tabs.query({
+                    // It's possible for the user to tweak the URL
+                    // so get the one from the address bar
                     active: true,
                     currentWindow: true
                 }, function(tabs) {
                     var tab = tabs[0];
                     var url_raw = tab.url;
-                    SubmissionModel.insert([submission], url_raw);
+                    SubmissionLscache.insert([submission], url_raw);
                 });
                 callback('Success');
             })
@@ -293,7 +292,7 @@ function backgroundSnoowrap() {
             getSnoowrapRequester()
             .then(r => r.getSubmission(id).fetch())
             .then(submission => {
-                SubmissionModel.update([submission])
+                SubmissionLscache.update([submission])
                 callback(submission);
             });
         },
@@ -307,7 +306,7 @@ function backgroundSnoowrap() {
                     let submission = lscache.get(SUBMISSION_STORAGE_KEY + id);
                     submission.num_comments += 1;
                     submission.comments.push(comment);
-                    SubmissionModel.update([submission]);
+                    SubmissionLscache.update([submission]);
                     // TODO: increment number of comments on comment.html
                     callback(comment);
                 })
@@ -331,7 +330,7 @@ function backgroundSnoowrap() {
                         }
                     }
                     let parent_comment = submission.comments.filter(findParent)[0];
-                    SubmissionModel.update([submission]);
+                    SubmissionLscache.update([submission]);
                     // TODO: increment number of comments on comment.html
                     callback(comment);
                 })
@@ -460,14 +459,14 @@ function backgroundSnoowrap() {
                     upvote_ratio: content.upvote_ratio
                 };
                 const submission_id = content.link_id || content.id;
-                let submission = SubmissionModel.get(submission_id);
+                let submission = SubmissionLscache.get(submission_id);
                 switch (replyable_content_type) {
                     case 'submission':
                         Object.assign(submission, newdata);
-                        SubmissionModel.update([submission]);
+                        SubmissionLscache.update([submission]);
                         break;
                     case 'comment':
-                        SubmissionModel.updateComment(submission, content.id, newdata);
+                        SubmissionLscache.updateComment(submission, content.id, newdata);
                         break;
                 }
                 return content

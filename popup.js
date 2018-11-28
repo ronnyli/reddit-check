@@ -8,7 +8,7 @@ function parsePosts(globalPage, tab) {
     if (redditPosts != null && redditPosts != []) {
         $("div#timeout").hide(0);
         processPosts(
-            SubmissionCollection.get(tab.url),
+            SubmissionCollectionLscache.get(tab.url),
             encodedUrl,
             title
         );
