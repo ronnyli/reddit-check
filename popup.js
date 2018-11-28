@@ -65,34 +65,7 @@ function processPosts(redditPosts, encodedUrl, title) {
 function makeDisplay(redditPosts, encodedUrl, title) {
     var resubmitUrl = "https://www.reddit.com/submit?resubmit=true&url=" + encodedUrl;
     redditPosts.sort(comparePosts)
-    var permalinks = [];
-    for( var i=0; entry = redditPosts[i]; i++) {
-            permalinks[i] = {
-                id: entry.id,
-                link: entry.permalink,
-                title: entry.title,
-                score: entry.score+"",
-                created_utc: entry.created_utc,
-                comments: entry.num_comments+"",
-                subreddit: entry.subreddit_name_prefixed,
-                author: entry.author
-            };
-    }
-    $.each(permalinks, postHtml);
-}
-
-function oldPostHtml(index, permalink) {
-    $("#links").append(`
-        <li>
-            <div class='score'>${numToString(permalink.score)}</div>
-            <a href='${buildCommentUrl(permalink)}' title='${permalink.link}'>${permalink.title}</a>
-            <div class='age'>${getAge(permalink.created_utc)}
-                &nbsp;&nbsp;${numToString(permalink.comments)} comments
-                &nbsp;&nbsp;<a href='http://www.reddit.com/${permalink.subreddit}' target='_blank'>${permalink.subreddit}</a>
-                &nbsp;&nbsp;u/${permalink.author}
-            </div>
-        </li>`
-    );
+    $.each(redditPosts, postHtml);
 }
 
 function postHtml(index, permalink) {
@@ -104,17 +77,6 @@ function postHtml(index, permalink) {
                         <div class="upvote-downvote-outer _3YgWdffoKyCp7UaGAEQpoo">
                             <div class="upvote-downvote-border s9fusyd-4 cRuhKC">
                                 <div class="upvote-downvote-inner s9fusyd-3 iJSWiv">
-                                    <button class="vote-arrow cYUyoUM3wmgRXEHv1LlZv" aria-label="upvote" aria-pressed="false" data-click-id="upvote">
-                                        <div class="upvote-arrow _2q7IQ0BUOWeEZoeAxN555e dplx91-0 buaDRo">
-                                            <i class="icon icon-upvote _2Jxk822qXs4DaXwsN7yyHA"></i>
-                                        </div>
-                                    </button>
-                                    <div class="score _1rZYMD_4xY3gRcSS3p8ODO" style="color: rgb(26, 26, 27);">${numToString(permalink.score)}</div>
-                                    <button class="vote-arrow cYUyoUM3wmgRXEHv1LlZv" aria-label="downvote" aria-pressed="false" data-click-id="downvote">
-                                        <div class="downvote-arrow _1iKd82bq_nqObFvSH1iC_Q s1y8gf4b-0 hxcKpF">
-                                            <i class="icon icon-downvote ZyxIIl4FP5gHGrJDzNpUC"></i>
-                                        </div>
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +91,7 @@ function postHtml(index, permalink) {
                                         </span>
                                     </div>
                                     <div class="item-source _3AStxql1mQsrZuUIFP9xSg s9fusyd-9 TFJUf">
-                                        <a class="subreddit s1i3ufq7-0 bsfRLa" data-click-id="subreddit" href="http://www.reddit.com/${permalink.subreddit}" target="_blank">${permalink.subreddit}</a>
+                                        <a class="subreddit s1i3ufq7-0 bsfRLa" data-click-id="subreddit" href="http://www.reddit.com/${permalink.subreddit_name_prefixed}" target="_blank">${permalink.subreddit_name_prefixed}</a>
                                         <span class="s106g12-0 hFyNNd" role="presentation"> &middot; </span>
                                         <span class="posted-by _2fCzxBE1dlMh4OFc7B3Dun">Posted by</span>
                                         <div class="user wx076j-0 hPglCh">
@@ -143,7 +105,7 @@ function postHtml(index, permalink) {
                                 <div class="col-right s9fusyd-11 fZehHr">
                                     <a rel="nofollow" data-click-id="comments" data-test-id="comments-page-link-num-comments" class="comments-page-link _1UoeAeSRhOKSNdY_h3iS1O _1Hw7tY9pMr-T1F4P1C-xNU s9fusyd-13 dQlfjM" href="${buildCommentUrl(permalink)}">
                                         <i class="icon icon-comment _3ch9jJ0painNf41PmU4F9i _3DVrpDrMM9NLT6TlsTUMxC" role="presentation"></i>
-                                        <span class="FHCV02u6Cp2zYL0fhQPsO">${numToString(permalink.comments)}</span>
+                                        <span class="FHCV02u6Cp2zYL0fhQPsO">${numToString(permalink.num_comments)}</span>
                                     </a>
                                     <div class="s9fusyd-12 gXQfqP s1o43ulv-1 fGjVuX"></div>
                                     <div>
@@ -158,13 +120,20 @@ function postHtml(index, permalink) {
                 </div>
             </div>
         </div>`);
+    let $vote_container = $('#' + permalink.id).find('.upvote-downvote-inner');
+        upvote_button = new upvoteButtonTemplate($vote_container, permalink, 'submission');
+        score = new scoreTemplate($vote_container, permalink);
+        downvote_button = new downvoteButtonTemplate($vote_container, permalink, 'submission');
+    upvote_button.init();
+    score.init(score.getStatus(permalink), permalink.score);
+    downvote_button.init();
 }
 
 function buildCommentUrl(permalink) {
     var uri = new URI("comment.html")
     var query = {
         'id': permalink.id,
-        'num_comments': permalink.comments,
+        'num_comments': permalink.num_comments,
         'title': cropTitle(permalink.title)
     }
     return uri.search(query);

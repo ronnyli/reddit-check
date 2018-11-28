@@ -194,7 +194,8 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
                             }
                             $parent = $('#' + parent_id).children('ul');
                         } else if (replyable_content_type == 'submission') {
-                            $parent = $('#comments');
+                            $parent = $('<ul>');
+                            $('#comments').prepend($parent);  // new comment is at top of thread
                         }
                         appendComment(-1, response, false, $parent);
                         // TODO: individual status div per reply box

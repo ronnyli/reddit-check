@@ -394,6 +394,7 @@ function backgroundSnoowrap() {
                     throw new Error('aborting pushshift api call');
                     return [];
                 } else {
+                    // TODO: pushshift submission_api is not as up-to-date as Reddit's
                     return fetch(submission_api + 'ids=' + ids.toString());
                 }
             })

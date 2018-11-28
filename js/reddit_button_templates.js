@@ -108,21 +108,10 @@ function downvoteButtonTemplate($element, content, replyable_content_type) {
     let $button = $('<button>');
     $parent.append($button);
 
-    let button_class;
     const liked_class = 'gwerfb';
     const disliked_class = 'VzVyB';
     const null_class = 'hxcKpF';
-    if ('likes' in content) {
-        if (content.likes === false) {
-            button_class = disliked_class;
-        } else {
-            button_class = null_class;
-        }
-    } else {
-        if (content.is_self) {
-            button_class = disliked_class;
-        }
-    }
+    let button_class = ('likes' in content) && content.likes === false ? disliked_class : null_class;
     $button
     .attr('id', `downvote-${content.id}`)
     .attr('class', 'cYUyoUM3wmgRXEHv1LlZv')
