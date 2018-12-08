@@ -10,41 +10,43 @@ function Upvote(props) {
         disliked: false
     };
     function onUpvote() {
-        (function(liked_status) {
-            switch(liked_status) {
-                case 'liked':
-                    return props.handleVote({
-                        likes: null,
-                        score: props.score - 1,
-                        liked_status: 'neutral'
-                    });
-                case 'neutral':
-                    return props.handleVote({
-                        likes: true,
-                        score: props.score + 1,
-                        liked_status: 'liked'
-                    });
-                case 'disliked':
-                    return props.handleVote({
-                        likes: true,
-                        score: props.score + 2,
-                        liked_status: 'liked'
-                    });
-            }
-        })(props.liked_status);
-        voteReddit(props.content_id,
-            props.liked_status === 'liked' ? 'unvote' : 'upvote',
-            props.replyable_content_type,
-            function(status) {
-                if (status !== 'Success') {
-                    props.handleVote({
-                        likes: like_values[props.liked_status],
-                        score: props.score,
-                        liked_status: props.liked_status
-                    });
+        logInReddit(function(status) {
+            (function(liked_status) {
+                switch(liked_status) {
+                    case 'liked':
+                        return props.handleVote({
+                            likes: null,
+                            score: props.score - 1,
+                            liked_status: 'neutral'
+                        });
+                    case 'neutral':
+                        return props.handleVote({
+                            likes: true,
+                            score: props.score + 1,
+                            liked_status: 'liked'
+                        });
+                    case 'disliked':
+                        return props.handleVote({
+                            likes: true,
+                            score: props.score + 2,
+                            liked_status: 'liked'
+                        });
                 }
-            }
-        );
+            })(props.liked_status);
+            voteReddit(props.content_id,
+                props.liked_status === 'liked' ? 'unvote' : 'upvote',
+                props.replyable_content_type,
+                function(status) {
+                    if (status !== 'Success') {
+                        props.handleVote({
+                            likes: like_values[props.liked_status],
+                            score: props.score,
+                            liked_status: props.liked_status
+                        });
+                    }
+                }
+            );
+        })
     }
     return React.createElement('button', {
         className: 'cYUyoUM3wmgRXEHv1LlZv',
@@ -68,41 +70,43 @@ function Downvote(props) {
         disliked: false
     };
     function onDownvote() {
-        (function(liked_status) {
-            switch(liked_status) {
-                case 'liked':
-                    return props.handleVote({
-                        likes: false,
-                        score: props.score - 2,
-                        liked_status: 'disliked'
-                    });
-                case 'neutral':
-                    return props.handleVote({
-                        likes: false,
-                        score: props.score - 1,
-                        liked_status: 'disliked'
-                    });
-                case 'disliked':
-                    return props.handleVote({
-                        likes: null,
-                        score: props.score + 1,
-                        liked_status: 'neutral'
-                    });
-            }
-        })(props.liked_status);
-        voteReddit(props.content_id,
-            props.liked_status === 'disliked' ? 'unvote' : 'downvote',
-            props.replyable_content_type,
-            function(status) {
-                if (status !== 'Success') {
-                    props.handleVote({
-                        likes: like_values[props.liked_status],
-                        score: props.score,
-                        liked_status: props.liked_status
-                    });
+        logInReddit(function(status) {
+            (function(liked_status) {
+                switch(liked_status) {
+                    case 'liked':
+                        return props.handleVote({
+                            likes: false,
+                            score: props.score - 2,
+                            liked_status: 'disliked'
+                        });
+                    case 'neutral':
+                        return props.handleVote({
+                            likes: false,
+                            score: props.score - 1,
+                            liked_status: 'disliked'
+                        });
+                    case 'disliked':
+                        return props.handleVote({
+                            likes: null,
+                            score: props.score + 1,
+                            liked_status: 'neutral'
+                        });
                 }
-            }
-        );
+            })(props.liked_status);
+            voteReddit(props.content_id,
+                props.liked_status === 'disliked' ? 'unvote' : 'downvote',
+                props.replyable_content_type,
+                function(status) {
+                    if (status !== 'Success') {
+                        props.handleVote({
+                            likes: like_values[props.liked_status],
+                            score: props.score,
+                            liked_status: props.liked_status
+                        });
+                    }
+                }
+            );
+        })
     }
     return React.createElement('button', {
         className: 'cYUyoUM3wmgRXEHv1LlZv',
