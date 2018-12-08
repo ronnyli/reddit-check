@@ -76,7 +76,7 @@ function getURLInfo(tab){
         })
         .then(function(listing) {
             updateBadge(listing.length, tab);
-            SubmissionModel.insert(listing, url);
+            SubmissionLscache.insert(listing, url);
             return listing;
         });
     }
@@ -193,12 +193,21 @@ function backgroundSnoowrap() {
         logInReddit: function(interactive, callback) {
             // In case we already have a snoowrap requester cached, simply return it.
             if (lscache.get('snoowrap_requester_json')) {
+                callback('Success');
                 return;
             }
 
             var authenticationUrl = snoowrap.getAuthUrl({
                 clientId: clientId,
-                scope: ['identity', 'read', 'submit'],
+                scope: [
+                    'edit',
+                    'identity',
+                    'read',
+                    'report',
+                    'save',
+                    'submit',
+                    'vote'
+                ],
                 redirectUri: redirectUri,
                 permanent: true,
                 state: 'fe211bebc52eb3da9bef8db6e63104d3' // TODO: bogus state
@@ -234,6 +243,7 @@ function backgroundSnoowrap() {
                     snoowrap_requester_json = JSON.stringify(r);
                     snoowrap_requester = r;
                     logoutContextMenu(first_run=false);
+                    callback('Success');
                 });
             }
         },
@@ -243,19 +253,18 @@ function backgroundSnoowrap() {
                 subredditName: subreddit,
                 title: title,
                 url: url
-            })
-            .then(submission => submission.name)  //ID of new submission
-            .then(id => snoowrap_requester.getSubmission(id))
-            .fetch()
+            }).fetch()
             .then(function(submission) {
                 // add submission to lscache
                 chrome.tabs.query({
+                    // It's possible for the user to tweak the URL
+                    // so get the one from the address bar
                     active: true,
                     currentWindow: true
                 }, function(tabs) {
                     var tab = tabs[0];
                     var url_raw = tab.url;
-                    SubmissionModel.insert([submission], url_raw);
+                    SubmissionLscache.insert([submission], url_raw);
                 });
                 callback('Success');
             })
@@ -283,7 +292,7 @@ function backgroundSnoowrap() {
             getSnoowrapRequester()
             .then(r => r.getSubmission(id).fetch())
             .then(submission => {
-                SubmissionModel.update([submission])
+                SubmissionLscache.update([submission])
                 callback(submission);
             });
         },
@@ -297,7 +306,7 @@ function backgroundSnoowrap() {
                     let submission = lscache.get(SUBMISSION_STORAGE_KEY + id);
                     submission.num_comments += 1;
                     submission.comments.push(comment);
-                    SubmissionModel.update([submission]);
+                    SubmissionLscache.update([submission]);
                     // TODO: increment number of comments on comment.html
                     callback(comment);
                 })
@@ -321,7 +330,7 @@ function backgroundSnoowrap() {
                         }
                     }
                     let parent_comment = submission.comments.filter(findParent)[0];
-                    SubmissionModel.update([submission]);
+                    SubmissionLscache.update([submission]);
                     // TODO: increment number of comments on comment.html
                     callback(comment);
                 })
@@ -384,6 +393,7 @@ function backgroundSnoowrap() {
                     throw new Error('aborting pushshift api call');
                     return [];
                 } else {
+                    // TODO: pushshift submission_api is not as up-to-date as Reddit's
                     return fetch(submission_api + 'ids=' + ids.toString());
                 }
             })
@@ -412,6 +422,57 @@ function backgroundSnoowrap() {
                 } else {
                     throw error;
                 }
+            });
+        },
+
+        voteReddit: function(id, vote_type, replyable_content_type, callback) {
+            getSnoowrapRequester()
+            .then(r => {
+                switch(replyable_content_type) {
+                    case 'submission':
+                        return r.getSubmission(id);
+                        break;
+                    case 'comment':
+                        return r.getComment(id);
+                        break;
+                }
+            }).then(content => {
+                switch(vote_type) {
+                    case 'upvote':
+                        return content.upvote();
+                        break;
+                    case 'unvote':
+                        return content.unvote();
+                        break;
+                    case 'downvote':
+                        return content.downvote();
+                        break;
+                }
+            }).then(content => content.fetch())
+            .then(content => {
+                // update current data with new scores
+                const newdata = {
+                    likes: content.likes,
+                    score: content.score,
+                    downs: content.downs,
+                    ups: content.ups,
+                    upvote_ratio: content.upvote_ratio
+                };
+                const submission_id = content.link_id || content.id;
+                let submission = SubmissionLscache.get(submission_id);
+                switch (replyable_content_type) {
+                    case 'submission':
+                        Object.assign(submission, newdata);
+                        SubmissionLscache.update([submission]);
+                        break;
+                    case 'comment':
+                        SubmissionLscache.updateComment(submission, content.id, newdata);
+                        break;
+                }
+                return content
+            }).then(content => callback('Success'))
+            .catch(function(err) {
+                callback(err.toString());
             });
         },
 
@@ -444,6 +505,12 @@ function onRequest(request, sender, callback) {
     } else if (request.action == 'leaveComment') {
         snoo.leaveComment(request.id,
             request.text,
+            request.replyable_content_type,
+            callback);
+        return true;
+    } else if (request.action == 'voteReddit') {
+        snoo.voteReddit(request.id,
+            request.vote_type,
             request.replyable_content_type,
             callback);
         return true;

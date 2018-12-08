@@ -291,6 +291,17 @@
     color: rgb(255, 106, 50);
 }
 
+.gwerfb {
+    cursor: pointer;
+    color: rgb(255, 69, 0) !important;
+    border-radius: 2px;
+    transition: background-color 0.1s ease 0s;
+}
+
+.gwerfb:hover, .gwerfb:focus {
+    outline: none;
+}
+
 ._2q7IQ0BUOWeEZoeAxN555e {
     display: inline-block;
     overflow: hidden;
@@ -369,6 +380,17 @@
 
 .hxcKpF:active {
     color: rgb(141, 168, 255);
+}
+
+.VzVyB {
+    cursor: pointer;
+    color: rgb(113, 147, 255) !important;
+    border-radius: 2px;
+    transition: background-color 0.1s ease 0s;
+}
+
+.VzVyB:hover, .VzVyB:focus {
+    outline: none;
 }
 
 ._1iKd82bq_nqObFvSH1iC_Q {
@@ -1307,7 +1329,6 @@
 .eHSpeV {
     background-color: rgba(255, 255, 255, 0.8);
     color: rgb(135, 138, 140);
-    cursor: pointer;
     fill: rgb(135, 138, 140);
     margin-bottom: -1px;
     position: relative;

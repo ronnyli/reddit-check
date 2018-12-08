@@ -2,12 +2,13 @@ const DEDUPE_KEY = "Dedupe_URL:";
       URL_STORAGE_KEY = "URL:";
       SUBMISSION_STORAGE_KEY = "Submission:";
 
-const SubmissionCollection = {
+/*Methods to interact with Submission Collections in lscache*/
+const SubmissionCollectionLscache = {
     EXPIRATION_TIME: 5,  // minutes
     init: function() {
+        let this_ = this;
         $(document).on('url-insert-ids', function(e, newdata) {
-            SubmissionCollection.insertIDs(newdata.url, newdata.ids);
-            // let front-facing pages know that new submissions were added
+            this_.insertIDs(newdata.url, newdata.ids);
         });
     },
     replace: function(url, ids) {
@@ -29,9 +30,9 @@ const SubmissionCollection = {
                     all_ids.push(id);
                 }
             });
-            SubmissionCollection.replace(url, all_ids);
+            this.replace(url, all_ids);
         } else {
-            SubmissionCollection.replace(url, new_ids);
+            this.replace(url, new_ids);
         }
     },
     get: function(url) {
@@ -41,12 +42,12 @@ const SubmissionCollection = {
     }
 };
 
-const SubmissionModel = {
+/*Methods to interact with Submissions in lscache*/
+const SubmissionLscache = {
     EXPIRATION_TIME: 5,  // minutes
-    init: function() {
-        $(document).on('submission-update', function(e, submissions) {
-            // let front-facing pages know that submission was updated
-        });
+    get: function(id) {
+        const id_ = id.includes('_') ? id.split('_')[1] : id;
+        return lscache.get(SUBMISSION_STORAGE_KEY + id_);
     },
     insert: function(submissions, url) {
         submissions.forEach(function(submission) {
@@ -72,8 +73,20 @@ const SubmissionModel = {
         $(document).trigger('submission-update', {
             submissions: submissions
         });
+    },
+    updateComment: function(submission, comment_id, newdata) {
+        const id_ = comment_id.includes('_') ? comment_id.split('_')[1] : comment_id;
+        function updateRecursive(entry) {
+            if (entry.id === id_) {
+                Object.assign(entry, newdata);
+                return true;
+            } else {
+                return entry.replies.filter(updateRecursive);
+            }
+        }
+        submission.comments.filter(updateRecursive);
+        this.update([submission]);
     }
 };
 
-SubmissionCollection.init();
-SubmissionModel.init();
+SubmissionCollectionLscache.init();
