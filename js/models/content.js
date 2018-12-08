@@ -10,11 +10,13 @@ function ContentModel(content) {
 	for (const key in content){
 		this[key] = content[key];
 	}
+	this.setLikedStatus();
 }
 ContentModel.prototype.update = function(newdata){
 	for (const key in newdata) {
+		const old = this[key];
 		this[key] = newdata[key];
-		if (key in subscribers) {
+		if (key in subscribers && old !== newdata[key]) {
 			// let subscribers know about the update
 			subscribers[key].forEach(subscriber => subscriber());
 		}
@@ -29,19 +31,18 @@ ContentModel.prototype.addSubscriber = function(key, fn) {
 		return subscribers[key].length - 1  // index
 	}
 };
-ContentModel.prototype.getLikedStatus = function() {
-        if ('likes' in this) {
-            if (this.likes) {
-                return 'liked'
-            } else if (this.likes === null) {
-                return 'neutral'
-            } else {
-                return 'disliked'
-            }
-        } else {
-            if (this.is_self) {
-                return 'liked'
-            }
-        }
-        return 'neutral'
-    }
+ContentModel.prototype.setLikedStatus = function() {
+	if ('likes' in this) {
+		if (this.likes) {
+			this.liked_status = 'liked';
+		} else if (this.likes === null) {
+			this.liked_status = 'neutral';
+		} else {
+			this.liked_status = 'disliked';
+		}
+	} else {
+		// Technically not true b/c the current user could
+		// have posted it.
+		this.liked_status = 'neutral';
+	}
+};

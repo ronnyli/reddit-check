@@ -11,9 +11,8 @@
 <script src="js/pagedown/Markdown.Editor.js"></script>
 <script src="js/pagedown/Markdown.Sanitizer.js"></script>
 <script src="js/snoowrap_background_message.js"></script>
-<script src="js/reddit_button_templates.js"></script>
+<script src="js/models/content.js"></script>
 <script src="shared.js"> </script>
-<script src="comment.js"></script>
 <base target="_blank">
 </head>
 <body class="container">
@@ -22,7 +21,10 @@
             <a href="popup.html" target="_self">Back</a>
         </div>
     </div>
-    <div id='archived' class="row">
+    <div id='loading'>
+        Loading... please wait.
+    </div>
+    <div id='archived' class="row" style="display:none">
         <div class="s15t8fxx-5 gdaRtq">
             <div class="s15t8fxx-1 cynRVh"></div>
             <div class="s15t8fxx-0 giTFAC">
@@ -38,14 +40,26 @@
     </div>
     <div id='post' class='row'></div>
     <form id="reply_post" class="row"></form>
+    <div id="status" class="row"></div>
     <div class="s1rikhqd-6 bCecKY">
         <div class="s10usnt7-0 gxtxxZ">
             <ul id="comments"></ul>
         </div>
     </div>
-    <div id='no_results' class="row">
+    <div id='no_results' class="row" style="display:none">
         No comments for this post. Would you like to make one?
     </div>
-    <div id="status" class="row"></div>
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="js/libraries/react.development.js" crossorigin></script>
+    <script src="js/libraries/react-dom.development.js" crossorigin></script>
+    <script src="js/react-components/subreddit.js"></script>
+    <script src="js/react-components/content_age.js"></script>
+    <script src="js/react-components/username.js"></script>
+    <script src="js/react-components/vote.js"></script>
+    <script src="js/react-components/content.js"></script>
+    <script src="js/react-components/comment_vote.js"></script>
+    <script src="js/react-components/submission_expand.js"></script>
+    <script src="comment.js"></script>
 </body>
 </html>

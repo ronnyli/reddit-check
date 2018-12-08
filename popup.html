@@ -7,9 +7,8 @@
 <script src="URI.js"></script>
 <script src="js/snoowrap_background_message.js"></script>
 <script src="js/reddit_lscache.js"></script>
-<script src="js/reddit_button_templates.js"></script>
-<script src="shared.js"> </script>
-<script src="popup.js"></script>
+<script src="js/models/content.js"></script>
+<script src="shared.js"></script>
 </head>
 <body>
     <header></header>
@@ -31,5 +30,16 @@
     <div id="blacklisted">
         You have chosen to blacklist this URL for reddit-check.
     </div>
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="js/libraries/react.development.js" crossorigin></script>
+    <script src="js/libraries/react-dom.development.js" crossorigin></script>
+    <script src="js/react-components/subreddit.js"></script>
+    <script src="js/react-components/content_age.js"></script>
+    <script src="js/react-components/username.js"></script>
+    <script src="js/react-components/vote.js"></script>
+    <script src="js/react-components/content.js"></script>
+    <script src="js/react-components/submission_popup.js"></script>
+    <script src="popup.js"></script>
 </body>
 </html>

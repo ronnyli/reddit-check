@@ -470,7 +470,10 @@ function backgroundSnoowrap() {
                         break;
                 }
                 return content
-            }).then(content => callback(content))
+            }).then(content => callback('Success'))
+            .catch(function(err) {
+                callback(err.toString());
+            });
         },
 
         fetchAnonymousToken: fetchAnonymousToken,
