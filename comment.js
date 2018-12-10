@@ -83,9 +83,7 @@ function renderComment(comment, archived) {
                             <div id="t1_e7i7pcv-comment-share-menu">
                                 <button class="s5kaj4p-9 hNSNDN">Share</button>
                             </div>
-                            <button class="s5kaj4p-9 hNSNDN">Report</button>
                             <div class='save_button'></div>
-                            <button class="s5kaj4p-9 hNSNDN">Give gold</button>
                         </div>
                     </div>
                     <form></form>

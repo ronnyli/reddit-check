@@ -66,12 +66,13 @@ class SubmissionExpand extends Content {
             className:"s1vspxim-1 iDplM"
         }, 'report')),
 
-        React.createElement('div', null,
-        React.createElement('button', {
-            className:"s1lfar2u-14 ksTfYp mpc6lx-1 iheKDM"
-        }, React.createElement('i', {
-            className:"icon icon-menu mpc6lx-2 ebwjqI"
-        })))
+        // TODO: add menu icon back in when we need it
+        // React.createElement('div', null,
+        // React.createElement('button', {
+        //     className:"s1lfar2u-14 ksTfYp mpc6lx-1 iheKDM"
+        // }, React.createElement('i', {
+        //     className:"icon icon-menu mpc6lx-2 ebwjqI"
+        // })))
 
         ), React.createElement('div', {
             className: 't4Hq30BDzTeJ85vREX7_M'
