@@ -8,8 +8,6 @@
     - bug fixin'
         - Raph still has "Loading..." bug
         - Blacklisted element appears for some reason (popup.js)
-        - Youtube searching is bugged.
-            - test https://www.youtube.com/watch?time_continue=6647&v=qLgj6zm6XoA
         - Top-level reply box should not disappear after posting
         - Occasionally the author is returned as an object
             - but goes away after waiting so it's probably Snoowrap taking some
@@ -26,6 +24,8 @@
 1. How do licenses work when I build on top of Reddit Check?
 1. could right-clicking Open In New Tab somehow keep popup window open?
     - or make the extension an overlay so it doesn't keep closing
+1. Switch React to production.min.js
+    - remove development.min.js from the folder
 ### After release
 1. Performance improvements
 1. Hover over subreddit to see Community Details
