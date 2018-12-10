@@ -36,7 +36,7 @@ function getYoutubeURLs(url){
     if (gotVidId) {
         var prefixes = [
             'www.youtube.com/watch?v=',
-            'www.youtu.be/',
+            'youtu.be/'
         ];
         prefixes.forEach(function(prefix) {
 			if (prefix + video_id != url)
@@ -91,17 +91,12 @@ function disableBadge(tab){
 }
 
 function updateBadge(numPosts, tab) {
-    var noPostsColor = [175, 0, 0, 55]
-    var green = [1, 175, 1, 255]
-
-    var title = "Repost"
+    var title = numPosts.toString() + " Results Found!"
     var text = numPosts.toString()
-    var badgeColor = green
+    var badgeColor = null;  // use default badge color
     var alienIcon = { '19': "images/alien19.png", '38': "images/alien38.png" }
     if (numPosts == 0) {
-        badgeColor = noPostsColor
-        title = "Post link"
-        alienIcon = { '19': "images/alien_apathy19.png", '38': "images/alien_apathy38.png" }
+        return;
     }
     setBadge(title, text, badgeColor, alienIcon, tab)
 }
@@ -109,7 +104,7 @@ function updateBadge(numPosts, tab) {
 function setBadge(title, text, badgeColor, alienIcon, tab) {
     var tabId = tab.id
     chrome.browserAction.setTitle({"title": title, "tabId": tabId})
-    chrome.browserAction.setBadgeBackgroundColor({
+    !badgeColor || chrome.browserAction.setBadgeBackgroundColor({
         "color": badgeColor, 
         "tabId": tabId
     })
@@ -341,15 +336,29 @@ function backgroundSnoowrap() {
         },
 
         searchSubmissionsForURL: function(url) {
-            var urls = constructURLs(url);
-            // search for multiple URLs by using url:(link1 OR link2 OR...)
-            // Do not include http[s]:// or Reddit will return an error
-            // see this query for an example https://www.reddit.com/search?q=url%3A%28imgur.com%2FhyLlADL+OR+en.wikipedia.org%2Fwiki%2FBankruptcy_barrel+OR+en.wikipedia.org%2Fwiki%2FExertional_rhabdomyolysis%29&restrict_sr=&sort=relevance&t=all
-            var urls_query = '(' + urls.map(url => `"${url}"`).join(' OR ') + ')';
-
+            function writeQuery(url) {
+                if (url.indexOf('youtube.com') != -1 && url.indexOf('v=') != -1) {
+                    // Reddit search for youtube needs to be even more specific
+                    // see: https://www.reddit.com/r/youtube/comments/6fhxnr/anyone_else_have_the_problem_of_this_forum_not/diid2b2
+                    let video_id = url.split('v=')[1];
+                    const ampersandPosition = video_id.indexOf('&');
+                    if (ampersandPosition != -1) {
+                        video_id = video_id.substring(0, ampersandPosition);
+                    }
+                    return `url:${video_id} site:(youtube.com OR youtu.be)`;
+                } else {
+                    // search for multiple URLs by using url:(link1 OR link2 OR...)
+                    // Do not include http[s]:// or Reddit will return an error
+                    // see this query for an example https://www.reddit.com/search?q=url%3A%28imgur.com%2FhyLlADL+OR+en.wikipedia.org%2Fwiki%2FBankruptcy_barrel+OR+en.wikipedia.org%2Fwiki%2FExertional_rhabdomyolysis%29&restrict_sr=&sort=relevance&t=all
+                    const urls = constructURLs(url);
+                    const urls_query = '(' + urls.map(url => `"${url}"`).join(' OR ') + ')';
+                    return "url:" + urls_query + " OR selftext:" + urls_query;
+                }
+            }
+            const query = writeQuery(url);
             return getSnoowrapRequester()
               .then(r => r.search({
-                query: "url:" + urls_query + " OR selftext:" + urls_query,
+                query: query,
                 restrictSr: false,
                 time: 'all',
                 sort: 'relevance',
@@ -370,7 +379,6 @@ function backgroundSnoowrap() {
             const submission_api = 'https://api.pushshift.io/reddit/search/submission/?';
 
             var urls = constructURLs(url);
-
             let promises = [];
 
             urls.forEach(u => {
