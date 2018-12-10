@@ -943,6 +943,7 @@
     display: inline-block;
     margin-right: 12px;
     transition: color 0.1s ease 0s;
+    text-transform: capitalize;
 }
 
 .hNSNDN:hover {
@@ -1578,6 +1579,11 @@
 .links-background {
     padding: 2%;
     background-color: rgb(228, 231, 240);
+}
+
+.fofuhh {
+    color: rgb(0, 121, 211);
+    fill: rgb(0, 121, 211);
 }
 
 @font-face {

@@ -25,16 +25,12 @@ class SubmissionExpand extends Content {
             className: '_6_44iTtZoeY6_XChKt5b0'
         }, 'share'))),
 
-        React.createElement('button', {
-            className: 's1afabjy-1 hbyVDo b1zwxr-0 hxpTao'
-        }, React.createElement('div', {
-            className: 's1vspxim-0 cpAOsy'
-        }, React.createElement('i', {
-            className: 'icon icon-save s1lfar2u-2 fIkQLB'
-        })),
-        React.createElement('span', {
-            className: 's1vspxim-1 iDplM'
-        }, 'save')),
+        React.createElement(SaveButton, {
+            content_id: this.props.id,
+            replyable_content_type: this.props.replyable_content_type,
+            saved: this.state.saved,
+            handleSave: ((e) => this.handleSave(e))
+        }),
 
         React.createElement('button', {
             className: "s1afabjy-1 jqIcAC b1zwxr-0 hxpTao"

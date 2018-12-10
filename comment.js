@@ -84,7 +84,7 @@ function renderComment(comment, archived) {
                                 <button class="s5kaj4p-9 hNSNDN">Share</button>
                             </div>
                             <button class="s5kaj4p-9 hNSNDN">Report</button>
-                            <button class="s5kaj4p-9 hNSNDN">Save</button>
+                            <div class='save_button'></div>
                             <button class="s5kaj4p-9 hNSNDN">Give gold</button>
                         </div>
                     </div>
@@ -96,10 +96,17 @@ function renderComment(comment, archived) {
     </li>`);
     let $vote_arrows_div = $comment.find('.comment_vote');
         vote_arrows_dom = document.createElement('div');
+        $save_div = $comment.find('.save_button');
+        save_dom = document.createElement('div');
     $vote_arrows_div.append(vote_arrows_dom);
+    $save_div.append(save_dom);
     ReactDOM.render(
         React.createElement(CommentVote, commentModel),
         vote_arrows_dom
+    );
+    ReactDOM.render(
+        React.createElement(CommentSave, commentModel),
+        save_dom
     );
     return $comment;
 }
