@@ -425,6 +425,45 @@ function backgroundSnoowrap() {
             });
         },
 
+        saveReddit: function(id, save_type, replyable_content_type, callback) {
+            getSnoowrapRequester()
+            .then(r => {
+                switch(replyable_content_type) {
+                    case 'submission':
+                        return r.getSubmission(id);
+                    case 'comment':
+                        return r.getComment(id);
+                }
+            }).then(content => {
+                switch(save_type) {
+                    case 'save':
+                        return content.save();
+                    case 'unsave':
+                        return content.unsave();
+                }
+            }).then(content => content.fetch())
+            .then(content => {
+                const newdata = {
+                    saved: content.saved,
+                };
+                const submission_id = content.link_id || content.id;
+                let submission = SubmissionLscache.get(submission_id);
+                switch (replyable_content_type) {
+                    case 'submission':
+                        Object.assign(submission, newdata);
+                        SubmissionLscache.update([submission]);
+                        break;
+                    case 'comment':
+                        SubmissionLscache.updateComment(submission, content.id, newdata);
+                        break;
+                }
+                return content
+            }).then(content => callback('Success'))
+            .catch(function(err) {
+                callback(err.toString());
+            });
+        },
+
         voteReddit: function(id, vote_type, replyable_content_type, callback) {
             getSnoowrapRequester()
             .then(r => {
@@ -472,6 +511,7 @@ function backgroundSnoowrap() {
                 return content
             }).then(content => callback('Success'))
             .catch(function(err) {
+                console.error(err);
                 callback(err.toString());
             });
         },
@@ -511,6 +551,12 @@ function onRequest(request, sender, callback) {
     } else if (request.action == 'voteReddit') {
         snoo.voteReddit(request.id,
             request.vote_type,
+            request.replyable_content_type,
+            callback);
+        return true;
+    } else if (request.action == 'saveReddit') {
+        snoo.saveReddit(request.id,
+            request.save_type,
             request.replyable_content_type,
             callback);
         return true;

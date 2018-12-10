@@ -17,7 +17,7 @@
         - Make search more relevant
 1. Consistent UI for post.html
 1. **MVC stuff**
-    - Add ability to upvote/downvote, share/save, etc.
+    - Add ability to share, etc.
     - Add ability to remove/edit your own posts
 1. Options
     - turn off auto-search
@@ -38,6 +38,10 @@
     - people who don't want to post/comment
     - IDEAS:
         - "check-in" to pages, like Foursquare
+1. additional Reddit API stuff
+    - Hide
+    - Report
+    - etc.
 
 Where to get outside help?
     - ideally trustworthy

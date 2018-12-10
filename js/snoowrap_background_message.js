@@ -37,6 +37,15 @@ function searchSubreddits(query, callback) {
     }, callback)
 }
 
+function saveReddit(id, save_type, replyable_content_type, callback) {
+    chrome.runtime.sendMessage({
+        'action': 'saveReddit',
+        'id': id,
+        'save_type': save_type,
+        'replyable_content_type': replyable_content_type,
+    }, callback)
+}
+
 function voteReddit(id, vote_type, replyable_content_type, callback) {
     chrome.runtime.sendMessage({
         'action': 'voteReddit',
