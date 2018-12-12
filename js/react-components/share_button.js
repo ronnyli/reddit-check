@@ -52,6 +52,7 @@ class ShareButton extends React.Component {
                     }
                 }),
                 React.createElement('i', {
+                    title: 'Copy to clipboard',
                     className: 'icon icon-link s1fyj3kn-13 hlpDWs' + (this.state.copied ? ' fofuhh' : ''),
                     onClick: ((e) => this.handleClick(e)),
                     style: {marginRight: '10px'}
