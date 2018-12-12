@@ -14,16 +14,9 @@ class SubmissionExpand extends Content {
                 className: 'FHCV02u6Cp2zYL0fhQPsO'
             }, `${numToString(this.props.num_comments)} comments`)),
 
-        React.createElement('div', {
-            className: 's1o44igr-1 hNfrQO'
-        }, React.createElement('button', {
-            className: 's1o44igr-0 hlpDWs'
-        }, React.createElement('i', {
-            className: 'icon icon-share xwmljjCrovDE5C9MasZja _1GQDWqbF-wkYWbrpmOvjqJ'
+        React.createElement(ShareButton, {
+            url: this.props.url
         }),
-        React.createElement('span', {
-            className: '_6_44iTtZoeY6_XChKt5b0'
-        }, 'share'))),
 
         React.createElement(SaveButton, {
             content_id: this.props.id,

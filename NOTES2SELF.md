@@ -7,11 +7,9 @@
     - extra libraries that aren't necessary
     - bug fixin'
         - Raph still has "Loading..." bug
+            - This could be due to LocalStorage running out of space
         - Blacklisted element appears for some reason (popup.js)
         - Top-level reply box should not disappear after posting
-        - Occasionally the author is returned as an object
-            - but goes away after waiting so it's probably Snoowrap taking some
-            time to resolve its Promise
         - Make search more relevant
 1. Consistent UI for post.html
 1. **MVC stuff**
@@ -22,8 +20,6 @@
 1. Not obvious how to log in
     - even less obvious to log out
 1. How do licenses work when I build on top of Reddit Check?
-1. could right-clicking Open In New Tab somehow keep popup window open?
-    - or make the extension an overlay so it doesn't keep closing
 1. Switch React to production.min.js
     - remove development.min.js from the folder
 ### After release
@@ -42,6 +38,8 @@
     - Hide
     - Report
     - etc.
+1. could right-clicking Open In New Tab somehow keep popup window open?
+    - or make the extension an overlay so it doesn't keep closing
 
 Where to get outside help?
     - ideally trustworthy

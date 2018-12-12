@@ -195,10 +195,10 @@ function backgroundSnoowrap() {
             var authenticationUrl = snoowrap.getAuthUrl({
                 clientId: clientId,
                 scope: [
-                    'edit',
+                    //'edit',
                     'identity',
                     'read',
-                    'report',
+                    //'report',
                     'save',
                     'submit',
                     'vote'
