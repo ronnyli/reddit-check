@@ -44,9 +44,6 @@ class ShareButton extends React.Component {
                     defaultValue: this.props.url,
                     style: {
                         fontWeight: 400,
-                        width: 240,
-                        margin: '6px',
-                        padding: '2px',
                         border: '1px solid',
                         backgroundColor: 'rgb(246, 247, 248)'
                     }
@@ -54,10 +51,10 @@ class ShareButton extends React.Component {
                 React.createElement('i', {
                     title: 'Copy to clipboard',
                     className: 'icon icon-link s1fyj3kn-13 hlpDWs' + (this.state.copied ? ' fofuhh' : ''),
-                    onClick: ((e) => this.handleClick(e)),
-                    style: {marginRight: '10px'}
+                    onClick: ((e) => this.handleClick(e))
                 })
-            ])
+            ]),
+            menu_style: this.props.menu_style
         });
     }
 }

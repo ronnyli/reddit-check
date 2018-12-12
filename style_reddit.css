@@ -1601,6 +1601,24 @@
     overflow: visible;
 }
 
+.UVOUP {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    color: rgb(135, 138, 140);
+    fill: rgb(135, 138, 140);
+    background-color: rgb(255, 255, 255);
+    display: block;
+    text-transform: capitalize;
+    white-space: nowrap;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(237, 239, 241);
+    border-image: initial;
+    padding: 8px 0px 8px 8px;
+}
+
 @font-face {
     font-family: IBMPlexSans;
     font-weight: 400;

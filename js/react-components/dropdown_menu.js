@@ -35,6 +35,7 @@ class DropdownMenu extends React.Component {
       this.state.showMenu ? (
         React.createElement('div', {
           className: 'menu mpc6lx-0 dMZkik',
+          style: (this.props.menu_style ? this.props.menu_style : {left:0}),
           ref: this.dropdownMenu 
         }, this.props.menu_contents)
       )
