@@ -1,10 +1,3 @@
-/*<button class="s1fyj3kn-15 fofuhh b1zwxr-0 hxpTao" role="menuitem">
-    <div class="j5bpp-0 LUyRW">
-        <i></i>
-    </div>
-    <span class="j5bpp-1 dgNomu">unsave</span>
-</button>*/
-
 function SaveButton(props) {
     let button_class = props.saved ? 'fofuhh' : '';
         button_text = props.saved ? 'unsave' : 'save';

@@ -80,9 +80,7 @@ function renderComment(comment, archived) {
                                     <i class="icon icon-comment _3ch9jJ0painNf41PmU4F9i s5kaj4p-0 domCcm"></i>Reply
                                 </button>`
                             }
-                            <div id="t1_e7i7pcv-comment-share-menu">
-                                <button class="s5kaj4p-9 hNSNDN">Share</button>
-                            </div>
+                            <div class="comment_share_menu"></div>
                             <div class='save_button'></div>
                         </div>
                     </div>
@@ -96,8 +94,11 @@ function renderComment(comment, archived) {
         vote_arrows_dom = document.createElement('div');
         $save_div = $comment.find('.save_button');
         save_dom = document.createElement('div');
+        $share_div = $comment.find('.comment_share_menu');
+        share_dom = document.createElement('div');
     $vote_arrows_div.append(vote_arrows_dom);
     $save_div.append(save_dom);
+    $share_div.append(share_dom);
     ReactDOM.render(
         React.createElement(CommentVote, commentModel),
         vote_arrows_dom
@@ -105,6 +106,13 @@ function renderComment(comment, archived) {
     ReactDOM.render(
         React.createElement(CommentSave, commentModel),
         save_dom
+    );
+    ReactDOM.render(
+        React.createElement(ShareButton, {
+            url: `https://www.reddit.com/${comment.permalink}`,
+            replyable_content_type: commentModel.replyable_content_type
+        }),
+        share_dom
     );
     return $comment;
 }

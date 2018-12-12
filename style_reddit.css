@@ -327,6 +327,10 @@
     content: "\F111";
 }
 
+.icon-link:before {
+    content: "\F11F";
+}
+
 .icon-upvote:before {
     content: "\F138";
 }
@@ -1339,7 +1343,7 @@
     border-style: solid;
     border-color: rgb(204, 204, 204);
     border-image: initial;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .eHSpeV:hover {
@@ -1584,6 +1588,17 @@
 .fofuhh {
     color: rgb(0, 121, 211);
     fill: rgb(0, 121, 211);
+}
+
+.dMZkik {
+    box-shadow: rgba(28, 28, 28, 0.2) 0px 2px 4px 0px;
+    color: rgb(28, 28, 28);
+    position: absolute;
+    z-index: 10;
+    background-color: rgb(255, 255, 255);
+    margin-top: 0px;
+    border-radius: 4px;
+    overflow: visible;
 }
 
 @font-face {

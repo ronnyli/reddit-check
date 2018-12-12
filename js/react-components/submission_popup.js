@@ -48,12 +48,20 @@ class SubmissionPopup extends Content {
             }), React.createElement('span', {
                 className: 'FHCV02u6Cp2zYL0fhQPsO'
             }, `${numToString(this.props.num_comments)}`));
-        let overflow_menu = React.createElement(
+
+        let overflow_menu = React.createElement(DropdownMenu, {
+            button: React.createElement(
                 "button",
                 { "className": "more-options s6epw68-15 jxTuag mpc6lx-1 iheKDM",
                 id: `${this.props.id}-overflow-menu` },
                 React.createElement("i", { "className": "icon icon-menu mpc6lx-2 ebwjqI" })
-            );
+            ),
+            menu_contents: [
+                React.createElement('div', null, 'Share button'),
+                React.createElement('div', null, 'Save button')
+            ]
+        });
+
         let item_source = React.createElement(
                 "div",
                 { "className": "item-source _3AStxql1mQsrZuUIFP9xSg s9fusyd-9 TFJUf" },
@@ -70,7 +78,7 @@ class SubmissionPopup extends Content {
                   "Posted by"
                 ),
                 React.createElement(Username, {
-                    author: this.props.author}),
+                    author: this.props.author.name || this.props.author}),
                 React.createElement(ContentAge, {
                     href_val: buildCommentUrl(this.props),
                     created_utc: this.props.created_utc
