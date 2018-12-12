@@ -15,7 +15,8 @@ class SubmissionExpand extends Content {
             }, `${numToString(this.props.num_comments)} comments`)),
 
         React.createElement(ShareButton, {
-            url: this.props.url
+            url: this.props.url,
+            replyable_content_type: this.props.replyable_content_type
         }),
 
         React.createElement(SaveButton, {

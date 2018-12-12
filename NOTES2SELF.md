@@ -6,8 +6,6 @@
     - bogus user agents, state, large blocks of HTML
     - extra libraries that aren't necessary
     - bug fixin'
-        - Raph still has "Loading..." bug
-            - This could be due to LocalStorage running out of space
         - Blacklisted element appears for some reason (popup.js)
         - Top-level reply box should not disappear after posting
         - Make search more relevant
@@ -19,11 +17,27 @@
     - turn off auto-search
 1. Not obvious how to log in
     - even less obvious to log out
+    - TODO: auto-logout after 1 hour
 1. How do licenses work when I build on top of Reddit Check?
 1. Switch React to production.min.js
     - remove development.min.js from the folder
+1. Security
+    - Remove snoowrap_requester_json from LocalStorage
+        - replace `snoowrap_requester_json` with `is_logged_in` boolean
+        - Only grant tokens access for 1 hour (`permanent: false` and 1hr expiration time on `is_logged_in`)
 ### After release
 1. Performance improvements
+1. IndexedDB to bypass 5MB LocalStorage limit
+    - would need to implement expiring old data
+        - probably as part of `changeAction`
+        - all records should have an indexed timestamp called `expires_at`
+            - created as part of the model initialization process
+    - `db.url` should be indexed on `[url+submission_id], api_source, page_num`
+        - use `Table.put()` or `Table.bulkPut()` to ignore primary key conflict
+    - `Table.update()` can be used to prevent over-riding existing Submission data with inferior data
+        - returns 0 if provided key not found **or** provided changes are identical to current values
+        - if 1 then do a full update and run `snoo.getSubmission()` later
+    - not sure what to do about Comments, probably same as now
 1. Hover over subreddit to see Community Details
 1. Build website for Thredd
     - context menu link to provide feedback can go to website
