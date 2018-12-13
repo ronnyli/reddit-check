@@ -124,25 +124,10 @@ function backgroundSnoowrap() {
     var redirectUri = chrome.identity.getRedirectURL('provider_cb');
     var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
     // TODO: bogus userAgent
-    var userAgent = chrome.runtime.id + ':' + 'v0.0.1' + ' (by /u/sirius_li)'
+    var userAgent = chrome.runtime.id + ':' + 'v0.0.1' + ' (by /u/sirius_li)';
 
-    var snoowrap_requester_json = lscache.get('snoowrap_requester_json');
-    var snoowrap_requester = setSnoowrapFromJson(snoowrap_requester_json);
-
-    var anonymous_requester;
-
-    function setSnoowrapFromJson(snoo_json) {
-        if (snoo_json) {
-            return new snoowrap({
-                userAgent: snoo_json.userAgent,
-                clientId: snoo_json.clientId,
-                clientSecret: '',
-                refreshToken: snoo_json.refreshToken
-            });
-        } else {
-            return null;
-        }
-    }
+    let anonymous_requester;
+    let snoowrap_requester;
 
     function fetchAnonymousToken() {
         const form = new FormData();
@@ -170,7 +155,7 @@ function backgroundSnoowrap() {
         // return whatever snoowrap requester is available
         // create a new anonymous requester if needed
         return new Promise(function(resolve, reject) {
-            if (snoowrap_requester) {
+            if (lscache.get('is_logged_in_reddit')) {
                 console.log('using logged in requester');
                 resolve(snoowrap_requester);
             } else if (lscache.get('anonymous_requester_json')) {
@@ -187,7 +172,7 @@ function backgroundSnoowrap() {
 
         logInReddit: function(interactive, callback) {
             // In case we already have a snoowrap requester cached, simply return it.
-            if (lscache.get('snoowrap_requester_json')) {
+            if (lscache.get('is_logged_in_reddit')) {
                 callback('Success');
                 return;
             }
@@ -204,7 +189,7 @@ function backgroundSnoowrap() {
                     'vote'
                 ],
                 redirectUri: redirectUri,
-                permanent: true,
+                permanent: false,
                 state: 'fe211bebc52eb3da9bef8db6e63104d3' // TODO: bogus state
             });
 
@@ -234,8 +219,7 @@ function backgroundSnoowrap() {
                     redirectUri: redirectUri
                 });
                 snoowrap_promise.then(r => {
-                    lscache.set('snoowrap_requester_json', r);
-                    snoowrap_requester_json = JSON.stringify(r);
+                    lscache.set('is_logged_in_reddit', true, 59);
                     snoowrap_requester = r;
                     logoutContextMenu(first_run=false);
                     callback('Success');

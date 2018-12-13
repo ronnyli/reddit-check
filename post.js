@@ -39,8 +39,7 @@ function showSubmitForm() {
 }
 
 function isLoggedIn(callback) {
-    snoo_json = lscache.get('snoowrap_requester_json');
-    if (snoo_json) {
+    if (lscache.get('is_logged_in_reddit')) {
         showSubmitForm();
     } else {
         callback();
