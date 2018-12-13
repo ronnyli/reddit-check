@@ -23,7 +23,7 @@ function logoutContextMenu(first_run=false) {
             "title": "Sign Out from " + username,
             "contexts": ["browser_action"],
             "onclick": function() {
-                lscache.set('snoowrap_requester_json', null);
+                lscache.set('is_logged_in_reddit', null);
                 loginContextMenu(first_run=false);
             }
         };
@@ -33,11 +33,15 @@ function logoutContextMenu(first_run=false) {
         } else {
             chrome.contextMenus.update(id, properties);
         }
+        setTimeout(function() {
+            // access token expires in an hour
+            loginContextMenu(first_run=false);
+        }, (1000 * 60 * 59));  // 59 minutes
         return;
     });
 }
 
-if (lscache.get('snoowrap_requester_json')) {
+if (lscache.get('is_logged_in_reddit')) {
     logoutContextMenu(first_run=true);
 } else {
     loginContextMenu(first_run=true);

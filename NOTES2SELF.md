@@ -11,20 +11,14 @@
         - Make search more relevant
 1. Consistent UI for post.html
 1. **MVC stuff**
-    - Add ability to share, etc.
     - Add ability to remove/edit your own posts
 1. Options
     - turn off auto-search
 1. Not obvious how to log in
     - even less obvious to log out
-    - TODO: auto-logout after 1 hour
 1. How do licenses work when I build on top of Reddit Check?
 1. Switch React to production.min.js
     - remove development.min.js from the folder
-1. Security
-    - Remove snoowrap_requester_json from LocalStorage
-        - replace `snoowrap_requester_json` with `is_logged_in` boolean
-        - Only grant tokens access for 1 hour (`permanent: false` and 1hr expiration time on `is_logged_in`)
 ### After release
 1. Performance improvements
 1. IndexedDB to bypass 5MB LocalStorage limit

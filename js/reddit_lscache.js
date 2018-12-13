@@ -23,17 +23,13 @@ const SubmissionCollectionLscache = {
     },
     insertIDs: function(url, new_ids) {
         const ID_array = typeof new_ids === "string"? [new_ids] : new_ids;
-        let all_ids = lscache.get(URL_STORAGE_KEY + url);
-        if (all_ids) {
-            ID_array.forEach(function(id) {
-                if (all_ids.indexOf(id) < 0) {
-                    all_ids.push(id);
-                }
-            });
-            this.replace(url, all_ids);
-        } else {
-            this.replace(url, new_ids);
-        }
+        let all_ids = lscache.get(URL_STORAGE_KEY + url) || [];
+        ID_array.forEach(function(id) {
+            if (all_ids.indexOf(id) < 0) {
+                all_ids.push(id);
+            }
+        });
+        this.replace(url, all_ids);
     },
     get: function(url) {
         const ids = lscache.get(URL_STORAGE_KEY + url);
