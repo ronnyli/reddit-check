@@ -181,8 +181,6 @@ function makeDisplay(submission) {
 }
 
 function displayReplyComment(comment_id, $form, replyable_content_type) {
-    console.log('Reply to ' + comment_id);
-
     if ($form.children().length == 0) {
         $form.append(renderReplyComment(comment_id, replyable_content_type));
         const converter = new Markdown.getSanitizingConverter();
@@ -197,12 +195,18 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
         // TODO: better handling of this function
         $form.submit(function(event) {
             event.preventDefault();
+            $form.find('button').prop('disabled', true);
             leaveComment(comment_id,
                 $(`#wmd-input-${comment_id}`).val(),
                 replyable_content_type,
                 function (response) {
+                    $form.find('button').prop('disabled', false);
                     if (response.id) {
-                        $form.hide(0);
+                        if (replyable_content_type === 'comment') {
+                            $form.hide(0);
+                        }
+                        $(`#wmd-input-${comment_id}`).val('');
+                        $(`#wmd-preview-${comment_id}`).html('');
                         const parent_id = comment_id;
                         let $parent;
                         if (replyable_content_type == 'comment') {
@@ -219,7 +223,9 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
                         $("#status").html("<span>Successful post</span>")
                     } else {
                         // TODO: better error handling
-                        $form.hide(0);
+                        if (replyable_content_type === 'comment') {
+                            $form.hide(0);
+                        }
                         $("#status").html(`<span>${response}</span>`);
                         console.log('Status of failed post:');
                         console.log(response);

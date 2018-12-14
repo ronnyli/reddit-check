@@ -208,18 +208,22 @@ function backgroundSnoowrap() {
                     userAgent: userAgent,
                     clientId: clientId,
                     redirectUri: redirectUri
-                });
-                snoowrap_promise.then(r => {
+                }).then(r => {
                     lscache.set('is_logged_in_reddit', true, 59);
                     snoowrap_requester = r;
                     logoutContextMenu(first_run=false);
-                    callback('Success');
+                    return 'Success'
                 }).catch(err => {
                     lscache.set('is_logged_in_reddit', null);
                     console.error(err);
-                    callback(err.toString());
                     loginContextMenu(first_run=false);
+                    return err.toString();
                 });
+                // popup window closes before callback can run so this
+                // will throw the following error:
+                // Unhandled rejection Error: Attempting to use a disconnected port object
+                // It's okay though because the login was successful
+                snoowrap_promise.then(status => callback(status));
             }
         },
 
