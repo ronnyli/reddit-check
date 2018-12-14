@@ -9,16 +9,18 @@
         - Blacklisted element appears for some reason (popup.js)
         - Top-level reply box should not disappear after posting
         - Make search more relevant
+            - comments that contain the URL but get deleted make the post look irrelevant
+                - hopefully fixed in a later pushshift update
 1. Consistent UI for post.html
+    - after posting, go to `comment.html` if it was successful
 1. **MVC stuff**
     - Add ability to remove/edit your own posts
-1. Options
-    - turn off auto-search
 1. Not obvious how to log in
     - even less obvious to log out
 1. How do licenses work when I build on top of Reddit Check?
 1. Switch React to production.min.js
     - remove development.min.js from the folder
+1. context menu link to go to chrome://extensions?id=EXTENSION_ID
 ### After release
 1. Performance improvements
 1. IndexedDB to bypass 5MB LocalStorage limit
@@ -35,6 +37,10 @@
 1. Hover over subreddit to see Community Details
 1. Build website for Thredd
     - context menu link to provide feedback can go to website
+    - mention how to turn off auto-search
+1. Sorting and filtering
+    - have a filter for "At least X comments" (initial value = 1) so you have something to read
+        - turn this filter on by default
 1. Pagination
 1. Move ALL HTML into Javascript b/c otherwise you have to remember which HTML goes where
 1. Think about actions for:

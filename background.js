@@ -46,17 +46,8 @@ function getYoutubeURLs(url){
     return urls;
 }
 
-function constructURLs(url){
-    if (url.indexOf('http') == -1) {
-        return []
-    }
-    // TODO: keep everything after the first instance of '://'
-    var url_without_protocol = url.split('://')[1];
-    var urls = [url_without_protocol];
-    if (url.indexOf('youtube.com') != -1) {
-        urls = urls.concat(getYoutubeURLs(url));
-    }
-    return urls;
+function trimURL(url){
+    return url.split('://')[1].split('?')[0];
 }
 
 
@@ -120,7 +111,7 @@ function setBadge(title, text, badgeColor, alienIcon, tab) {
 
 function backgroundSnoowrap() {
     'use strict';
-    var clientId = 'wRDCbVoIWlkbYg';
+    var clientId = 'JM8JSElud0Rm1g';
     var redirectUri = chrome.identity.getRedirectURL('provider_cb');
     var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
     // TODO: bogus userAgent
@@ -223,6 +214,11 @@ function backgroundSnoowrap() {
                     snoowrap_requester = r;
                     logoutContextMenu(first_run=false);
                     callback('Success');
+                }).catch(err => {
+                    lscache.set('is_logged_in_reddit', null);
+                    console.error(err);
+                    callback(err.toString());
+                    loginContextMenu(first_run=false);
                 });
             }
         },
@@ -320,8 +316,16 @@ function backgroundSnoowrap() {
         },
 
         searchSubmissionsForURL: function(url) {
+            // TODO: clean up search logic
+
+            // if (url.indexOf('http') == -1) {
+            //     urls = [];  // TODO: return a Promise so we don't waste our time
+            // }
+
             function writeQuery(url) {
-                if (url.indexOf('youtube.com') != -1 && url.indexOf('v=') != -1) {
+                if (url.indexOf('http') == -1) {
+                    return [];
+                } else if (url.indexOf('youtube.com') != -1 && url.indexOf('v=') != -1) {
                     // Reddit search for youtube needs to be even more specific
                     // see: https://www.reddit.com/r/youtube/comments/6fhxnr/anyone_else_have_the_problem_of_this_forum_not/diid2b2
                     let video_id = url.split('v=')[1];
@@ -331,15 +335,18 @@ function backgroundSnoowrap() {
                     }
                     return `url:${video_id} site:(youtube.com OR youtu.be)`;
                 } else {
-                    // search for multiple URLs by using url:(link1 OR link2 OR...)
-                    // Do not include http[s]:// or Reddit will return an error
-                    // see this query for an example https://www.reddit.com/search?q=url%3A%28imgur.com%2FhyLlADL+OR+en.wikipedia.org%2Fwiki%2FBankruptcy_barrel+OR+en.wikipedia.org%2Fwiki%2FExertional_rhabdomyolysis%29&restrict_sr=&sort=relevance&t=all
-                    const urls = constructURLs(url);
-                    const urls_query = '(' + urls.map(url => `"${url}"`).join(' OR ') + ')';
-                    return "url:" + urls_query + " OR selftext:" + urls_query;
+                    const trimmed_url = trimURL(url);
+                    return `url:"${trimmed_url}" OR selftext:"${trimmed_url}"`;
                 }
             }
             const query = writeQuery(url);
+            // TODO: need a better name...
+            const is_fancy_url = (url.indexOf('youtube.com') != -1 && url.indexOf('v=') != -1) ? true : false;
+
+            function escapeRegExp(string) {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+            }
+
             return getSnoowrapRequester()
               .then(r => r.search({
                 query: query,
@@ -354,22 +361,61 @@ function backgroundSnoowrap() {
                 if (true) {  // TODO: convert this to an option
                     listing_filtered = listing.filter((el) => {return !el.over_18});
                 }
+                if (!is_fancy_url) {
+                    const u = trimURL(url);
+                    const too_much = new RegExp(escapeRegExp(u) + '/?\\w');
+                    const basic = new RegExp(escapeRegExp(u));
+                    listing_filtered = listing_filtered.filter(elem => {
+                        return (
+                            basic.test(elem.url) && !too_much.test(elem.url)
+                        ) || (
+                            basic.test(elem.selftext_html) && !too_much.test(elem.selftext_html)
+                        );
+                    });
+                }
                 return listing_filtered;
               });
         },
 
         searchCommentsForURL: function(url) {
+            // TODO: clean up search logic
+            let is_fancy_url;
+            let urls = [];
+            if (url.indexOf('http') == -1) {
+                urls = [];  // TODO: return a Promise so we don't waste our time
+            } else if (url.indexOf('youtube.com') != -1 && url.indexOf('v=') != -1) {
+                is_fancy_url = true;  // TODO: re-name at some point
+                urls = getYoutubeURLs(url);
+            } else {
+                is_fancy_url = false;
+                urls = [trimURL(url)];
+            }
             const comment_api = 'https://api.pushshift.io/reddit/search/comment/?';
             const submission_api = 'https://api.pushshift.io/reddit/search/submission/?';
-
-            var urls = constructURLs(url);
+            const fields = ['link_id', 'body'];
             let promises = [];
+
+            function escapeRegExp(string) {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+            }
 
             urls.forEach(u => {
                 promises.push(
-                    fetch(comment_api + 'q="' + URI.encode(u) + '"&fields=link_id')
+                    fetch(comment_api + 'q="' + URI.encode(u) + '"&fields=' + fields.join(','))
                     .then(response => response.json())
                     .then(resp => resp.data)
+                    .then(data => {
+                        if (is_fancy_url) {
+                            return data;
+                        } else {
+                            const too_much = new RegExp(escapeRegExp(u) + '/?\\w');
+                            const basic = new RegExp(escapeRegExp(u));
+                            return data.filter(elem => {
+                                // Must match URL but not go over
+                                return (basic.test(elem.body) && !too_much.test(elem.body));
+                            });
+                        }
+                    })
                     .then(data => data.map(elem => elem.link_id))  // array of submission IDs
                     .catch(error => {
                         console.log(error);
