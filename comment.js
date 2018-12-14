@@ -195,10 +195,12 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
         // TODO: better handling of this function
         $form.submit(function(event) {
             event.preventDefault();
+            $form.find('button').prop('disabled', true);
             leaveComment(comment_id,
                 $(`#wmd-input-${comment_id}`).val(),
                 replyable_content_type,
                 function (response) {
+                    $form.find('button').prop('disabled', false);
                     if (response.id) {
                         if (replyable_content_type === 'comment') {
                             $form.hide(0);
