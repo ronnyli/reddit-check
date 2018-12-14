@@ -181,8 +181,6 @@ function makeDisplay(submission) {
 }
 
 function displayReplyComment(comment_id, $form, replyable_content_type) {
-    console.log('Reply to ' + comment_id);
-
     if ($form.children().length == 0) {
         $form.append(renderReplyComment(comment_id, replyable_content_type));
         const converter = new Markdown.getSanitizingConverter();
@@ -202,7 +200,11 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
                 replyable_content_type,
                 function (response) {
                     if (response.id) {
-                        $form.hide(0);
+                        if (replyable_content_type === 'comment') {
+                            $form.hide(0);
+                        }
+                        $(`#wmd-input-${comment_id}`).val('');
+                        $(`#wmd-preview-${comment_id}`).html('');
                         const parent_id = comment_id;
                         let $parent;
                         if (replyable_content_type == 'comment') {
