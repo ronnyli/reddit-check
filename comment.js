@@ -221,7 +221,9 @@ function displayReplyComment(comment_id, $form, replyable_content_type) {
                         $("#status").html("<span>Successful post</span>")
                     } else {
                         // TODO: better error handling
-                        $form.hide(0);
+                        if (replyable_content_type === 'comment') {
+                            $form.hide(0);
+                        }
                         $("#status").html(`<span>${response}</span>`);
                         console.log('Status of failed post:');
                         console.log(response);
