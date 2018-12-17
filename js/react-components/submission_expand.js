@@ -1,74 +1,41 @@
 class SubmissionExpand extends Content {
     render() {
-        let buttons = React.createElement('div', {
+        let buttons = [
+            React.createElement('div', {
+                    className: '_1UoeAeSRhOKSNdY_h3iS1O _3m17ICJgx45k_z-t82iVuO _2qww3J5KKzsD7e5DO0BvvU'
+                }, React.createElement('i', {
+                    className: 'icon icon-comment _3ch9jJ0painNf41PmU4F9i _3DVrpDrMM9NLT6TlsTUMxC'
+                }), React.createElement('span', {
+                    className: 'FHCV02u6Cp2zYL0fhQPsO'
+                }, `${numToString(this.props.num_comments)} comments`)),
+
+            React.createElement(ShareButton, {
+                url: this.props.url,
+                replyable_content_type: this.props.replyable_content_type
+            }),
+
+            React.createElement(SaveButton, {
+                content_id: this.props.id,
+                replyable_content_type: this.props.replyable_content_type,
+                saved: this.state.saved,
+                handleSave: ((e) => this.handleSave(e))
+            })
+        ];
+        if (lscache.get('is_logged_in_reddit') &&
+            ((this.props.author.name || this.props.author) === lscache.get('reddit_username'))) {
+            buttons.push(React.createElement(RemoveButton, {
+                content_id: this.props.id,
+                replyable_content_type: this.props.replyable_content_type,
+                removed: this.state.removed,
+                handleRemove: ((e) => this.handleRemove(e))
+            }));
+        }
+        let button_container = React.createElement('div', {
             className: '_1hwEKkB_38tIoal6fcdrt9'
         }, React.createElement('div', {
             className:'_3-miAEojrCvx_4FQ8x3P-s s1o44igr-2 hbJPLi'
-        },
-
-        React.createElement('div', {
-                className: '_1UoeAeSRhOKSNdY_h3iS1O _3m17ICJgx45k_z-t82iVuO _2qww3J5KKzsD7e5DO0BvvU'
-            }, React.createElement('i', {
-                className: 'icon icon-comment _3ch9jJ0painNf41PmU4F9i _3DVrpDrMM9NLT6TlsTUMxC'
-            }), React.createElement('span', {
-                className: 'FHCV02u6Cp2zYL0fhQPsO'
-            }, `${numToString(this.props.num_comments)} comments`)),
-
-        React.createElement(ShareButton, {
-            url: this.props.url,
-            replyable_content_type: this.props.replyable_content_type
-        }),
-
-        React.createElement(SaveButton, {
-            content_id: this.props.id,
-            replyable_content_type: this.props.replyable_content_type,
-            saved: this.state.saved,
-            handleSave: ((e) => this.handleSave(e))
-        }),
-
-        React.createElement('button', {
-            className: "s1afabjy-1 jqIcAC b1zwxr-0 hxpTao"
-        }, React.createElement('div', {
-            className:"s1vspxim-0 cpAOsy"
-        }, React.createElement('i', {
-            className:"icon icon-gild s1lfar2u-5 zIdCy"
-        }, React.createElement('span', {
-            className:"i729lw-0 ebGXPK"}))),
-        React.createElement('span', {
-            className:"s1vspxim-1 iDplM"
-        },'Give gold')),
-
-        React.createElement('button', {
-            className:"s1afabjy-1 jqIcAC b1zwxr-0 hxpTao"
-        }, React.createElement('div', {
-            className: "s1vspxim-0 cpAOsy"
-        }, React.createElement('i', {
-            className: "icon icon-hide s1lfar2u-0 ksuhiV"
-        })),
-        React.createElement('span', {
-            className:"s1vspxim-1 iDplM"
-        }, 'hide')),
-
-        React.createElement('button', {
-            className:"s1afabjy-1 jqIcAC b1zwxr-0 hxpTao"
-        }, React.createElement('div', {
-            className: "s1vspxim-0 cpAOsy"
-        }, React.createElement('i', {
-            className: "icon icon-report _1MDjRAzxk1RSTB12748O1v s1lfar2u-1 jdmklb"
-        })),
-        React.createElement('span', {
-            className:"s1vspxim-1 iDplM"
-        }, 'report')),
-
-        // TODO: add menu icon back in when we need it
-        // React.createElement('div', null,
-        // React.createElement('button', {
-        //     className:"s1lfar2u-14 ksTfYp mpc6lx-1 iheKDM"
-        // }, React.createElement('i', {
-        //     className:"icon icon-menu mpc6lx-2 ebwjqI"
-        // })))
-
-        ), React.createElement('div', {
+        }, buttons),
+           React.createElement('div', {
             className: 't4Hq30BDzTeJ85vREX7_M'
         }, `${Math.floor(this.props.upvote_ratio * 100)}% Upvoted`));
         let title = React.createElement(
@@ -147,7 +114,7 @@ class SubmissionExpand extends Content {
             React.createElement('i', {
                 className: 'icon icon-outboundLink jlrhi6-0 esUKm'
             }))) : '',
-            buttons);
+            button_container);
         let submission_container = React.createElement('div', {
             className: `s1knm1ot-9 jcdeKe _2rszc84L136gWQrkwH6IaM Post ${this.props.id} s1r9phcq-0 kpzJdf`,
             id: `${this.props.id}`,

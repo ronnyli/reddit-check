@@ -331,6 +331,10 @@
     content: "\F11F";
 }
 
+.icon-remove:before {
+    content: "\F12E";
+}
+
 .icon-upvote:before {
     content: "\F138";
 }
@@ -1617,6 +1621,24 @@
     border-color: rgb(237, 239, 241);
     border-image: initial;
     padding: 8px 0px 8px 8px;
+}
+
+.bFttyl {
+    -webkit-box-align: center;
+    align-items: center;
+    display: flex;
+    text-transform: capitalize;
+    opacity: 0.5;
+    color: rgb(255, 88, 91);
+    fill: rgb(255, 88, 91);
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    border-radius: 2px;
+    margin: 4px 8px 4px 0px;
+    padding: 4px;
+    text-decoration: none;
 }
 
 @font-face {

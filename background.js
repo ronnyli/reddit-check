@@ -117,6 +117,7 @@ function backgroundSnoowrap() {
     // TODO: bogus userAgent
     var userAgent = chrome.runtime.id + ':' + 'v0.0.1' + ' (by /u/sirius_li)';
 
+    lscache.set('is_logged_in_reddit', null);
     let anonymous_requester;
     let snoowrap_requester;
 
@@ -173,6 +174,7 @@ function backgroundSnoowrap() {
                 scope: [
                     //'edit',
                     'identity',
+                    'modposts',
                     'read',
                     //'report',
                     'save',
@@ -210,6 +212,7 @@ function backgroundSnoowrap() {
                     redirectUri: redirectUri
                 }).then(r => {
                     lscache.set('is_logged_in_reddit', true, 59);
+                    r.getMe().then(u => lscache.set('reddit_username', u.name));
                     snoowrap_requester = r;
                     logoutContextMenu(first_run=false);
                     return 'Success'
@@ -317,6 +320,32 @@ function backgroundSnoowrap() {
                     callback(err.toString());
                 });
             }
+        },
+
+        removeReddit: function(id, replyable_content_type, callback) {
+            getSnoowrapRequester()
+            .then(r => {
+                switch(replyable_content_type) {
+                    case 'submission':
+                        return r.getSubmission(id).remove().fetch();
+                    case 'comment':
+                        return r.getComment(id)
+                            .remove()
+                            .fetch()
+                            .then(content => content.link_id)
+                            .then(content_id => r.getSubmission(content_id).fetch());
+                }
+            }).then(submission => {
+                switch(replyable_content_type) {
+                    case 'submission':
+                        SubmissionLscache.delete(id);
+                        break;
+                    case 'comment':
+                        SubmissionLscache.update([submission]);
+                        break;
+                }
+                callback('Success');
+            }).catch(err => callback(err.toString()));
         },
 
         searchSubmissionsForURL: function(url) {
@@ -590,15 +619,20 @@ function onRequest(request, sender, callback) {
             request.replyable_content_type,
             callback);
         return true;
-    } else if (request.action == 'voteReddit') {
-        snoo.voteReddit(request.id,
-            request.vote_type,
+    } else if (request.action == 'removeReddit') {
+        snoo.removeReddit(request.id,
             request.replyable_content_type,
             callback);
         return true;
     } else if (request.action == 'saveReddit') {
         snoo.saveReddit(request.id,
             request.save_type,
+            request.replyable_content_type,
+            callback);
+        return true;
+    } else if (request.action == 'voteReddit') {
+        snoo.voteReddit(request.id,
+            request.vote_type,
             request.replyable_content_type,
             callback);
         return true;
