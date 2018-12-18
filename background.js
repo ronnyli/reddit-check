@@ -118,6 +118,7 @@ function backgroundSnoowrap() {
     var userAgent = chrome.runtime.id + ':' + 'v0.0.1' + ' (by /u/sirius_li)';
 
     lscache.set('is_logged_in_reddit', null);
+    lscache.set('anonymous_requester_json', null);
     let anonymous_requester;
     let snoowrap_requester;
 
@@ -152,12 +153,7 @@ function backgroundSnoowrap() {
                 resolve(snoowrap_requester);
             } else if (lscache.get('anonymous_requester_json')) {
                 console.log('using anonymous requester');
-                    if (anonymous_requester) {
-                        resolve(anonymous_requester);
-                    } else {
-                        anonymous_requester = new snoowrap({ accessToken: anonymousToken });
-                        resolve(anonymous_requester);
-                    }
+                resolve(anonymous_requester);
             } else {
                 console.log('anonymous requester expired. Fetching new one...');
                 resolve(fetchAnonymousToken());
