@@ -80,8 +80,10 @@ function renderComment(comment, archived) {
                                     <i class="icon icon-comment _3ch9jJ0painNf41PmU4F9i s5kaj4p-0 domCcm"></i>Reply
                                 </button>`
                             }
+                            <div class="comment_buttons"></div>
                             <div class="comment_share_menu"></div>
                             <div class='save_button'></div>
+                            <div class='remove_button'></div>
                         </div>
                     </div>
                     <form></form>
@@ -92,27 +94,17 @@ function renderComment(comment, archived) {
     </li>`);
     let $vote_arrows_div = $comment.find('.comment_vote');
         vote_arrows_dom = document.createElement('div');
-        $save_div = $comment.find('.save_button');
-        save_dom = document.createElement('div');
-        $share_div = $comment.find('.comment_share_menu');
-        share_dom = document.createElement('div');
+        $buttons_div = $comment.find('.comment_buttons');
+        buttons_dom = document.createElement('div');
     $vote_arrows_div.append(vote_arrows_dom);
-    $save_div.append(save_dom);
-    $share_div.append(share_dom);
+    $buttons_div.append(buttons_dom);
     ReactDOM.render(
         React.createElement(CommentVote, commentModel),
         vote_arrows_dom
     );
     ReactDOM.render(
-        React.createElement(CommentSave, commentModel),
-        save_dom
-    );
-    ReactDOM.render(
-        React.createElement(ShareButton, {
-            url: `https://www.reddit.com/${comment.permalink}`,
-            replyable_content_type: commentModel.replyable_content_type
-        }),
-        share_dom
+        React.createElement(CommentButtons, commentModel),
+        buttons_dom
     );
     return $comment;
 }

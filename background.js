@@ -152,7 +152,12 @@ function backgroundSnoowrap() {
                 resolve(snoowrap_requester);
             } else if (lscache.get('anonymous_requester_json')) {
                 console.log('using anonymous requester');
-                resolve(anonymous_requester);
+                    if (anonymous_requester) {
+                        resolve(anonymous_requester);
+                    } else {
+                        anonymous_requester = new snoowrap({ accessToken: anonymousToken });
+                        resolve(anonymous_requester);
+                    }
             } else {
                 console.log('anonymous requester expired. Fetching new one...');
                 resolve(fetchAnonymousToken());
