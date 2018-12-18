@@ -5,22 +5,15 @@
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML
     - extra libraries that aren't necessary
-    - bug fixin'
-        - Blacklisted element appears for some reason (popup.js)
-        - Top-level reply box should not disappear after posting
-        - Make search more relevant
-            - comments that contain the URL but get deleted make the post look irrelevant
-                - hopefully fixed in a later pushshift update
 1. Consistent UI for post.html
     - after posting, go to `comment.html` if it was successful
-1. **MVC stuff**
-    - Add ability to remove/edit your own posts
 1. Not obvious how to log in
     - even less obvious to log out
 1. How do licenses work when I build on top of Reddit Check?
 1. Switch React to production.min.js
     - remove development.min.js from the folder
 1. context menu link to go to chrome://extensions?id=EXTENSION_ID
+1. Logo design, Fiverrr for now. Upgrade later.
 ### After release
 1. Performance improvements
 1. IndexedDB to bypass 5MB LocalStorage limit
@@ -49,6 +42,7 @@
     - IDEAS:
         - "check-in" to pages, like Foursquare
 1. additional Reddit API stuff
+    - Edit
     - Hide
     - Report
     - etc.

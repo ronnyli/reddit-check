@@ -4,6 +4,35 @@ this file just contains little sub-components.
 // TODO: make an actual Comment compoenent
 */
 
+class CommentButtons extends Content {
+    render() {
+        let buttons = [
+            React.createElement(ShareButton, {
+                url: `https://www.reddit.com/${this.props.permalink}`,
+                replyable_content_type: this.props.replyable_content_type
+            }),
+            React.createElement(SaveButton, {
+                content_id: this.props.id,
+                replyable_content_type: this.props.replyable_content_type,
+                saved: this.state.saved,
+                handleSave: ((e) => this.handleSave(e))
+            })
+        ]
+        if (lscache.get('is_logged_in_reddit') &&
+            ((this.props.author.name || this.props.author) === lscache.get('reddit_username'))) {
+            buttons.push(React.createElement(RemoveButton, {
+                content_id: this.props.id,
+                replyable_content_type: this.props.replyable_content_type,
+                removed: this.state.removed,
+                handleRemove: ((e) => this.handleRemove(e))
+            }));
+        }
+        return React.createElement('div', {
+            style: {display: 'flex', flexDirection: 'row'}
+        }, buttons);
+    }
+}
+
 class CommentVote extends Content {
     render() {
         return React.createElement('div', {
@@ -24,16 +53,5 @@ class CommentVote extends Content {
                 handleVote: ((e) => this.handleVote(e))
             })
         ]);
-    }
-}
-
-class CommentSave extends Content {
-    render() {
-        return React.createElement(SaveButton, {
-            content_id: this.props.id,
-            replyable_content_type: this.props.replyable_content_type,
-            saved: this.state.saved,
-            handleSave: ((e) => this.handleSave(e))
-        });
     }
 }

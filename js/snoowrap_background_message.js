@@ -30,6 +30,14 @@ function leaveComment(id, text, replyable_content_type, callback) {
     }, callback)
 }
 
+function removeReddit(id, replyable_content_type, callback) {
+    chrome.runtime.sendMessage({
+        'action': 'removeReddit',
+        'id': id,
+        'replyable_content_type': replyable_content_type
+    }, callback)
+}
+
 function searchSubreddits(query, callback) {
     chrome.runtime.sendMessage({
         'action': 'searchSubreddits',
