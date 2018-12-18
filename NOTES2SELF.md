@@ -5,15 +5,8 @@
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML
     - extra libraries that aren't necessary
-    - bug fixin'
-        - Blacklisted element appears for some reason (popup.js)
 1. Consistent UI for post.html
     - after posting, go to `comment.html` if it was successful
-1. **MVC stuff**
-    - Add ability to remove/edit your own posts
-        - probably not using react for now
-            - use react to re-render the list of posts in popup.html
-            - maybe use react to re-render SubmissionExpanded
 1. Not obvious how to log in
     - even less obvious to log out
 1. How do licenses work when I build on top of Reddit Check?
@@ -49,6 +42,7 @@
     - IDEAS:
         - "check-in" to pages, like Foursquare
 1. additional Reddit API stuff
+    - Edit
     - Hide
     - Report
     - etc.
