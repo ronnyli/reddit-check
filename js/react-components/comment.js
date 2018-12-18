@@ -6,7 +6,7 @@ this file just contains little sub-components.
 
 class CommentButtons extends Content {
     render() {
-        buttons = [
+        let buttons = [
             React.createElement(ShareButton, {
                 url: `https://www.reddit.com/${this.props.permalink}`,
                 replyable_content_type: this.props.replyable_content_type
@@ -27,7 +27,9 @@ class CommentButtons extends Content {
                 handleRemove: ((e) => this.handleRemove(e))
             }));
         }
-        return React.createElement('div', null, buttons);
+        return React.createElement('div', {
+            style: {display: 'flex', flexDirection: 'row'}
+        }, buttons);
     }
 }
 

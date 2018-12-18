@@ -81,9 +81,6 @@ function renderComment(comment, archived) {
                                 </button>`
                             }
                             <div class="comment_buttons"></div>
-                            <div class="comment_share_menu"></div>
-                            <div class='save_button'></div>
-                            <div class='remove_button'></div>
                         </div>
                     </div>
                     <form></form>
