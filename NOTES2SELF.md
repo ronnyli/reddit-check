@@ -5,8 +5,8 @@
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML
     - extra libraries that aren't necessary
-1. Consistent UI for post.html
-    - after posting, go to `comment.html` if it was successful
+    - Bugfix:
+        - use delete instead of remove (Remove requires moderator privileges)
 1. Not obvious how to log in
     - even less obvious to log out
 1. How do licenses work when I build on top of Reddit Check?
@@ -27,7 +27,6 @@
         - returns 0 if provided key not found **or** provided changes are identical to current values
         - if 1 then do a full update and run `snoo.getSubmission()` later
     - not sure what to do about Comments, probably same as now
-1. Hover over subreddit to see Community Details
 1. Build website for Thredd
     - context menu link to provide feedback can go to website
     - mention how to turn off auto-search
@@ -48,6 +47,8 @@
     - etc.
 1. could right-clicking Open In New Tab somehow keep popup window open?
     - or make the extension an overlay so it doesn't keep closing
+1. Consistent UI for post.html
+    - after posting, go to `comment.html` if it was successful
 
 Where to get outside help?
     - ideally trustworthy

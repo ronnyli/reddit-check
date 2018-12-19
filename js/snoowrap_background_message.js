@@ -14,6 +14,13 @@ function getSubmission(id, callback)  {
     }, callback)
 }
 
+function getSubreddit(subreddit, callback)  {
+    chrome.runtime.sendMessage({
+        'action' : 'getSubreddit',
+        'subreddit' : subreddit
+    }, callback)
+}
+
 function logInReddit(callback) {
     chrome.runtime.sendMessage({
         'action' : 'logInReddit',
