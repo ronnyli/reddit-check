@@ -2,7 +2,7 @@
 
 function RemoveButton(props) {
     let button_class = props.removed ? 'bFttyl' : '';
-        button_text = props.removed ? 'removed' : 'remove';
+        button_text = props.removed ? 'deleted' : 'delete';
     function onRemove() {
         if (!props.removed) {
             removeReddit(

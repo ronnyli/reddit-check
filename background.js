@@ -173,9 +173,8 @@ function backgroundSnoowrap() {
             var authenticationUrl = snoowrap.getAuthUrl({
                 clientId: clientId,
                 scope: [
-                    //'edit',
+                    'edit',
                     'identity',
-                    'modposts',
                     'read',
                     //'report',
                     'save',
@@ -335,10 +334,10 @@ function backgroundSnoowrap() {
             .then(r => {
                 switch(replyable_content_type) {
                     case 'submission':
-                        return r.getSubmission(id).remove().fetch();
+                        return r.getSubmission(id).delete().fetch();
                     case 'comment':
                         return r.getComment(id)
-                            .remove()
+                            .delete()
                             .fetch()
                             .then(content => content.link_id)
                             .then(content_id => r.getSubmission(content_id).fetch());

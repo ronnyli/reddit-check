@@ -5,14 +5,15 @@
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML
     - extra libraries that aren't necessary
-    - Bugfix:
-        - use delete instead of remove (Remove requires moderator privileges)
 1. Not obvious how to log in
     - even less obvious to log out
 1. How do licenses work when I build on top of Reddit Check?
 1. Switch React to production.min.js
     - remove development.min.js from the folder
 1. context menu link to go to chrome://extensions?id=EXTENSION_ID
+1. Blacklist tweaks
+    - google is blacklisted by default
+    - explain why a page is blacklisted along with link to options.html
 1. Logo design, Fiverrr for now. Upgrade later.
 ### After release
 1. Performance improvements
