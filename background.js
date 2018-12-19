@@ -111,7 +111,7 @@ function setBadge(title, text, badgeColor, alienIcon, tab) {
 
 function backgroundSnoowrap() {
     'use strict';
-    var clientId = 'niMaaIpWSA1LKA';
+    var clientId = 'JM8JSElud0Rm1g';
     var redirectUri = chrome.identity.getRedirectURL('provider_cb');
     var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
     // TODO: bogus userAgent
@@ -278,6 +278,13 @@ function backgroundSnoowrap() {
                 SubmissionLscache.update([submission])
                 callback(submission);
             });
+        },
+
+        getSubreddit: function(subreddit, callback) {
+            anonymous_requester.getSubreddit(subreddit)
+            .fetch()
+            .then(fetched => callback(fetched))
+            .catch(err => console.error(err));
         },
 
         leaveComment: function(id, text, replyable_content_type, callback) {
@@ -599,7 +606,10 @@ snoo.fetchAnonymousToken();
 
 function onRequest(request, sender, callback) {
     console.log(request);
-    if (request.action == 'logInReddit') {
+    if (request.action == 'getSubreddit') {
+        snoo.getSubreddit(request.subreddit, callback);
+        return true;
+    } else if (request.action == 'logInReddit') {
         snoo.logInReddit(request.interactive, callback);
         return true;
     } else if (request.action == 'submitPost') {

@@ -32,7 +32,9 @@ function getAge(created_utc) {
 
 function numToString(score) {
     const thousands = score / 1000;
-    if (thousands >= 1) {
+    if ((thousands / 1000) >= 1) {
+        return `${(thousands / 1000).toFixed(1)}m`
+    } else if (thousands >= 1) {
         return `${thousands.toFixed(1)}k`
     } else {
         return score.toString();
