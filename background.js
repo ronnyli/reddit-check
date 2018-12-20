@@ -74,8 +74,8 @@ function getURLInfo(tab){
 }
 
 function disableBadge(tab){
-    var title = "Blacklisted by you"
-    var text = "-"
+    var title = "Not running on this page"
+    var text = "X"
     var badgeColor = [175, 0, 0, 200] //red
     var alienIcon = { '19': "images/alien_apathy19.png", '38': "images/alien_apathy38.png" }
     setBadge(title, text, badgeColor, alienIcon, tab)

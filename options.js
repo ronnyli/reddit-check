@@ -1,5 +1,5 @@
 
-var gBlacklist = null
+var gBlacklist = [];
 
 function getblockurl(index, item) {
     var id = 'blockurl_'+index
@@ -26,15 +26,19 @@ function loadBlacklist()
 {
     console.log('loadBlacklist called.');
     $('#blacklist').text('');
-    chrome.storage.sync.get('blacklist', function (storageMap) {
+    chrome.storage.sync.get(['blacklist', 'blacklist_edited'], function (storageMap) {
         $('div#loading').hide(0);
-        if (storageMap.hasOwnProperty('blacklist') ){
-            gBlacklist = storageMap['blacklist']
-            $.each(storageMap['blacklist'], function(index, item) {
+        if ((!storageMap['blacklist_edited']) || storageMap['blacklist']){
+            gBlacklist = storageMap['blacklist'] || [];
+            if (!storageMap['blacklist_edited']) {
+                // add default blacklist items
+                gBlacklist.push('www.google', 'mail.google');
+            }
+            $.each(gBlacklist, function(index, item) {
                 $("#blacklist").append(getblockurl(index, item))
             });
 
-            if (storageMap['blacklist'].length == 0) {
+            if (gBlacklist.length == 0) {
                 $('div#emptynotice').show(0);
             } else {
                 $('div#emptynotice').hide(0);
@@ -50,14 +54,8 @@ $('#blockform').submit(function() {
     console.log(url);
     if (url.length > 0) {
         $('input#blockurl').val('');
-        chrome.storage.sync.get('blacklist', function (storageMap) {
-            var blacklist = [];
-            if (storageMap.hasOwnProperty('blacklist') ){
-                blacklist = storageMap['blacklist'];
-            }
-            blacklist.push(url);
-            saveBlacklist(blacklist, 'Added \''+url+'\' to blacklist.');
-        });
+        gBlacklist.push(url);
+        saveBlacklist(gBlacklist, 'Added \''+url+'\' to blacklist.');
     } else {
         alert('Empty URL.')
     }
@@ -75,8 +73,10 @@ $('#clear').click(function() {
 
 function saveBlacklist(blacklist, message)
 {
-    gBlacklist=blacklist
-    chrome.storage.sync.set({'blacklist':blacklist},function(){
+    chrome.storage.sync.set({
+        'blacklist':blacklist,
+        'blacklist_edited': true
+    },function(){
         setStatus(message);
         loadBlacklist();
     });

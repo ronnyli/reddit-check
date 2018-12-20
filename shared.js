@@ -1,9 +1,13 @@
 function isBlacklisted(tab, actionOnTrue, actionOnElse) {
     var url = tab.url
-    chrome.storage.sync.get('blacklist', function (storageMap) {
+    chrome.storage.sync.get(['blacklist', 'blacklist_edited'], function (storageMap) {
         var isBlocked = false
-        if (storageMap.hasOwnProperty('blacklist')){
-            var list = storageMap['blacklist']
+        if ((!storageMap['blacklist_edited']) || storageMap['blacklist']){
+            var list = storageMap['blacklist'] || [];
+            if (!storageMap['blacklist_edited']) {
+                // add default blacklist items
+                list.push('www.google', 'mail.google');
+            }
             for (var i=0; i<list.length; ++i) {
                 if (url.indexOf(list[i]) > -1) {
                     isBlocked = true
