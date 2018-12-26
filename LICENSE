@@ -1,6 +1,8 @@
- Reddit Check - This program is a Chrome extension which allows you to 
- check whether current URL is submitted on reddit.com.
-    Copyright (C) 2010  Hrishikesh Bakshi
+Copyright for portions of Thredd are held by Hrishikesh Bakshi (2010) as part of Reddit Check.
+All other copyright for Thredd are held by Ronny Li (2017).
+ 
+Thredd - a browser extension for connecting content on the internet with the communities that discuss them.
+    Copyright (C) 2017  Ronny Li
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,4 +17,4 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
-    Contact: bakshi.hrishikesh@gmail.com
+    Contact: ronnyli91@gmail.com
