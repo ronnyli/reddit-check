@@ -9,7 +9,7 @@
        "default_popup": "popup.html",
        "default_title": "Thredd"
     },
-    "description": "Check if current URL is submitted on reddit. Submit link or join the discussion.",
+    "description": "Connecting you to people who share your interests.",
     "options_page": "options.html",
     "icons": {
        "19": "images/alien19.png",
@@ -27,5 +27,5 @@
         "http://www.reddit.com/*",
         "storage"],
     "update_url": "http://clients2.google.com/service/update2/crx",
-    "version": "0.8.106"
+    "version": "0.8.107"
 }

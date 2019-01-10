@@ -5,16 +5,14 @@
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML
     - extra libraries that aren't necessary
-1. Not obvious how to log in
-    - even less obvious to log out
-1. How do licenses work when I build on top of Reddit Check?
+    - Bugfix:
+        - when posts/comments link to subreddits/users, the href does not go where you would expect
+        - sometimes blue badge will be displayed but Thredd will say 0 results
+            - this can be either due to the badge not updating
+            - or there are actually results but Thredd is not finding them for some reason
+        - Thredd doesn't find good results for pages that have ? params
 1. Switch React to production.min.js
     - remove development.min.js from the folder
-1. context menu link to go to chrome://extensions?id=EXTENSION_ID
-1. Blacklist tweaks
-    - google is blacklisted by default
-    - explain why a page is blacklisted along with link to options.html
-1. Logo design, Fiverrr for now. Upgrade later.
 ### After release
 1. Performance improvements
 1. IndexedDB to bypass 5MB LocalStorage limit
@@ -28,9 +26,6 @@
         - returns 0 if provided key not found **or** provided changes are identical to current values
         - if 1 then do a full update and run `snoo.getSubmission()` later
     - not sure what to do about Comments, probably same as now
-1. Build website for Thredd
-    - context menu link to provide feedback can go to website
-    - mention how to turn off auto-search
 1. Sorting and filtering
     - have a filter for "At least X comments" (initial value = 1) so you have something to read
         - turn this filter on by default
@@ -39,8 +34,6 @@
 1. Think about actions for:
     - pages without posts
     - people who don't want to post/comment
-    - IDEAS:
-        - "check-in" to pages, like Foursquare
 1. additional Reddit API stuff
     - Edit
     - Hide
