@@ -143,7 +143,7 @@ function setBadge(title, text, badgeColor, tab) {
 
 function backgroundSnoowrap() {
     'use strict';
-    var clientId = CLIENT_ID_DEV;
+    var clientId = CLIENT_ID_PROD;
     var redirectUri = chrome.identity.getRedirectURL('provider_cb');
     var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
     // TODO: bogus userAgent
