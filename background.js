@@ -114,7 +114,7 @@ function setBadge(title, text, badgeColor, alienIcon, tab) {
 
 function backgroundSnoowrap() {
     'use strict';
-    var clientId = 'JM8JSElud0Rm1g';
+    var clientId = CLIENT_ID_DEV;
     var redirectUri = chrome.identity.getRedirectURL('provider_cb');
     var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
     // TODO: bogus userAgent

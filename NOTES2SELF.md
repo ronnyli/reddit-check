@@ -7,8 +7,6 @@
     - extra libraries that aren't necessary
     - Bugfix:
         - when posts/comments link to subreddits/users, the href does not go where you would expect
-1. Switch React to production.min.js
-    - remove development.min.js from the folder
 ### After release
 1. Performance improvements
 1. IndexedDB to bypass 5MB LocalStorage limit
