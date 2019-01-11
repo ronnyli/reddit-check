@@ -14,6 +14,8 @@ chrome.tabs.onSelectionChanged.addListener(function(tabId, info) {
 
 function changeAction(tab) {
     if (lscache.get(DEDUPE_KEY + tab.url + tab.id) != null) {
+        const posts = lscache.get(URL_STORAGE_KEY + tab.url);
+        updateBadge(posts.length, tab);
         return // dupe
     }
     lscache.set(DEDUPE_KEY + tab.url + tab.id, "", 2)
@@ -87,7 +89,8 @@ function updateBadge(numPosts, tab) {
     var badgeColor = null;  // use default badge color
     var alienIcon = { '19': "images/alien19.png", '38': "images/alien38.png" }
     if (numPosts == 0) {
-        return;
+        text = '';
+        title = 'Thredd';
     }
     setBadge(title, text, badgeColor, alienIcon, tab)
 }

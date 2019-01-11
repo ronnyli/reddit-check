@@ -7,10 +7,6 @@
     - extra libraries that aren't necessary
     - Bugfix:
         - when posts/comments link to subreddits/users, the href does not go where you would expect
-        - sometimes blue badge will be displayed but Thredd will say 0 results
-            - this can be either due to the badge not updating
-            - or there are actually results but Thredd is not finding them for some reason
-        - Thredd doesn't find good results for pages that have ? params
 1. Switch React to production.min.js
     - remove development.min.js from the folder
 ### After release
@@ -43,6 +39,10 @@
     - or make the extension an overlay so it doesn't keep closing
 1. Consistent UI for post.html
     - after posting, go to `comment.html` if it was successful
+1. Search multiple variations of the URL and stop when results are found
+    1. URL with ? params
+    1. URL with # segment
+    1. URL w/o ? or #
 
 Where to get outside help?
     - ideally trustworthy
