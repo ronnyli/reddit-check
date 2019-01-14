@@ -30,6 +30,9 @@ class SubmissionExpand extends Content {
                 handleRemove: ((e) => this.handleRemove(e))
             }));
         }
+        buttons.push(React.createElement(OpenInRedditButton, {
+            content_id: this.props.id
+        }))
         let button_container = React.createElement('div', {
             className: '_1hwEKkB_38tIoal6fcdrt9'
         }, React.createElement('div', {

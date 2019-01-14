@@ -315,6 +315,10 @@
     position: relative;
 }
 
+.icon-reddit:before {
+    content: "\F102";
+}
+
 .icon-archived:before {
     content: "\F104";
 }
