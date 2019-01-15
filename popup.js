@@ -48,7 +48,7 @@ function processPosts(redditPosts, encodedUrl, title) {
                         </p>
                     `}
                 </div>
-                <a class="s6tnjvv-17 cvgsde pbxmwi-2 bmmzQa" href="post.html">
+                <a class="s6tnjvv-17 cvgsde pbxmwi-2 bmmzQa" href="https://www.reddit.com/submit?url=${encodedUrl}" target="_blank" rel="noopener noreferrer">
                     Create Post
                 </a>
             </div>
