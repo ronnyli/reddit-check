@@ -81,7 +81,12 @@ class SubmissionPopup extends Content {
                     replyable_content_type: this.props.replyable_content_type,
                     removed: this.state.removed,
                     handleRemove: ((e) => this.handleRemove(e))
-                })) : null)
+                })) : null),
+                React.createElement('div', {
+                    className: 's1fyj3kn-15 UVOUP b1zwxr-0 hxpTao'
+                }, React.createElement(OpenInRedditButton, {
+                    content_id: this.props.id
+                }))
             ],
             menu_style: {left:'auto', right:0}
         });
