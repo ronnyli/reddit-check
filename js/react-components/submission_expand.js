@@ -1,5 +1,47 @@
 class SubmissionExpand extends Content {
     render() {
+        let overflow_menu = React.createElement(DropdownMenu, {
+            button: React.createElement(
+                "button",
+                { "className": "more-options s6epw68-15 jxTuag mpc6lx-1 iheKDM",
+                id: `${this.props.id}-overflow-menu` },
+                React.createElement("i", { "className": "icon icon-menu mpc6lx-2 ebwjqI" })
+            ),
+            menu_contents: [
+                React.createElement('div', {
+                    className: 's1fyj3kn-15 UVOUP b1zwxr-0 hxpTao'
+                }, React.createElement(ShareButton, {
+                        url: this.props.url,
+                        replyable_content_type: this.props.replyable_content_type,
+                        menu_style: {left:'auto', right:0}
+                })),
+                React.createElement('div', {
+                    className: 's1fyj3kn-15 UVOUP b1zwxr-0 hxpTao'
+                }, React.createElement(SaveButton, {
+                    content_id: this.props.id,
+                    replyable_content_type: this.props.replyable_content_type,
+                    saved: this.state.saved,
+                    handleSave: ((e) => this.handleSave(e))
+                })),
+                ((lscache.get('is_logged_in_reddit') &&
+                ((this.props.author.name || this.props.author) === lscache.get('reddit_username'))) ?
+                React.createElement('div', {
+                    className: 's1fyj3kn-15 UVOUP b1zwxr-0 hxpTao'
+                }, React.createElement(RemoveButton, {
+                    content_id: this.props.id,
+                    replyable_content_type: this.props.replyable_content_type,
+                    removed: this.state.removed,
+                    handleRemove: ((e) => this.handleRemove(e))
+                })) : null),
+                React.createElement('div', {
+                    className: 's1fyj3kn-15 UVOUP b1zwxr-0 hxpTao'
+                }, React.createElement(OpenInRedditButton, {
+                    content_id: this.props.id
+                }))
+            ],
+            menu_style: {left:'auto', right:0}
+        });
+
         let buttons = [
             React.createElement('div', {
                     className: '_1UoeAeSRhOKSNdY_h3iS1O _3m17ICJgx45k_z-t82iVuO _2qww3J5KKzsD7e5DO0BvvU'
@@ -9,30 +51,11 @@ class SubmissionExpand extends Content {
                     className: 'FHCV02u6Cp2zYL0fhQPsO'
                 }, `${numToString(this.props.num_comments)} comments`)),
 
-            React.createElement(ShareButton, {
-                url: this.props.url,
-                replyable_content_type: this.props.replyable_content_type
-            }),
+            React.createElement(FindMyLinkButton),
 
-            React.createElement(SaveButton, {
-                content_id: this.props.id,
-                replyable_content_type: this.props.replyable_content_type,
-                saved: this.state.saved,
-                handleSave: ((e) => this.handleSave(e))
-            })
+            overflow_menu
         ];
-        if (lscache.get('is_logged_in_reddit') &&
-            ((this.props.author.name || this.props.author) === lscache.get('reddit_username'))) {
-            buttons.push(React.createElement(RemoveButton, {
-                content_id: this.props.id,
-                replyable_content_type: this.props.replyable_content_type,
-                removed: this.state.removed,
-                handleRemove: ((e) => this.handleRemove(e))
-            }));
-        }
-        buttons.push(React.createElement(OpenInRedditButton, {
-            content_id: this.props.id
-        }))
+
         let button_container = React.createElement('div', {
             className: '_1hwEKkB_38tIoal6fcdrt9'
         }, React.createElement('div', {
