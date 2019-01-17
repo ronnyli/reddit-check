@@ -335,6 +335,10 @@
     content: "\F11F";
 }
 
+.icon-link-solid:before {
+    content: "\F117";
+}
+
 .icon-remove:before {
     content: "\F12E";
 }
