@@ -49,7 +49,9 @@ function getYoutubeURLs(url){
 }
 
 function trimURL(url){
-    return url.split('://')[1].split('?')[0];
+    return url.split('://')[1]
+        .split('#')[0]
+        .split('?')[0];
 }
 
 
