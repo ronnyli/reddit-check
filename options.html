@@ -61,7 +61,12 @@ body {
 <title>Thredd Options</title></head>
 <body>
 <div id="main">
-    <div id="title"> Thredd Website Blacklist </div>
+    <h1>Thredd Privacy Options</h1>
+    <p>Edit the <strong>Website Blacklist</strong> to indicate sites where Thredd should not run.</p>
+    <p>Alternatively, you can check the box to <strong>Only run on click</strong> for the most control over your privacy.
+    However, Thredd cannot work in the background if you check this box.
+    <h3> Website Blacklist </h3>
+    <hr>
     <div id="inputarea">
         <form action="" id="blockform">
             <input id="blockurl" type="text"> 
@@ -80,6 +85,14 @@ body {
     <div id="emptynotice">Your blacklist is empty.</div>
     <div id="loading">
         Loading your black list.
+    </div>
+    <h3>Additional Privacy Options</h3>
+    <hr>
+    <input type="checkbox" id="runonclick"> Only run on click
+    <span id="runonclick_saving" style="display:none;padding-left: 15px">Saving...</span>
+    <span id="runonclick_saved" style="display:none; color: green;padding-left: 15px"><strong>Saved!</strong></span>
+    <div id="runonclick_warning" style="display:none; color:red">
+        <strong>*WARNING*:</strong> Thredd cannot notify you of results found if this box is checked!
     </div>
 </div>
 <script src="options.js"></script>
