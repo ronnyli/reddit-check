@@ -18,8 +18,19 @@ function changeAction(tab) {
         updateBadge(posts.length, tab);
         return // dupe
     }
-    lscache.set(DEDUPE_KEY + tab.url + tab.id, "", 2)
-    isBlacklisted(tab, disableBadge, getURLInfo)
+    chrome.storage.sync.get('run_on_click', function(settings) {
+        if (settings['run_on_click']) {
+            setBadge(
+                'Click to search Thredd',
+                '?',
+                [110, 110, 110, 1],
+                { '19': "images/alien19.png", '38': "images/alien38.png" },
+                tab);
+        } else {
+            lscache.set(DEDUPE_KEY + tab.url + tab.id, "", 2)
+            isBlacklisted(tab, disableBadge, getURLInfo)
+        }
+    });
 }
 
 function getYoutubeURLs(url){
