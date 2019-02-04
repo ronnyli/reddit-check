@@ -5,8 +5,11 @@ class RefineSearch extends React.Component {
     }
 
     handleClick() {
-        const url = this.urlInput.current.value;
-        this.props.search(url);
+        let window_url = new URI(window.location.href);
+        const input_url = this.urlInput.current.value;
+        window_url.setSearch('override_url', input_url);
+        let refresh_window = window.open(window_url.toString(), '_self');
+        refresh_window.opener = null;
     }
 
     render () {
@@ -32,7 +35,7 @@ class RefineSearch extends React.Component {
                     onClick: ((e) => this.handleClick(e))
                 }, 'Search')
             ]),
-            menu_style: {left:'auto', right:0}
+            menu_style: {left:'auto'}
         });
     }
 }

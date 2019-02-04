@@ -1,16 +1,22 @@
 // parse json data
 function parsePosts(globalPage, tab) {
-    var encodedUrl = encodeURIComponent(tab.url);
+    const window_url = new URI(window.location.href);
+    const query = window_url.search(true);
+    const url = query.override_url || tab.url;
 
-    var redditPosts = lscache.get(URL_STORAGE_KEY + tab.url);
+    const encodedUrl = encodeURIComponent(url);
+    const redditPosts = lscache.get(URL_STORAGE_KEY + url);
+
+    renderRefinedSearch(query.override_url || globalPage.trimURL(tab.url));
+
     if (redditPosts != null && redditPosts != []) {
         $("div#timeout").hide(0);
-        const listing = SubmissionCollectionLscache.get(tab.url);
+        const listing = SubmissionCollectionLscache.get(url);
         renderHeader(listing, encodedUrl);
         makeDisplay(listing);
     } else {
         // redditPosts can be empty if the entry expired in lscache
-        globalPage.getURLInfo(tab)
+        globalPage.getURLInfo(tab, query.override_url)
         .then(function(listing) {
             $("div#timeout").hide(0);
             return listing;
@@ -29,7 +35,7 @@ function renderRefinedSearch(url, searchFn) {
         React.createElement(RefineSearch, {
             url: url,
             search: searchFn
-    }), document.getElementById('links'));
+    }), document.getElementById('refine_search'));
 }
 
 function renderHeader(redditPosts, encodedUrl) {
