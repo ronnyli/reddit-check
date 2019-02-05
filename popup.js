@@ -1,18 +1,17 @@
 // parse json data
 function parsePosts(globalPage, tab) {
-    const window_url = new URI(window.location.href);
+    let window_url = new URI(window.location.href);
     const query = window_url.search(true);
     const url = query.override_url || tab.url;
 
     const encodedUrl = encodeURIComponent(url);
     const redditPosts = lscache.get(URL_STORAGE_KEY + url);
 
-    renderRefinedSearch(query.override_url || globalPage.trimURL(tab.url));
-
     if (redditPosts != null && redditPosts != []) {
         $("div#timeout").hide(0);
         const listing = SubmissionCollectionLscache.get(url);
         renderHeader(listing, encodedUrl);
+        renderRefinedSearch(tab_url=tab.url, window_url=window_url);
         makeDisplay(listing);
     } else {
         // redditPosts can be empty if the entry expired in lscache
@@ -24,18 +23,28 @@ function parsePosts(globalPage, tab) {
         .then(function(listing) {
             renderHeader(listing, encodedUrl);
             if (listing.length > 0) {
+                renderRefinedSearch(tab_url=tab.url, window_url=window_url);
                 makeDisplay(listing);
             }
         });
     }
 }
 
-function renderRefinedSearch(url, searchFn) {
-    ReactDOM.render(
-        React.createElement(RefineSearch, {
-            url: url,
-            search: searchFn
-    }), document.getElementById('refine_search'));
+function renderRefinedSearch(tab_url, window_url) {
+    if ((tab_url.indexOf('youtube.com') == -1) && (tab_url.indexOf('?') != -1)) {
+        $('#links').before(`
+            <a id="refine-search" class="links-background s1461iz-1 RVnoX"
+               href="#" target="_self"
+               title="Search for your exact URL">
+                Refine Search
+            </a>
+        `);
+        $('#refine-search').click(() => {
+            SubmissionCollectionLscache.remove(tab_url);
+            window_url.setSearch('override_url', tab_url);
+            window.open(window_url.toString(), '_self');
+        })
+    }
 }
 
 function renderHeader(redditPosts, encodedUrl) {

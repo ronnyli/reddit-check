@@ -7,9 +7,10 @@ class PopupResults extends React.Component {
     }
 
     render() {
+        const posts = this.renderPosts();
         return React.createElement('div', {
-            className: 'links-background'
-        }, this.renderPosts())
+            className: posts.length > 0 ? 'links-background' : ''
+        }, posts);
     }
 
     renderPosts() {

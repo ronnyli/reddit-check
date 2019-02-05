@@ -25,13 +25,13 @@ class RefineSearch extends React.Component {
                     type: 'text',
                     defaultValue: this.props.url,
                     style: {
-                        fontWeight: 400,
+                        fontWeight: 100,
                         border: '1px solid',
                         backgroundColor: 'rgb(246, 247, 248)'
                     }
                 }),
-                React.createElement('span', {
-                    className: '_6_44iTtZoeY6_XChKt5b0',
+                React.createElement('button', {
+                    className: 's1htkqit-1 htkhll',
                     onClick: ((e) => this.handleClick(e))
                 }, 'Search')
             ]),
