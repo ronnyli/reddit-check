@@ -11,8 +11,10 @@ function parsePosts(globalPage, tab) {
         $("div#timeout").hide(0);
         const listing = SubmissionCollectionLscache.get(url);
         renderHeader(listing, encodedUrl);
-        renderRefinedSearch(tab_url=tab.url, window_url=window_url);
-        makeDisplay(listing);
+        if (listing.length > 0) {
+            renderRefinedSearch(tab_url=tab.url, window_url=window_url);
+            makeDisplay(listing);
+        }
     } else {
         // redditPosts can be empty if the entry expired in lscache
         globalPage.getURLInfo(tab, query.override_url)
