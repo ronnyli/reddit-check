@@ -61,12 +61,13 @@ function getYoutubeURLs(url){
 
 function trimURL(url, http_only){
     let trimmed;
+    const is_youtube_video = (url.indexOf('youtube.com') != -1 && url.indexOf('v=') != -1);
     if (url.indexOf('http') == -1) {
         trimmed = url;
     } else {
         trimmed = url.split('://')[1];
     }
-    if (http_only) {
+    if (http_only || is_youtube_video) {
         // only trim http and nothing else
         return trimmed;
     } else {
