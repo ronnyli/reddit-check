@@ -1,35 +1,55 @@
 // parse json data
 function parsePosts(globalPage, tab) {
-    var url = tab.url
-    var title = tab.title
-    var encodedUrl = encodeURIComponent(url)
+    let window_url = new URI(window.location.href);
+    const query = window_url.search(true);
+    const url = query.override_url || tab.url;
 
-    var redditPosts = lscache.get(URL_STORAGE_KEY + tab.url);
+    const encodedUrl = encodeURIComponent(url);
+    const redditPosts = lscache.get(URL_STORAGE_KEY + url);
+
     if (redditPosts != null && redditPosts != []) {
         $("div#timeout").hide(0);
-        processPosts(
-            SubmissionCollectionLscache.get(tab.url),
-            encodedUrl,
-            title
-        );
+        const listing = SubmissionCollectionLscache.get(url);
+        renderHeader(listing, encodedUrl);
+        if (listing.length > 0) {
+            renderRefinedSearch(tab_url=tab.url, window_url=window_url);
+            makeDisplay(listing);
+        }
     } else {
         // redditPosts can be empty if the entry expired in lscache
-        globalPage.getURLInfo(tab)
+        globalPage.getURLInfo(tab, query.override_url)
         .then(function(listing) {
             $("div#timeout").hide(0);
             return listing;
         })
         .then(function(listing) {
-            processPosts(
-                listing,
-                encodedUrl,
-                title
-            );
+            renderHeader(listing, encodedUrl);
+            if (listing.length > 0) {
+                renderRefinedSearch(tab_url=tab.url, window_url=window_url);
+                makeDisplay(listing);
+            }
         });
     }
 }
 
-function processPosts(redditPosts, encodedUrl, title) {
+function renderRefinedSearch(tab_url, window_url) {
+    if ((tab_url.indexOf('youtube.com') == -1) && (tab_url.indexOf('?') != -1)) {
+        $('#links').before(`
+            <a id="refine-search" class="links-background s1461iz-1 RVnoX"
+               href="#" target="_self"
+               title="Search for your exact URL.\nRemove sensitive information from the URL before clicking.">
+                Refine Search
+            </a>
+        `);
+        $('#refine-search').click(() => {
+            SubmissionCollectionLscache.remove(tab_url);
+            window_url.setSearch('override_url', tab_url);
+            window.open(window_url.toString(), '_self');
+        })
+    }
+}
+
+function renderHeader(redditPosts, encodedUrl) {
     $("header").append(`
         <div class="header">
             <span class="page-header s6tnjvv-7 dScugc">Home</span>
@@ -54,24 +74,13 @@ function processPosts(redditPosts, encodedUrl, title) {
             </div>
         </div>
     `);
-    if (redditPosts.length === 0) {
-        return;
-    } else {
-        $('#links').addClass('links-background');
-    }
-    makeDisplay(redditPosts)
 }
 
 function makeDisplay(redditPosts) {
-    redditPosts.sort(comparePosts)
-    const posts = redditPosts.map((post) => {
-        const submissionModel = new ContentModel(post);
-        submissionModel.replyable_content_type = 'submission';
-        return React.createElement(SubmissionPopup,
-            Object.assign({key: post.id}, submissionModel));
-    });
-    ReactDOM.render(React.createElement('div', null, posts),
-        document.getElementById('links'));
+    ReactDOM.render(
+        React.createElement(PopupResults, {
+            posts: redditPosts
+    }), document.getElementById('links'));
 }
 
 function buildCommentUrl(permalink) {
@@ -82,10 +91,6 @@ function buildCommentUrl(permalink) {
         'title': cropTitle(permalink.title)
     }
     return uri.search(query);
-}
-
-function comparePosts(postA, postB) {
-    return postB.score - postA.score
 }
 
 function cropTitle(title) {

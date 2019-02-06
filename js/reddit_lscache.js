@@ -35,6 +35,9 @@ const SubmissionCollectionLscache = {
         const ids = lscache.get(URL_STORAGE_KEY + url);
         const posts = ids ? ids.map(id => lscache.get(SUBMISSION_STORAGE_KEY + id)) : null;
         return posts.filter(post => post);
+    },
+    remove: function(url) {
+        lscache.remove(URL_STORAGE_KEY + url);
     }
 };
 

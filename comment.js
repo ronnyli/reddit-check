@@ -256,6 +256,7 @@ function renderReplyComment(comment_id, replyable_content_type) {
 }
 
 $(document).ready(function(){
+    $('#back_button').click(() => window.history.back());
     var window_url = new URI(window.location.href);
     var query = window_url.search(true);
 
