@@ -37,7 +37,7 @@ function renderRefinedSearch(tab_url, window_url) {
         $('#links').before(`
             <a id="refine-search" class="links-background s1461iz-1 RVnoX"
                href="#" target="_self"
-               title="Search for your exact URL">
+               title="Search for your exact URL.\nRemove sensitive information from the URL before clicking.">
                 Refine Search
             </a>
         `);
