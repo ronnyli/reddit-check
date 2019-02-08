@@ -52,8 +52,7 @@ function getYoutubeURLs(url){
             'youtu.be/'
         ];
         prefixes.forEach(function(prefix) {
-			if (prefix + video_id != url)
-				urls.push(prefix + video_id);
+			urls.push(prefix + video_id);
 		});
     }
     return urls;
