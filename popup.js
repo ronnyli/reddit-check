@@ -63,9 +63,6 @@ function renderHeader(redditPosts, encodedUrl) {
                         <p class="s6tnjvv-14 bPUliZ">
                             ${redditPosts.length} Reddit posts are discussing this page!
                         </p>
-                        <p class="s6tnjvv-14 bPUliZ">
-                            Click a post below to see what people are saying or Create a Post of your own!
-                        </p>
                     `}
                 </div>
                 <a class="s6tnjvv-17 cvgsde pbxmwi-2 bmmzQa" href="https://www.reddit.com/submit?url=${encodedUrl}" target="_blank" rel="noopener noreferrer">

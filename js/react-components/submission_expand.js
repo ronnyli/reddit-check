@@ -64,6 +64,7 @@ class SubmissionExpand extends Content {
            React.createElement('div', {
             className: 't4Hq30BDzTeJ85vREX7_M'
         }, `${Math.floor(this.props.upvote_ratio * 100)}% Upvoted`));
+
         let title = React.createElement(
             "div",
             { "className": "_1rcejqgj_laTEewtp2DbWG s1knm1ot-0 cKmWbx" },
