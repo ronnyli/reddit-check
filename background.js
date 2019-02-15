@@ -672,3 +672,18 @@ function onRequest(request, sender, callback) {
 }
 
 chrome.runtime.onMessage.addListener(onRequest);
+
+/* Check whether new version is installed */
+chrome.runtime.onInstalled.addListener(function(details) {
+    if (details.reason == "install" || details.reason == 'update') {
+        const uninstallGoogleFormLink = 'http://thredd.io/uninstall-survey/';
+        /* If Chrome version supports it... */
+        if (chrome.runtime.setUninstallURL) {
+            chrome.runtime.setUninstallURL(uninstallGoogleFormLink);
+        }
+    }
+    if (details.reason == 'update') {
+        let update_window = window.open('http://thredd.io/changelog/', '_blank');
+        update_window.opener = null;
+    }
+});
