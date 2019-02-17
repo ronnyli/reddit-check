@@ -23,8 +23,7 @@ function changeAction(tab) {
             setBadge(
                 'Click to search Thredd',
                 '?',
-                [110, 110, 110, 1],
-                { '19': "images/alien19.png", '38': "images/alien38.png" },
+                [150, 150, 150, 200],  // grey
                 tab);
         } else {
             lscache.set(DEDUPE_KEY + tab.url + tab.id, "", 2)
@@ -109,24 +108,22 @@ function getURLInfo(tab, override_url){
 function disableBadge(tab){
     var title = "Not running on this page"
     var text = "X"
-    var badgeColor = [175, 0, 0, 200] //red
-    var alienIcon = { '19': "images/alien_apathy19.png", '38': "images/alien_apathy38.png" }
-    setBadge(title, text, badgeColor, alienIcon, tab)
+    var badgeColor = [150, 150, 150, 200];  // grey
+    setBadge(title, text, badgeColor, tab)
 }
 
 function updateBadge(numPosts, tab) {
     var title = numPosts.toString() + " Results Found!"
     var text = numPosts.toString()
-    var badgeColor = null;  // use default badge color
-    var alienIcon = { '19': "images/alien19.png", '38': "images/alien38.png" }
+    var badgeColor = [236, 19, 19, 200];  // red
     if (numPosts == 0) {
         text = '';
         title = 'Thredd';
     }
-    setBadge(title, text, badgeColor, alienIcon, tab)
+    setBadge(title, text, badgeColor, tab)
 }
 
-function setBadge(title, text, badgeColor, alienIcon, tab) {
+function setBadge(title, text, badgeColor, tab) {
     var tabId = tab.id
     chrome.browserAction.setTitle({"title": title, "tabId": tabId})
     !badgeColor || chrome.browserAction.setBadgeBackgroundColor({
@@ -135,10 +132,6 @@ function setBadge(title, text, badgeColor, alienIcon, tab) {
     })
     chrome.browserAction.setBadgeText({
         "text": text,
-        "tabId": tabId
-    })
-    chrome.browserAction.setIcon({
-        "path": alienIcon,
         "tabId": tabId
     })
 }

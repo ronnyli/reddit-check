@@ -5,19 +5,19 @@
         "persistent": true
     },
     "browser_action": {
-       "default_icon": { "19": "images/alien19.png", "38": "images/alien38.png" },
+       "default_icon": { "19": "images/thredd19.png", "38": "images/thredd38.png" },
        "default_popup": "popup.html",
        "default_title": "Thredd"
     },
     "description": "Connect to people who share your interests simply by browsing the web!",
     "options_page": "options.html",
     "icons": {
-       "19": "images/alien19.png",
-       "32": "images/alien32.png",
-       "38": "images/alien38.png",
-       "48": "images/alien48.png",
-       "64": "images/alien64.png",
-       "128": "images/alien128.png"
+       "19": "images/thredd19.png",
+       "32": "images/thredd32.png",
+       "38": "images/thredd38.png",
+       "48": "images/thredd48.png",
+       "64": "images/thredd64.png",
+       "128": "images/thredd128.png"
     },
     "name": "Thredd",
     "permissions": [
