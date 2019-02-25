@@ -144,9 +144,9 @@ function backgroundSnoowrap() {
     // TODO: bogus userAgent
     var userAgent = chrome.runtime.id + ':' + 'v0.0.1' + ' (by /u/sirius_li)';
 
+    const ONE_HOUR_MS = 1000 * 60 * 60;
     lscache.set('is_logged_in_reddit', null);
-    lscache.set('anonymous_requester_json', null);
-    let anonymous_requester;
+    let anonymous_requester = {};
     let snoowrap_requester;
 
     function fetchAnonymousToken() {
@@ -162,12 +162,12 @@ function backgroundSnoowrap() {
           .then(JSON.parse)
           .then(tokenInfo => tokenInfo.access_token)
           .then(anonymousToken => {
+              // anonymous_requester must be refreshed after 1 hour
+              anonymous_requester.expiryTime = new Date().getTime() + ONE_HOUR_MS;
               const anonymousSnoowrap = new snoowrap({ accessToken: anonymousToken });
               anonymousSnoowrap.config({ proxies: false, requestDelay: 1000 });
-              anonymous_requester = anonymousSnoowrap;
-              // anonymous_requester must be refreshed after 1 hour
-              lscache.set('anonymous_requester_json', anonymousSnoowrap, 59);
-              return anonymous_requester;
+              anonymous_requester.r = anonymousSnoowrap;
+              return anonymousSnoowrap;
           });
     }
 
@@ -178,9 +178,10 @@ function backgroundSnoowrap() {
             if (lscache.get('is_logged_in_reddit')) {
                 console.log('using logged in requester');
                 resolve(snoowrap_requester);
-            } else if (lscache.get('anonymous_requester_json')) {
+            } else if (anonymous_requester.expiryTime &&
+                new Date().getTime() < anonymous_requester.expiryTime) {
                 console.log('using anonymous requester');
-                resolve(anonymous_requester);
+                resolve(anonymous_requester.r);
             } else {
                 console.log('anonymous requester expired. Fetching new one...');
                 resolve(fetchAnonymousToken());
@@ -307,7 +308,7 @@ function backgroundSnoowrap() {
         },
 
         getSubreddit: function(subreddit, callback) {
-            anonymous_requester.getSubreddit(subreddit)
+            anonymous_requester.r.getSubreddit(subreddit)
             .fetch()
             .then(fetched => callback(fetched))
             .catch(err => console.error(err));
@@ -674,9 +675,5 @@ chrome.runtime.onInstalled.addListener(function(details) {
         if (chrome.runtime.setUninstallURL) {
             chrome.runtime.setUninstallURL(uninstallGoogleFormLink);
         }
-    }
-    if (details.reason == 'update') {
-        let update_window = window.open('http://thredd.io/changelog/', '_blank');
-        update_window.opener = null;
     }
 });
