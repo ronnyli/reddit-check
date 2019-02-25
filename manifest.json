@@ -9,7 +9,7 @@
        "default_popup": "popup.html",
        "default_title": "Thredd"
     },
-    "description": "Connect to people who share your interests simply by browsing the web!",
+    "description": "Find more information about any page you read! Get reviews and recommendations for similar content, crowdsourced from Reddit.",
     "options_page": "options.html",
     "icons": {
        "19": "images/thredd19.png",
