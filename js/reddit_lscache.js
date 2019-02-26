@@ -55,7 +55,7 @@ const SubmissionLscache = {
                 submission,
                 this.EXPIRATION_TIME
             );
-        })
+        }, this)
         $(document).trigger('url-insert-ids', {
             url: url,
             ids: submissions.map(submission => submission.id)
@@ -71,7 +71,7 @@ const SubmissionLscache = {
                 submission,
                 this.EXPIRATION_TIME
             );
-        });
+        }, this);
         $(document).trigger('submission-update', {
             submissions: submissions
         });
