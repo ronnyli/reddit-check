@@ -9,7 +9,7 @@
        "default_popup": "popup.html",
        "default_title": "Thredd"
     },
-    "description": "Connect to people who share your interests simply by browsing the web!",
+    "description": "Get reviews for the page you're reading or recommendations for similar content - crowdsourced from Reddit!",
     "options_page": "options.html",
     "icons": {
        "19": "images/thredd19.png",
@@ -19,7 +19,8 @@
        "64": "images/thredd64.png",
        "128": "images/thredd128.png"
     },
-    "name": "Thredd",
+    "name": "Thredd - Browse Smarter with Reddit's Help",
+    "short_name": "Thredd",
     "permissions": [
         "identity",
         "contextMenus",
@@ -27,5 +28,5 @@
         "http://www.reddit.com/*",
         "storage"],
     "update_url": "http://clients2.google.com/service/update2/crx",
-    "version": "0.8.122"
+    "version": "0.8.123"
 }
