@@ -1,3 +1,8 @@
+// Bug with lscache when Thredd is updated:
+// pre-existing cached items lose the -cacheexpiration suffix so
+// lscache doesn't know to flush them
+lscache.flush();
+
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
     console.log('onUpdated: ' + tabId)
