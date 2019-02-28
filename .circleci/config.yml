@@ -28,7 +28,9 @@ jobs:
           command: echo "You can also install Yarn, NPM, or anything else you need to use to build and test your extension."
       - run:
           name: "Create js/secret.js"
-          command: echo $'const CLIENT_ID_DEV = "$SNOOWRAP_CLIENT_ID_DEV";\nconst CLIENT_ID_PROD = "$SNOOWRAP_CLIENT_ID_PROD";' > js/foo.js
+          command: |
+            echo "const CLIENT_ID_DEV = '$SNOOWRAP_CLIENT_ID_DEV';" >> js/secret.js
+            echo "const CLIENT_ID_PROD = '$SNOOWRAP_CLIENT_ID_PROD';" >> js/secret.js
       - run:
           name: "Run Tests"
           command: echo "Run any tests here."
