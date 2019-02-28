@@ -35,6 +35,11 @@ jobs:
           name: "Run Tests"
           command: echo "Run any tests here."
       - run:
+          name: "git config"
+          command: |
+            git config --global user.email '$RONNY_PERSONAL_EMAIL'
+            git config --global user.name 'Ronny Li'
+      - run:
           name: "Package Extension"
           command: |
             rm .gitignore
