@@ -1,0 +1,53 @@
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
+
+version: 2
+jobs:
+  build:
+    docker:
+      - image: cibuilds/chrome-extension:latest
+    steps:
+      - checkout
+      - run:
+          name: "Install Dependencies"
+          command: echo "You can also install Yarn, NPM, or anything else you need to use to build and test your extension."
+      - run:
+          name: "Create js/secret.js"
+          command: echo $'const CLIENT_ID_DEV = "$SNOOWRAP_CLIENT_ID_DEV";\nconst CLIENT_ID_PROD = "$SNOOWRAP_CLIENT_ID_PROD";' > js/foo.js
+      - run:
+          name: "Run Tests"
+          command: echo "Run any tests here."
+      - run:
+          name: "Package Extension"
+          command: git archive -o thredd.zip HEAD
+      - persist_to_workspace:
+          root: /root/project
+          paths:
+            - thredd.zip
+
+  publish:
+    docker:
+      - image: cibuilds/chrome-extension:latest
+    environment:
+      - APP_ID: "nofhlafikocbioemioehbpadpgjlpeco"
+    steps:
+      - attach_workspace:
+          at: /root/workspace
+      - run:
+          name: "Publish to the Google Chrome Store"
+          command: publish /root/workspace/thredd.zip
