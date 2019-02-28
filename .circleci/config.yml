@@ -36,7 +36,11 @@ jobs:
           command: echo "Run any tests here."
       - run:
           name: "Package Extension"
-          command: git archive -o thredd.zip HEAD
+          command: |
+            rm .gitignore
+            git add js/secret.js
+            git commit -m "DO NOT MERGE"
+            git archive -o thredd.zip HEAD
       - persist_to_workspace:
           root: /root/project
           paths:
