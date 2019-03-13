@@ -437,6 +437,22 @@ function backgroundSnoowrap() {
                     });
                 }
                 return listing_filtered;
+              })
+              .catch(error => {
+                console.error(error);
+                console.error('current time: ' + new Date().getTime().toString());
+                if (lscache.get('is_logged_in_reddit')) {
+                    console.error('using logged in requester. Expires:');
+                    console.error(lscache.get('is_logged_in_reddit-cacheexpiration'));
+                    // TODO: write a log out function
+                    lscache.set('is_logged_in_reddit', null);  // reset to use anonymous token
+                } else {
+                    console.error('using anonymous_requester');
+                    console.error(anonymous_requester);
+                    anonymous_requester = {};  // reset to get a new one next time
+                }
+                // TODO: only reset if error has status 403
+                return [];
               });
         },
 
@@ -479,7 +495,7 @@ function backgroundSnoowrap() {
                     })
                     .then(data => data.map(elem => elem.link_id))  // array of submission IDs
                     .catch(error => {
-                        console.log(error);
+                        console.error(error);
                         return [];
                     })
                 );
