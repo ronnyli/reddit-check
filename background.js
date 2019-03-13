@@ -443,15 +443,13 @@ function backgroundSnoowrap() {
                 console.error('current time: ' + new Date().getTime().toString());
                 if (lscache.get('is_logged_in_reddit')) {
                     console.error('using logged in requester. Expires:');
-                    console.error(lscache.get('is_logged_in_reddit-cacheexpiration'));
-                    // TODO: write a log out function
-                    lscache.set('is_logged_in_reddit', null);  // reset to use anonymous token
+                    console.error(lscache.get('is_logged_in_reddit-cacheexpiration') * 1000 * 60);  // ms
+                    // TODO: reset logged_in_reddit but only if error has status 403
                 } else {
                     console.error('using anonymous_requester');
                     console.error(anonymous_requester);
                     anonymous_requester = {};  // reset to get a new one next time
                 }
-                // TODO: only reset if error has status 403
                 return [];
               });
         },
