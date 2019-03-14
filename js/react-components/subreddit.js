@@ -1,4 +1,4 @@
-class Subreddit extends React.Component {
+class SubredditBase extends React.Component {
     constructor(props) {
       super(props);
 
@@ -12,14 +12,7 @@ class Subreddit extends React.Component {
       this.tooltip = React.createRef();
     }
 
-    showTooltip(event) {
-      event.preventDefault();
-
-      if (this.state.subreddit) {
-        this.setState({ showTooltip: true }, () => {
-          document.addEventListener('click', this.closeTooltip);
-        });
-      } else {
+    setSubreddit() {
         let this_ = this;
         getSubreddit(this.props.subreddit, function(fetched_subreddit) {
           if (fetched_subreddit) {
@@ -29,6 +22,17 @@ class Subreddit extends React.Component {
             });
           }
         });
+    }
+
+    showTooltip(event) {
+      event.preventDefault();
+
+      if (this.state.subreddit) {
+        this.setState({ showTooltip: true }, () => {
+          document.addEventListener('click', this.closeTooltip);
+        });
+      } else {
+        this.setSubreddit();
       }
     }
 
@@ -38,9 +42,9 @@ class Subreddit extends React.Component {
         });
     }
 
-    render () {
-        let tooltip = (
-            this.state.showTooltip ? (
+    renderTooltip(showTooltip) {
+        return (
+            showTooltip ? (
                 React.createElement('div', {
                     className: 'pffdxb-10 ikATnw bGIFnd'
                 }, [
@@ -84,16 +88,71 @@ class Subreddit extends React.Component {
                         className: 's1w1mqsg-2 ifvzlp',
                         href: `http://www.reddit.com/${this.props.subreddit}`,
                         target: "_blank",
-                    }, 'View Community')
+                    }, 'View Page')
                 ])
             ): (
                 null
             ));
+    }
+}
+
+class SubredditText extends SubredditBase {
+    render () {
+        let tooltip = this.renderTooltip(this.state.showTooltip);
         return React.createElement('span', {
             onMouseEnter: this.showTooltip
         }, [
             React.createElement("a", {
                 "className": "subreddit s1i3ufq7-0 bsfRLa",
+                href: `http://www.reddit.com/${this.props.subreddit}`,
+                target: "_blank",
+            }, `${this.props.subreddit}`),
+            React.createElement('div', {
+                className: 'dMZkik',
+                onMouseLeave: this.closeTooltip,
+                ref: this.tooltip
+            }, tooltip)
+        ]);
+    }
+}
+
+class SubredditPicture extends SubredditBase {
+    render() {
+        let img_src = '/images/generic_profile_picture.png';
+        if (this.state.subreddit) {
+            img_src = this.state.subreddit.icon_img ||
+                this.state.subreddit.community_icon ||
+                img_src;
+        } else {
+            this.setSubreddit();
+        }
+
+        return React.createElement('img', {
+            src: img_src,
+            style: {
+                backgroundColor: 'rgb(255,255,255)',
+                borderRadius: '24px',
+                boxSizing: 'border-box',
+                display: 'inline-block',
+                height: '32px',
+                verticalAlign: 'middle',
+                width: '32px'
+            }
+        });
+    }
+}
+
+class Subreddit extends SubredditBase {
+    render () {
+        let tooltip = this.renderTooltip(this.state.showTooltip);
+        return React.createElement('span', {
+            onMouseEnter: this.showTooltip
+        }, [
+            React.createElement(SubredditPicture, {
+                subreddit: this.props.subreddit
+            }),
+            React.createElement("a", {
+                "className": "subreddit pffdxb-1 jUDXzN",
                 href: `http://www.reddit.com/${this.props.subreddit}`,
                 target: "_blank",
             }, `${this.props.subreddit}`),
