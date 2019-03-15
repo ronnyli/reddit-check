@@ -12,13 +12,13 @@ class SubredditBase extends React.Component {
       this.tooltip = React.createRef();
     }
 
-    setSubreddit() {
+    setSubreddit(triggerTooltip=false) {
         let this_ = this;
         getSubreddit(this.props.subreddit, function(fetched_subreddit) {
           if (fetched_subreddit) {
             this_.setState({
                 subreddit: fetched_subreddit,
-                showTooltip: true
+                showTooltip: triggerTooltip
             });
           }
         });
@@ -32,7 +32,7 @@ class SubredditBase extends React.Component {
           document.addEventListener('click', this.closeTooltip);
         });
       } else {
-        this.setSubreddit();
+        this.setSubreddit(true);
       }
     }
 
@@ -120,25 +120,39 @@ class SubredditPicture extends SubredditBase {
     render() {
         let img_src = '/images/generic_profile_picture.png';
         if (this.state.subreddit) {
-            img_src = this.state.subreddit.icon_img ||
-                this.state.subreddit.community_icon ||
+            img_src = this.state.subreddit.community_icon ||
+                this.state.subreddit.icon_img ||
                 img_src;
         } else {
-            this.setSubreddit();
+            this.setSubreddit(false);
         }
+        let tooltip = this.renderTooltip(this.state.showTooltip);
 
-        return React.createElement('img', {
-            src: img_src,
-            style: {
-                backgroundColor: 'rgb(255,255,255)',
-                borderRadius: '24px',
-                boxSizing: 'border-box',
-                display: 'inline-block',
-                height: '32px',
-                verticalAlign: 'middle',
-                width: '32px'
-            }
-        });
+        return React.createElement('span', {
+            onMouseEnter: this.showTooltip
+        }, [React.createElement("a", {
+                href: `http://www.reddit.com/${this.props.subreddit}`,
+                target: "_blank",
+            }, React.createElement('img', {
+                    src: img_src,
+                    style: {
+                        backgroundColor: 'rgb(255,255,255)',
+                        borderRadius: '50%',
+                        boxSizing: 'border-box',
+                        display: 'inline-block',
+                        height: '40px',
+                        marginRight: '8px',
+                        paddingBottom: '3px',
+                        verticalAlign: 'middle',
+                        width: '40px'
+                    }
+                })
+            ), React.createElement('div', {
+                    className: 'dMZkik',
+                    onMouseLeave: this.closeTooltip,
+                    ref: this.tooltip
+                }, tooltip)
+        ]);
     }
 }
 

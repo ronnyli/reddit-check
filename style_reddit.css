@@ -537,7 +537,6 @@
 
 .y8HYJ-y_lTUHkQIc1mdCq {
     display: inline;
-    position: relative;
     text-decoration: none;
     word-break: break-word;
 }
@@ -1448,8 +1447,8 @@
     color: rgb(34, 34, 34);
     overflow-wrap: break-word;
     font-size: 14px;
-    font-weight: 500;
-    line-height: 18px;
+    font-weight: normal;
+    line-height: 1.38;
     padding-right: 5px;
 }
 

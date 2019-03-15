@@ -1,6 +1,7 @@
 const DEDUPE_KEY = "Dedupe_URL:";
       URL_STORAGE_KEY = "URL:";
       SUBMISSION_STORAGE_KEY = "Submission:";
+      SUBREDDIT_STORAGE_KEY = "Subreddit:";
 
 /*Methods to interact with Submission Collections in lscache*/
 const SubmissionCollectionLscache = {

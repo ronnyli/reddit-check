@@ -1,21 +1,27 @@
 class SubmissionPopup extends Content {
     render() {
         let title = React.createElement(
-                "div",
-                { "className": "s56cc5r-1 jhlfXq" },
-                React.createElement(
+                "div", {
+                    "className": "s56cc5r-1 jhlfXq",
+                    "style": {
+                        marginTop: "6px"
+                    }
+                }, React.createElement(
                     "span",
                     { "className": "item-title y8HYJ-y_lTUHkQIc1mdCq" },
                     React.createElement(
                         "a",
                         { "className": "SQnoC3ObvgnGjWt90zD9Z",
-                        href: `${buildCommentUrl(this.props)}`},
-                        React.createElement(
-                            "h2",
-                            { "className": "s56cc5r-0 jpXBut" },
-                            this.props.title
-                        )
-                    )
+                        href: `${buildCommentUrl(this.props)}`}, [
+                            React.createElement(
+                                "h2",
+                                { "className": "s56cc5r-0 jpXBut" },
+                                this.props.title
+                            ),
+                        React.createElement("span", {
+                            className: "s1461iz-1 RVnoX"
+                        }, "... See More")
+                    ])
                 )
             );
         let comment = React.createElement('a', {
