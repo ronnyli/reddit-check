@@ -1,43 +1,27 @@
 class SubmissionPopup extends Content {
     render() {
-        let vote_container = React.createElement('div', {
-            className: 'upvote-downvote-outer _3YgWdffoKyCp7UaGAEQpoo'
-        }, React.createElement('div', {
-            className: 's9fusyd-4 cRuhKC'
-        }, React.createElement('div', {
-            className: 's9fusyd-3 iJSWiv'
-        }, React.createElement(Upvote, {
-                content_id: this.props.id,
-                replyable_content_type: this.props.replyable_content_type,
-                score: this.state.score,
-                liked_status: this.state.liked_status,
-                handleVote: ((e) => this.handleVote(e))
-            }), React.createElement(Score, {
-                liked_status: this.state.liked_status,
-                score: this.state.score
-            }), React.createElement(Downvote, {
-                content_id: this.props.id,
-                replyable_content_type: this.props.replyable_content_type,
-                score: this.state.score,
-                liked_status: this.state.liked_status,
-                handleVote: ((e) => this.handleVote(e))
-            }))));
         let title = React.createElement(
-                "div",
-                { "className": "s56cc5r-1 jhlfXq" },
-                React.createElement(
+                "div", {
+                    "className": "s56cc5r-1 jhlfXq",
+                    "style": {
+                        marginTop: "6px"
+                    }
+                }, React.createElement(
                     "span",
                     { "className": "item-title y8HYJ-y_lTUHkQIc1mdCq" },
                     React.createElement(
                         "a",
                         { "className": "SQnoC3ObvgnGjWt90zD9Z",
-                        href: `${buildCommentUrl(this.props)}`},
-                        React.createElement(
-                            "h2",
-                            { "className": "s56cc5r-0 jpXBut" },
-                            this.props.title
-                        )
-                    )
+                        href: `${buildCommentUrl(this.props)}`}, [
+                            React.createElement(
+                                "h2",
+                                { "className": "s56cc5r-0 jpXBut" },
+                                this.props.title
+                            ),
+                        React.createElement("span", {
+                            className: "s1461iz-1 RVnoX"
+                        }, "... See More")
+                    ])
                 )
             );
         let comment = React.createElement('a', {
@@ -93,28 +77,49 @@ class SubmissionPopup extends Content {
             className:'_3-miAEojrCvx_4FQ8x3P-s s1o44igr-2 hbJPLi'
         }, buttons));
 
-        let item_source = React.createElement(
+        let item_source = React.createElement('div', {}, [
+            React.createElement(SubredditPicture, {
+                subreddit: this.props.subreddit_name_prefixed}),
+            React.createElement(
                 "div",
-                { "className": "item-source _3AStxql1mQsrZuUIFP9xSg s9fusyd-9 TFJUf" },
-                React.createElement(Subreddit, {
-                    subreddit: this.props.subreddit_name_prefixed}),
-                React.createElement(
-                  "span",
-                  { "className": "s106g12-0 hFyNNd", role: "presentation" },
-                  String.fromCharCode(183)
-                ),
-                React.createElement(
-                  "span",
-                  { "className": "posted-by _2fCzxBE1dlMh4OFc7B3Dun" },
-                  "Posted by"
-                ),
-                React.createElement(Username, {
-                    author: this.props.author.name || this.props.author}),
-                React.createElement(ContentAge, {
-                    href_val: buildCommentUrl(this.props),
-                    created_utc: this.props.created_utc
-                })
-            );
+                { "className": "item-source _3AStxql1mQsrZuUIFP9xSg s9fusyd-9 TFJUf" }, [
+                    React.createElement(SubredditText, {
+                        subreddit: this.props.subreddit_name_prefixed}),
+                    React.createElement('div', {
+                        style: {
+                            display: 'block'
+                        }
+                    }, [
+                        React.createElement(
+                          "span",
+                          { "className": "posted-by _2fCzxBE1dlMh4OFc7B3Dun" },
+                          "Posted by"
+                        ),
+                        React.createElement(Username, {
+                            author: this.props.author.name || this.props.author}),
+                        React.createElement(
+                          "span",
+                          { "className": "s106g12-0 hFyNNd", role: "presentation" },
+                          String.fromCharCode(183)
+                        ),
+                        React.createElement(
+                          "span", {
+                            "className": "h5svje-0 cFQOcm"
+                          }, `${numToString(this.props.score)} points`
+                        ),
+                        React.createElement(
+                          "span",
+                          { "className": "s106g12-0 hFyNNd", role: "presentation" },
+                          String.fromCharCode(183)
+                        ),
+                        React.createElement(ContentAge, {
+                            href_val: buildCommentUrl(this.props),
+                            created_utc: this.props.created_utc
+                        })
+                    ])
+                ]
+            )]
+        );
         let item_description = React.createElement("div", {
                 "className": "item-description s9fusyd-8 hgDRGI"},
                 item_source,
@@ -128,7 +133,6 @@ class SubmissionPopup extends Content {
             );
         let scrollerItemContent = React.createElement("div", {
                 className: "scrollerItem-content YA9IzN0YR-G5_oD5EUydl"},
-                vote_container,
                 item_content);
         let scrollerItem = React.createElement("div", {
                 className: `scrollerItem Post ${this.props.id} s9fusyd-17 eHSpeV s1ukwo15-0 RqhAo`,

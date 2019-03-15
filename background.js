@@ -313,10 +313,22 @@ function backgroundSnoowrap() {
         },
 
         getSubreddit: function(subreddit, callback) {
-            anonymous_requester.r.getSubreddit(subreddit)
-            .fetch()
-            .then(fetched => callback(fetched))
-            .catch(err => console.error(err));
+            const cached_subreddit = lscache.get(SUBREDDIT_STORAGE_KEY + subreddit);
+            if (cached_subreddit) {
+                callback(cached_subreddit);
+            } else {
+                anonymous_requester.r.getSubreddit(subreddit)
+                .fetch()
+                .then(fetched => {
+                    lscache.set(
+                        SUBREDDIT_STORAGE_KEY + subreddit,
+                        fetched,
+                        this.EXPIRATION_TIME
+                    );
+                    callback(fetched);
+                })
+                .catch(err => console.error(err));
+            }
         },
 
         leaveComment: function(id, text, replyable_content_type, callback) {

@@ -14,5 +14,5 @@ function OpenInRedditButton(props) {
     }),
     React.createElement('span', {
         className: '_6_44iTtZoeY6_XChKt5b0'
-    }, 'Open In Reddit')));
+    }, 'Go to Reddit')));
 }

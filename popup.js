@@ -52,7 +52,7 @@ function renderRefinedSearch(tab_url, window_url) {
 function renderHeader(redditPosts, encodedUrl) {
     $("header").append(`
         <div class="header">
-            <span class="page-header s6tnjvv-7 dScugc">Home</span>
+            <img src="/images/thredd_reverse.png" height="14px" class="page-header s6tnjvv-7 dScugc">
             <div class="header-content">
                 <div class="header-text">
                     ${redditPosts.length == 0 ? `
