@@ -88,7 +88,7 @@ class SubredditBase extends React.Component {
                         className: 's1w1mqsg-2 ifvzlp',
                         href: `http://www.reddit.com/${this.props.subreddit}`,
                         target: "_blank",
-                    }, 'View Page')
+                    }, 'View Community')
                 ])
             ): (
                 null
