@@ -26,9 +26,15 @@ function loadBlacklist()
 {
     console.log('loadBlacklist called.');
     $('#blacklist').text('');
-    chrome.storage.sync.get(['blacklist', 'blacklist_edited', 'run_on_click'], function (storageMap) {
+    chrome.storage.sync.get([
+        'blacklist',
+        'blacklist_edited',
+        'disable_flashing_notification',
+        'run_on_click'
+    ], function (storageMap) {
         $('div#loading').hide(0);
         $('#runonclick').prop('checked', storageMap['run_on_click']);
+        $('#disableflash').prop('checked', storageMap['disable_flashing_notification']);
         if ((!storageMap['blacklist_edited']) || storageMap['blacklist']){
             gBlacklist = storageMap['blacklist'] || [];
             if (!storageMap['blacklist_edited']) {
@@ -99,3 +105,19 @@ $('#runonclick').click(function() {
         $('#runonclick_saving').hide();
     });
 })
+
+$('#disableflash').click(function() {
+    $('#disableflash_saved').hide();
+    $('#disableflash_saving').show();
+    if (this.checked) {
+        $('#disableflash_warning').show();
+    } else {
+        $('#disableflash_warning').hide();
+    }
+    chrome.storage.sync.set({
+        'disable_flashing_notification': this.checked
+    },function(){
+        $('#disableflash_saved').show();
+        $('#disableflash_saving').hide();
+    });
+});
