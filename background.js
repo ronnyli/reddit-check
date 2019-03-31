@@ -734,4 +734,12 @@ chrome.runtime.onInstalled.addListener(function(details) {
             chrome.runtime.setUninstallURL(uninstallGoogleFormLink);
         }
     }
+    if (details.reason == 'install') {
+        let install_window = window.open('http://thredd.io/thank-you/', '_blank');
+        install_window.opener = null;
+    }
+    if (details.reason == 'update') {
+        let update_window = window.open('http://thredd.io/changelog/', '_blank');
+        update_window.opener = null;
+    }
 });
