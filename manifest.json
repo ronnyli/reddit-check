@@ -19,7 +19,7 @@
        "64": "images/thredd64.png",
        "128": "images/thredd128.png"
     },
-    "name": "Thredd - Browse Smarter with Reddit's Help",
+    "name": "Thredd - Collaborative Browsing",
     "short_name": "Thredd",
     "permissions": [
         "identity",
@@ -28,5 +28,5 @@
         "http://www.reddit.com/*",
         "storage"],
     "update_url": "http://clients2.google.com/service/update2/crx",
-    "version": "0.8.127"
+    "version": "1.0.0"
 }

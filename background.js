@@ -121,14 +121,16 @@ function updateBadge(numPosts, tab) {
     var title = numPosts.toString() + " Results Found!"
     var text = numPosts.toString()
     var badgeColor = [236, 19, 19, 200];  // red
+    let flash = true;
     if (numPosts == 0) {
         text = '';
         title = 'Thredd';
+        flash = false;
     }
-    setBadge(title, text, badgeColor, tab)
+    setBadge(title, text, badgeColor, tab, flash);
 }
 
-function setBadge(title, text, badgeColor, tab) {
+function setBadge(title, text, badgeColor, tab, flash=false) {
     var tabId = tab.id
     chrome.browserAction.setTitle({"title": title, "tabId": tabId})
     !badgeColor || chrome.browserAction.setBadgeBackgroundColor({
@@ -139,6 +141,31 @@ function setBadge(title, text, badgeColor, tab) {
         "text": text,
         "tabId": tabId
     })
+    if (flash) {
+        flashBadge(text, tabId);
+    }
+}
+
+function flashBadge(text, tabId) {
+    chrome.storage.sync.get('disable_flashing_notification', function(settings) {
+        if (!(settings['disable_flashing_notification'])) {
+            const flashInterval = setInterval(function() {
+                setTimeout(function() {
+                    chrome.browserAction.setBadgeText({
+                        "text": text,
+                        "tabId": tabId
+                    });
+                }, 333);
+                chrome.browserAction.setBadgeText({
+                    "text": '',
+                    "tabId": tabId
+                });
+            }, 666);
+            setTimeout(function() {
+                clearInterval(flashInterval);
+            }, 333 * 6);
+        }
+    });
 }
 
 function backgroundSnoowrap() {
@@ -706,5 +733,13 @@ chrome.runtime.onInstalled.addListener(function(details) {
         if (chrome.runtime.setUninstallURL) {
             chrome.runtime.setUninstallURL(uninstallGoogleFormLink);
         }
+    }
+    if (details.reason == 'install') {
+        let install_window = window.open('http://thredd.io/thank-you/', '_blank');
+        install_window.opener = null;
+    }
+    if (details.reason == 'update') {
+        let update_window = window.open('http://thredd.io/changelog/', '_blank');
+        update_window.opener = null;
     }
 });
