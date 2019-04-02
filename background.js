@@ -95,24 +95,17 @@ function getURLInfo(tab, override_url){
     } else {
         console.log('getURLInfo: calling reddit API');
         const trimmed_url = override_url ? trimURL(override_url, http_only=true) : trimURL(tab.url);
-        let submissions = Promise.all([
+        return Promise.all([
             snoo.searchCommentsForURL(trimmed_url),
             snoo.searchSubmissionsForURL(trimmed_url)])
         .then(values => {
             return [].concat.apply([], values);
-        });
-        let subreddits = submissions.then(function(listing) {
-            const subreddit_ids = listing.map(elem => elem.subreddit_id);
-            return snoo.getSubredditBatch(subreddit_ids);
-        });
-        return Promise.all([submissions, subreddits])
-        .then(function([listing, subreddit_info]) {
+        })
+        .then(function(listing) {
             updateBadge(listing.length, tab);
             SubmissionLscache.insert(listing, url);
-            SubredditLscache.insert(subreddit_info, url);
-            return [listing, subreddit_info];
+            return listing;
         });
-
     }
 }
 
@@ -345,7 +338,7 @@ function backgroundSnoowrap() {
             });
         },
 
-        getSubredditBatch: function(subreddit_ids) {
+        getSubredditBatch: function(subreddit_ids, callback) {
             let unique_ids = [...new Set(subreddit_ids)];
             let batch_ids = [];
             let promises = [];
@@ -373,7 +366,11 @@ function backgroundSnoowrap() {
                 }
                 if (unique_ids.length == 0) {
                     return Promise.all(promises)
-                        .then(values => [].concat.apply([], values));
+                        .then(values => [].concat.apply([], values))
+                        .then(subreddits => {
+                            SubredditLscache.insert(subreddits);
+                            callback(subreddits);
+                        });
                 }
             }
         },
@@ -699,8 +696,8 @@ snoo.fetchAnonymousToken();
 
 function onRequest(request, sender, callback) {
     console.log(request);
-    if (request.action == 'getSubreddit') {
-        snoo.getSubreddit(request.subreddit, callback);
+    if (request.action == 'getSubredditBatch') {
+        snoo.getSubredditBatch(request.subreddit_ids, callback);
         return true;
     } else if (request.action == 'logInReddit') {
         snoo.logInReddit(request.interactive, callback);

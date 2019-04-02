@@ -14,10 +14,10 @@ function getSubmission(id, callback)  {
     }, callback)
 }
 
-function getSubreddit(subreddit, callback)  {
+function getSubredditBatch(subreddit_ids, callback)  {
     chrome.runtime.sendMessage({
-        'action' : 'getSubreddit',
-        'subreddit' : subreddit
+        'action' : 'getSubredditBatch',
+        subreddit_ids
     }, callback)
 }
 

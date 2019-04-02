@@ -6,6 +6,14 @@ class PopupResults extends React.Component {
         }
     }
 
+    componentWillMount() {
+        const subreddit_ids = this.props.posts.map(elem => elem.subreddit_id);
+        getSubredditBatch(subreddit_ids, subreddits => {
+            $(document).trigger('fetched-subreddits', {subreddits});
+            console.log('fetched subreddits');
+        });
+    }
+
     render() {
         const posts = this.renderPosts();
         return React.createElement('div', {

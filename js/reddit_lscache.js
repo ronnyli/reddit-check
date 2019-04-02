@@ -1,7 +1,7 @@
 const DEDUPE_KEY = "Dedupe_URL:";
       URL_STORAGE_KEY = "URL:";
       SUBMISSION_STORAGE_KEY = "Submission:";
-      SUBREDDIT_STORAGE_KEY = "URL Subreddits:";
+      SUBREDDIT_STORAGE_KEY = "Subreddit:";
 
 /*Methods to interact with Submission Collections in lscache*/
 const SubmissionCollectionLscache = {
@@ -99,16 +99,18 @@ const SubmissionLscache = {
 
 const SubredditLscache = {
     EXPIRATION_TIME: 5,  // minutes
-    get: function(url) {
-        return lscache.get(SUBREDDIT_STORAGE_KEY + url);
+    get: function(id) {
+        return lscache.get(SUBREDDIT_STORAGE_KEY + id);
     },
     insert: function(subreddits, url) {
         try {
-            lscache.set(
-                SUBREDDIT_STORAGE_KEY + url,
-                subreddits,
-                this.EXPIRATION_TIME
-            );
+            subreddits.forEach(function(subreddit) {
+                lscache.set(
+                    SUBREDDIT_STORAGE_KEY + subreddit.name,
+                    subreddit,
+                    this.EXPIRATION_TIME
+                );
+            }, this);
         }
         catch(err) {
             console.error(err);
