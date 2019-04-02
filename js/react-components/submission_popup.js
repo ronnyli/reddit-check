@@ -79,12 +79,16 @@ class SubmissionPopup extends Content {
 
         let item_source = React.createElement('div', {}, [
             React.createElement(SubredditPicture, {
-                subreddit: this.props.subreddit_name_prefixed}),
+                subreddit: this.props.subreddit_name_prefixed,
+                subreddit_id: this.props.subreddit_id
+            }),
             React.createElement(
                 "div",
                 { "className": "item-source _3AStxql1mQsrZuUIFP9xSg s9fusyd-9 TFJUf" }, [
                     React.createElement(SubredditText, {
-                        subreddit: this.props.subreddit_name_prefixed}),
+                        subreddit: this.props.subreddit_name_prefixed,
+                        subreddit_id: this.props.subreddit_id
+                    }),
                     React.createElement('div', {
                         style: {
                             display: 'block'

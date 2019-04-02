@@ -106,7 +106,6 @@ function getURLInfo(tab, override_url){
             SubmissionLscache.insert(listing, url);
             return listing;
         });
-
     }
 }
 
@@ -339,22 +338,40 @@ function backgroundSnoowrap() {
             });
         },
 
-        getSubreddit: function(subreddit, callback) {
-            const cached_subreddit = lscache.get(SUBREDDIT_STORAGE_KEY + subreddit);
-            if (cached_subreddit) {
-                callback(cached_subreddit);
-            } else {
-                anonymous_requester.r.getSubreddit(subreddit)
-                .fetch()
-                .then(fetched => {
-                    lscache.set(
-                        SUBREDDIT_STORAGE_KEY + subreddit,
-                        fetched,
-                        this.EXPIRATION_TIME
+        getSubredditBatch: function(subreddit_ids, callback) {
+            let unique_ids = [...new Set(subreddit_ids)];
+            let batch_ids = [];
+            let promises = [];
+            while (unique_ids.length > 0) {
+                batch_ids.push(unique_ids.shift());
+                if (unique_ids.length == 0 || batch_ids.length >= 100) {
+                    const ids_str = batch_ids.join(',');
+                    batch_ids = [];
+                    promises.push(
+                        fetch('https://api.reddit.com/api/info.json?id=' + ids_str)
+                        .then(response => response.json())
+                        .then(resp => resp.data.children)
+                        .then(listing => {
+                            if (listing.length > 0) {
+                                return listing.map(elem => elem.data);
+                            } else {
+                                return [];
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            return [];
+                        })
                     );
-                    callback(fetched);
-                })
-                .catch(err => console.error(err));
+                }
+                if (unique_ids.length == 0) {
+                    return Promise.all(promises)
+                        .then(values => [].concat.apply([], values))
+                        .then(subreddits => {
+                            SubredditLscache.insert(subreddits);
+                            callback(subreddits);
+                        });
+                }
             }
         },
 
@@ -679,8 +696,8 @@ snoo.fetchAnonymousToken();
 
 function onRequest(request, sender, callback) {
     console.log(request);
-    if (request.action == 'getSubreddit') {
-        snoo.getSubreddit(request.subreddit, callback);
+    if (request.action == 'getSubredditBatch') {
+        snoo.getSubredditBatch(request.subreddit_ids, callback);
         return true;
     } else if (request.action == 'logInReddit') {
         snoo.logInReddit(request.interactive, callback);
@@ -737,9 +754,5 @@ chrome.runtime.onInstalled.addListener(function(details) {
     if (details.reason == 'install') {
         let install_window = window.open('http://thredd.io/thank-you/', '_blank');
         install_window.opener = null;
-    }
-    if (details.reason == 'update') {
-        let update_window = window.open('http://thredd.io/changelog/', '_blank');
-        update_window.opener = null;
     }
 });

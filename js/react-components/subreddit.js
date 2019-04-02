@@ -12,16 +12,21 @@ class SubredditBase extends React.Component {
       this.tooltip = React.createRef();
     }
 
-    setSubreddit(triggerTooltip=false) {
-        let this_ = this;
-        getSubreddit(this.props.subreddit, function(fetched_subreddit) {
-          if (fetched_subreddit) {
-            this_.setState({
-                subreddit: fetched_subreddit,
-                showTooltip: triggerTooltip
-            });
-          }
+    fetchSubreddit() {
+        this.setState({
+            subreddit: SubredditLscache.get(this.props.subreddit_id)
         });
+    }
+
+    componentDidMount() {
+        let this_ = this;
+        $(document).on('fetched-subreddits', function(e, newdata) {
+            const subreddit = newdata.subreddits.find(elem => {
+                return elem.name == this_.props.subreddit_id;
+            });
+            this_.setState({subreddit});
+        });
+        this.fetchSubreddit();
     }
 
     showTooltip(event) {
@@ -31,8 +36,6 @@ class SubredditBase extends React.Component {
         this.setState({ showTooltip: true }, () => {
           document.addEventListener('click', this.closeTooltip);
         });
-      } else {
-        this.setSubreddit(true);
       }
     }
 
@@ -64,21 +67,21 @@ class SubredditBase extends React.Component {
                             className: 'pffdxb-5 gqrTRv'
                         }, [
                             React.createElement('div', {
-                                className: 'pffdxb-7 iJMTHi'
-                            }, numToString(this.state.subreddit.subscribers)),
-                            React.createElement('div', {
                                 className: 'pffdxb-8 cdobkJ'
-                            }, 'Subscribers')
+                            }, 'Subscribers'),
+                            React.createElement('div', {
+                                className: 'pffdxb-7 iJMTHi'
+                            }, numToString(this.state.subreddit.subscribers))
                         ]),
                         React.createElement('div', {
                             className: 'pffdxb-6 czsqYP'
                         }, [
                             React.createElement('div', {
-                                className: 'pffdxb-7 iJMTHi'
-                            }, numToString(this.state.subreddit.active_user_count)),
-                            React.createElement('div', {
                                 className: 'pffdxb-8 cdobkJ'
-                            }, 'Online')
+                            }, 'Created'),
+                            React.createElement('div', {
+                                className: 'pffdxb-7 iJMTHi'
+                            }, getAge(this.state.subreddit.created_utc))
                         ])
                     ]),
                     React.createElement('div', {
@@ -118,13 +121,12 @@ class SubredditText extends SubredditBase {
 
 class SubredditPicture extends SubredditBase {
     render() {
-        let img_src = '/images/generic_profile_picture.png';
+        const default_img_src = '/images/generic_profile_picture.png';
+        let img_src = default_img_src;
         if (this.state.subreddit) {
             img_src = this.state.subreddit.community_icon ||
                 this.state.subreddit.icon_img ||
                 img_src;
-        } else {
-            this.setSubreddit(false);
         }
         let tooltip = this.renderTooltip(this.state.showTooltip);
 
@@ -135,6 +137,7 @@ class SubredditPicture extends SubredditBase {
                 target: "_blank",
             }, React.createElement('img', {
                     src: img_src,
+                    onError: (e)=>{e.target.onerror = null; e.target.src=default_img_src},
                     style: {
                         backgroundColor: 'rgb(255,255,255)',
                         borderRadius: '50%',
