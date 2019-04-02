@@ -1,7 +1,7 @@
 const DEDUPE_KEY = "Dedupe_URL:";
       URL_STORAGE_KEY = "URL:";
       SUBMISSION_STORAGE_KEY = "Submission:";
-      SUBREDDIT_STORAGE_KEY = "Subreddit:";
+      SUBREDDIT_STORAGE_KEY = "URL Subreddits:";
 
 /*Methods to interact with Submission Collections in lscache*/
 const SubmissionCollectionLscache = {
@@ -50,17 +50,22 @@ const SubmissionLscache = {
         return lscache.get(SUBMISSION_STORAGE_KEY + id_);
     },
     insert: function(submissions, url) {
-        submissions.forEach(function(submission) {
-            lscache.set(
-                SUBMISSION_STORAGE_KEY + submission.id,
-                submission,
-                this.EXPIRATION_TIME
-            );
-        }, this)
-        $(document).trigger('url-insert-ids', {
-            url: url,
-            ids: submissions.map(submission => submission.id)
-        });
+        try {
+            submissions.forEach(function(submission) {
+                lscache.set(
+                    SUBMISSION_STORAGE_KEY + submission.id,
+                    submission,
+                    this.EXPIRATION_TIME
+                );
+            }, this)
+            $(document).trigger('url-insert-ids', {
+                url: url,
+                ids: submissions.map(submission => submission.id)
+            });
+        }
+        catch(err) {
+            console.error(err);
+        }
     },
     delete: function(id) {
         lscache.remove(SUBMISSION_STORAGE_KEY + id);
@@ -91,5 +96,24 @@ const SubmissionLscache = {
         this.update([submission]);
     }
 };
+
+const SubredditLscache = {
+    EXPIRATION_TIME: 5,  // minutes
+    get: function(url) {
+        return lscache.get(SUBREDDIT_STORAGE_KEY + url);
+    },
+    insert: function(subreddits, url) {
+        try {
+            lscache.set(
+                SUBREDDIT_STORAGE_KEY + url,
+                subreddits,
+                this.EXPIRATION_TIME
+            );
+        }
+        catch(err) {
+            console.error(err);
+        }
+    }
+}
 
 SubmissionCollectionLscache.init();
