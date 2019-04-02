@@ -24,14 +24,49 @@ function isBlacklisted(tab, actionOnTrue, actionOnElse) {
 }
 
 function getAge(created_utc) {
-    var now = new Date();
-    var date_now = new Date(now.getUTCFullYear(), now.getUTCMonth(),
-        now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-    var date_entry = new Date(created_utc*1000).getTime();
-    var one_day = 86400000; // milliseconds per day
-    var days = (date_now - date_entry) / one_day;
-    var age = days.toFixed(1) + " days ago";
-    return age;
+    const now_date = moment.utc();
+    const created_date = moment.unix(created_utc).utc();
+    const age = moment.preciseDiff(created_date, now_date, true);
+    if (age['firstDateWasLater']) {
+        return 'Just Now';
+    } else {
+        let max_index = -1;
+        let max_unit = 'seconds';
+        let max_num = 0;
+        Object.keys(age).forEach(function(key) {
+            switch (key) {
+                case 'years':
+                    date_index = 5;
+                    break;
+                case 'months':
+                    date_index = 4;
+                    break;
+                case 'days':
+                    date_index = 3;
+                    break;
+                case 'hours':
+                    date_index = 2;
+                    break;
+                case 'minutes':
+                    date_index = 1;
+                    break;
+                case 'seconds':
+                    date_index = 0;
+                    break;
+            }
+            if (age[key] > 0 && date_index > max_index) {
+                max_index = date_index;
+                max_unit = key;
+                max_num = age[key];
+            }
+        })
+        const pluralized = max_num == 1 ? max_unit.substring(0, max_unit.length - 1) : max_unit;
+        return max_num.toString() +
+            ' ' +
+            pluralized +
+            ' ' +
+            'ago';
+    }
 }
 
 function numToString(score) {
