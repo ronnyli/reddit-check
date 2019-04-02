@@ -22,10 +22,9 @@ class SubredditBase extends React.Component {
         let this_ = this;
         $(document).on('fetched-subreddits', function(e, newdata) {
             const subreddit = newdata.subreddits.find(elem => {
-                elem.name == this_.props.subreddit_id;
+                return elem.name == this_.props.subreddit_id;
             });
             this_.setState({subreddit});
-            console.log(newdata);
         });
         this.fetchSubreddit();
     }
@@ -122,7 +121,8 @@ class SubredditText extends SubredditBase {
 
 class SubredditPicture extends SubredditBase {
     render() {
-        let img_src = '/images/generic_profile_picture.png';
+        const default_img_src = '/images/generic_profile_picture.png';
+        let img_src = default_img_src;
         if (this.state.subreddit) {
             img_src = this.state.subreddit.community_icon ||
                 this.state.subreddit.icon_img ||
@@ -137,6 +137,7 @@ class SubredditPicture extends SubredditBase {
                 target: "_blank",
             }, React.createElement('img', {
                     src: img_src,
+                    onError: (e)=>{e.target.onerror = null; e.target.src=default_img_src},
                     style: {
                         backgroundColor: 'rgb(255,255,255)',
                         borderRadius: '50%',

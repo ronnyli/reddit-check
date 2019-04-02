@@ -84,7 +84,9 @@ class SubmissionExpand extends Content {
             React.createElement('div', {className: 'cZPZhMe-UCZ8htPodMyJ5'},
             React.createElement('div', {className: '_3AStxql1mQsrZuUIFP9xSg nU4Je7n-eSXStTBAPMYt8'},
             React.createElement(SubredditText, {
-                subreddit: this.props.subreddit_name_prefixed}),
+                subreddit: this.props.subreddit_name_prefixed,
+                subreddit_id: this.props.subreddit_id
+            }),
             React.createElement(
               "span",
               { "className": "s106g12-0 hFyNNd", role: "presentation" },
