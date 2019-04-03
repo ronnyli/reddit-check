@@ -77,18 +77,16 @@ class SubmissionPopup extends Content {
             className:'_3-miAEojrCvx_4FQ8x3P-s s1o44igr-2 hbJPLi'
         }, buttons));
 
+        const fetched_subreddit = this.props.fetched_subreddit || {};
+        const subreddit_props = Object.assign({
+            subreddit: this.props.subreddit_name_prefixed
+        }, fetched_subreddit);
         let item_source = React.createElement('div', {}, [
-            React.createElement(SubredditPicture, {
-                subreddit: this.props.subreddit_name_prefixed,
-                subreddit_id: this.props.subreddit_id
-            }),
+            React.createElement(SubredditPicture, subreddit_props),
             React.createElement(
                 "div",
                 { "className": "item-source _3AStxql1mQsrZuUIFP9xSg s9fusyd-9 TFJUf" }, [
-                    React.createElement(SubredditText, {
-                        subreddit: this.props.subreddit_name_prefixed,
-                        subreddit_id: this.props.subreddit_id
-                    }),
+                    React.createElement(SubredditText, subreddit_props),
                     React.createElement('div', {
                         style: {
                             display: 'block'

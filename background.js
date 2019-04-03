@@ -368,7 +368,6 @@ function backgroundSnoowrap() {
                     return Promise.all(promises)
                         .then(values => [].concat.apply([], values))
                         .then(subreddits => {
-                            SubredditLscache.insert(subreddits);
                             callback(subreddits);
                         });
                 }
