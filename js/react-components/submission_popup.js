@@ -1,5 +1,14 @@
 class SubmissionPopup extends Content {
     render() {
+        const thredd_result_details = this.props.thredd_result_type == 'comment' ?
+            this.props.thredd_result_details :
+            {
+                author: this.props.author.name || this.props.author,
+                body: this.props.selftext_html || this.props.selftext,
+                id: this.props.id,
+                link_id: this.props.id,
+                num_comments: this.props.num_comments
+            };
         let title = React.createElement(
                 "div", {
                     "className": "s56cc5r-1 jhlfXq",
@@ -7,20 +16,23 @@ class SubmissionPopup extends Content {
                         marginTop: "6px"
                     }
                 }, React.createElement(
-                    "span",
-                    { "className": "item-title y8HYJ-y_lTUHkQIc1mdCq" },
+                    "span", {
+                        "className": "item-title y8HYJ-y_lTUHkQIc1mdCq"
+                    },
                     React.createElement(
-                        "a",
-                        { "className": "SQnoC3ObvgnGjWt90zD9Z",
-                        href: `${buildCommentUrl(this.props)}`}, [
+                        "a", {
+                            "className": "SQnoC3ObvgnGjWt90zD9Z",
+                            href: `${buildCommentUrl(this.props)}`
+                        }, [
                             React.createElement(
                                 "h2",
                                 { "className": "s56cc5r-0 jpXBut" },
                                 this.props.title
                             ),
-                        React.createElement("span", {
-                            className: "s1461iz-1 RVnoX"
-                        }, "... See More")
+                            React.createElement(ThreddResultDetails, 
+                                Object.assign({
+                                    thredd_result_type: this.props.thredd_result_type
+                                }, thredd_result_details))
                     ])
                 )
             );

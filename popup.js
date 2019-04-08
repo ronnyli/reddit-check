@@ -87,17 +87,9 @@ function buildCommentUrl(permalink) {
     var uri = new URI("comment.html")
     var query = {
         'id': permalink.id,
-        'num_comments': permalink.num_comments,
-        'title': cropTitle(permalink.title)
+        'num_comments': permalink.num_comments
     }
     return uri.search(query);
-}
-
-function cropTitle(title) {
-    var maxTitleLength = 30;
-    if (title.length > maxTitleLength)
-        title = title.substring (0, maxTitleLength) + "...";
-    return title;
 }
 
 chrome.runtime.getBackgroundPage(function (global) {
