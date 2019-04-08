@@ -52,7 +52,8 @@ class ThreddResultDetails extends React.Component {
             ' started a discussion about this URL.' :
             ' mentioned your URL in the thread:';
         return React.createElement('div', {
-            className: 'hPglCh'
+            className: 'hPglCh',
+            style: {paddingBottom: '2%'}
         }, [
             React.createElement('a', {
                 className: 'RVnoX',
@@ -68,20 +69,25 @@ class ThreddResultDetails extends React.Component {
     render() {
         return React.createElement(DropdownMenu, {
             button: React.createElement("span", {
-                className: "s1461iz-1 RVnoX",
+                className: "s1461iz-1 icon icon-info RVnoX",
                 title: "Why is this post relevant?"
-            }, String.fromCharCode(171) + "?" + String.fromCharCode(187)),
-            menu_contents: React.createElement('a', {
-                className: 'links-background',
-                href: buildCommentUrl({
-                    id: this.props.link_id.indexOf('_') != -1 ?
-                        this.props.link_id.split('_')[1] :
-                        this.props.link_id,
-                    num_comments: this.props.num_comments
-                }) + `#${this.props.id}`
+            }, React.createElement('span', {
+                style: {display: this.props.display ? 'inline' : 'none'}
+            }, '  Why is this post relevant?')),
+            menu_contents: React.createElement('div', {
+                className: 'links-background'
             }, [
-                this.renderReason(),
-                this.state.details
+                React.createElement('a', {
+                    href: buildCommentUrl({
+                        id: this.props.link_id.indexOf('_') != -1 ?
+                            this.props.link_id.split('_')[1] :
+                            this.props.link_id,
+                        num_comments: this.props.num_comments
+                    }) + `#${this.props.id}`
+                }, [
+                    this.renderReason(),
+                    this.state.details
+                ])
             ])
         });
     }

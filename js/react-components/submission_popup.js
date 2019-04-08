@@ -28,12 +28,13 @@ class SubmissionPopup extends Content {
                                 "h2",
                                 { "className": "s56cc5r-0 jpXBut" },
                                 this.props.title
-                            ),
-                            React.createElement(ThreddResultDetails, 
-                                Object.assign({
-                                    thredd_result_type: this.props.thredd_result_type
-                                }, thredd_result_details))
-                    ])
+                            )
+                    ]),
+                    React.createElement(ThreddResultDetails,
+                        Object.assign({
+                            thredd_result_type: this.props.thredd_result_type,
+                            display: this.state.thredd_result_details_display
+                        }, thredd_result_details))
                 )
             );
         let comment = React.createElement('a', {
@@ -149,11 +150,13 @@ class SubmissionPopup extends Content {
                 className: "scrollerItem-content YA9IzN0YR-G5_oD5EUydl"},
                 item_content);
         let scrollerItem = React.createElement("div", {
-                className: `scrollerItem Post ${this.props.id} s9fusyd-17 eHSpeV s1ukwo15-0 RqhAo`,
-                id: `${this.props.id}`,
-                style: {'maxWidth': '100%'},
-                tabIndex: "-1" },
-                scrollerItemContent);
+            className: `scrollerItem Post ${this.props.id} s9fusyd-17 eHSpeV s1ukwo15-0 RqhAo`,
+            id: `${this.props.id}`,
+            style: {'maxWidth': '100%'},
+            tabIndex: "-1",
+            onMouseEnter: (e => this.setState({thredd_result_details_display: true})),
+            onMouseLeave: (e => this.setState({thredd_result_details_display: false}))
+        }, scrollerItemContent);
         return scrollerItem;
     }
 }
