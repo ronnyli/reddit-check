@@ -2,8 +2,13 @@ class ThreddResultDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            details: null
+            details: null,
+            showTooltip: false
         };
+
+        this.showTooltip = this.showTooltip.bind(this);
+        this.closeTooltip = this.closeTooltip.bind(this);
+        this.tooltip = React.createRef();
     }
 
     componentWillMount() {
@@ -47,6 +52,15 @@ class ThreddResultDetails extends React.Component {
         }
     }
 
+    showTooltip(event) {
+        event.preventDefault();
+        this.setState({ showTooltip: true });
+    }
+
+    closeTooltip(event) {
+        this.setState({ showTooltip: false });
+    }
+
     renderReason() {
         const verb = this.props.thredd_result_type == 'link post' ?
             ' started a discussion about this URL.' :
@@ -66,29 +80,44 @@ class ThreddResultDetails extends React.Component {
         ]);
     }
 
-    render() {
-        return React.createElement(DropdownMenu, {
-            button: React.createElement("span", {
+    renderTooltip(showTooltip) {
+        return (
+            showTooltip ? (
+                React.createElement('div', {
+                    className: 'links-background'
+                }, [
+                    React.createElement('a', {
+                        href: buildCommentUrl({
+                            id: this.props.link_id.indexOf('_') != -1 ?
+                                this.props.link_id.split('_')[1] :
+                                this.props.link_id,
+                            num_comments: this.props.num_comments
+                        }) + `#${this.props.id}`
+                    }, [
+                        this.renderReason(),
+                        this.state.details
+                    ])
+                ])
+            ) : null
+        );
+    }
+
+    render () {
+        let tooltip = this.renderTooltip(this.state.showTooltip);
+        return React.createElement('span', {
+            onMouseEnter: this.showTooltip
+        }, [
+            React.createElement("span", {
                 className: "s1461iz-1 icon icon-info RVnoX",
                 title: "Why is this post relevant?"
             }, React.createElement('span', {
                 style: {display: this.props.display ? 'inline' : 'none'}
             }, '  Why is this post relevant?')),
-            menu_contents: React.createElement('div', {
-                className: 'links-background'
-            }, [
-                React.createElement('a', {
-                    href: buildCommentUrl({
-                        id: this.props.link_id.indexOf('_') != -1 ?
-                            this.props.link_id.split('_')[1] :
-                            this.props.link_id,
-                        num_comments: this.props.num_comments
-                    }) + `#${this.props.id}`
-                }, [
-                    this.renderReason(),
-                    this.state.details
-                ])
-            ])
-        });
+            React.createElement('div', {
+                className: 'dMZkik',
+                onMouseLeave: this.closeTooltip,
+                ref: this.tooltip
+            }, tooltip)
+        ]);
     }
 }
