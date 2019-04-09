@@ -55,7 +55,6 @@ class ThreddResultDetails extends React.Component {
     }
 
     showTooltip(event) {
-        event.preventDefault();
         this.setState({ showTooltip: true });
     }
 
@@ -107,11 +106,12 @@ class ThreddResultDetails extends React.Component {
     render () {
         let tooltip = this.renderTooltip(this.state.showTooltip);
         return React.createElement('span', {
-            onMouseEnter: this.showTooltip
+            onClick: this.showTooltip,
+            style: {cursor: 'pointer'}
         }, [
             React.createElement("span", {
                 className: "s1461iz-1 icon icon-info RVnoX",
-                title: "Why is this post relevant?"
+                title: "Search for the most relevant comment in this post"
             }, React.createElement('span', {
                 style: {display: this.props.display ? 'inline' : 'none'}
             }, '  Why is this post relevant?')),
