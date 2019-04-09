@@ -37,16 +37,18 @@ class ThreddResultDetails extends React.Component {
                 const truncated_end = url_end_index + 100;
                 const is_truncated_start = truncated_start < 0 ? '' : '...';
                 const is_truncated_end = truncated_end > this_.props.body.length ? '' : '...';
+                const output_html = is_truncated_start +
+                    this_.props.body.substring(truncated_start, url_start_index) +
+                    "<span style='background-color:yellow;'>" +
+                    this_.props.body.substring(url_start_index, url_end_index) +
+                    "</span>" +
+                    this_.props.body.substring(url_end_index, truncated_end) +
+                    is_truncated_end;
+
                 this_.setState ({
-                    details: React.createElement('div', details_style, [
-                        is_truncated_start + this_.props.body.substring(truncated_start, url_start_index),
-                        React.createElement('span', {
-                            style: {
-                                backgroundColor: 'yellow'
-                            }
-                        }, this_.props.body.substring(url_start_index, url_end_index)),
-                        this_.props.body.substring(url_end_index, truncated_end) + is_truncated_end
-                    ])
+                    details: React.createElement('div', Object.assign(details_style, {
+                        dangerouslySetInnerHTML: {__html: output_html}
+                    }))
                 });
             });
         }
