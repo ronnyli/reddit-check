@@ -72,9 +72,11 @@ const SubmissionLscache = {
     },
     update: function(submissions) {
         submissions.forEach(function(submission) {
+            const old_post = this.get(submission.id) || {};
+            const updated = Object.assign(old_post, submission);
             lscache.set(
                 SUBMISSION_STORAGE_KEY + submission.id,
-                submission,
+                updated,
                 this.EXPIRATION_TIME
             );
         }, this);
@@ -96,26 +98,5 @@ const SubmissionLscache = {
         this.update([submission]);
     }
 };
-
-const SubredditLscache = {
-    EXPIRATION_TIME: 5,  // minutes
-    get: function(id) {
-        return lscache.get(SUBREDDIT_STORAGE_KEY + id);
-    },
-    insert: function(subreddits, url) {
-        try {
-            subreddits.forEach(function(subreddit) {
-                lscache.set(
-                    SUBREDDIT_STORAGE_KEY + subreddit.name,
-                    subreddit,
-                    this.EXPIRATION_TIME
-                );
-            }, this);
-        }
-        catch(err) {
-            console.error(err);
-        }
-    }
-}
 
 SubmissionCollectionLscache.init();

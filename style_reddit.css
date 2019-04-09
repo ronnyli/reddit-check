@@ -331,6 +331,10 @@
     content: "\F111";
 }
 
+.icon-info:before {
+    content: "\F11E";
+}
+
 .icon-link:before {
     content: "\F11F";
 }

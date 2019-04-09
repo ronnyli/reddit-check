@@ -1,5 +1,14 @@
 class SubmissionPopup extends Content {
     render() {
+        const thredd_result_details = this.props.thredd_result_type == 'comment' ?
+            this.props.thredd_result_details :
+            {
+                author: this.props.author.name || this.props.author,
+                body: this.props.selftext_html || this.props.selftext,
+                id: this.props.id,
+                link_id: this.props.id,
+                num_comments: this.props.num_comments
+            };
         let title = React.createElement(
                 "div", {
                     "className": "s56cc5r-1 jhlfXq",
@@ -7,21 +16,25 @@ class SubmissionPopup extends Content {
                         marginTop: "6px"
                     }
                 }, React.createElement(
-                    "span",
-                    { "className": "item-title y8HYJ-y_lTUHkQIc1mdCq" },
+                    "span", {
+                        "className": "item-title y8HYJ-y_lTUHkQIc1mdCq"
+                    },
                     React.createElement(
-                        "a",
-                        { "className": "SQnoC3ObvgnGjWt90zD9Z",
-                        href: `${buildCommentUrl(this.props)}`}, [
+                        "a", {
+                            "className": "SQnoC3ObvgnGjWt90zD9Z",
+                            href: `${buildCommentUrl(this.props)}`
+                        }, [
                             React.createElement(
                                 "h2",
                                 { "className": "s56cc5r-0 jpXBut" },
                                 this.props.title
-                            ),
-                        React.createElement("span", {
-                            className: "s1461iz-1 RVnoX"
-                        }, "... See More")
-                    ])
+                            )
+                    ]),
+                    React.createElement(ThreddResultDetails,
+                        Object.assign({
+                            thredd_result_type: this.props.thredd_result_type,
+                            display: this.state.thredd_result_details_display
+                        }, thredd_result_details))
                 )
             );
         let comment = React.createElement('a', {
@@ -77,18 +90,16 @@ class SubmissionPopup extends Content {
             className:'_3-miAEojrCvx_4FQ8x3P-s s1o44igr-2 hbJPLi'
         }, buttons));
 
+        const fetched_subreddit = this.props.fetched_subreddit || {};
+        const subreddit_props = Object.assign({
+            subreddit: this.props.subreddit_name_prefixed
+        }, fetched_subreddit);
         let item_source = React.createElement('div', {}, [
-            React.createElement(SubredditPicture, {
-                subreddit: this.props.subreddit_name_prefixed,
-                subreddit_id: this.props.subreddit_id
-            }),
+            React.createElement(SubredditPicture, subreddit_props),
             React.createElement(
                 "div",
                 { "className": "item-source _3AStxql1mQsrZuUIFP9xSg s9fusyd-9 TFJUf" }, [
-                    React.createElement(SubredditText, {
-                        subreddit: this.props.subreddit_name_prefixed,
-                        subreddit_id: this.props.subreddit_id
-                    }),
+                    React.createElement(SubredditText, subreddit_props),
                     React.createElement('div', {
                         style: {
                             display: 'block'
@@ -139,11 +150,13 @@ class SubmissionPopup extends Content {
                 className: "scrollerItem-content YA9IzN0YR-G5_oD5EUydl"},
                 item_content);
         let scrollerItem = React.createElement("div", {
-                className: `scrollerItem Post ${this.props.id} s9fusyd-17 eHSpeV s1ukwo15-0 RqhAo`,
-                id: `${this.props.id}`,
-                style: {'maxWidth': '100%'},
-                tabIndex: "-1" },
-                scrollerItemContent);
+            className: `scrollerItem Post ${this.props.id} s9fusyd-17 eHSpeV s1ukwo15-0 RqhAo`,
+            id: `${this.props.id}`,
+            style: {'maxWidth': '100%'},
+            tabIndex: "-1",
+            onMouseEnter: (e => this.setState({thredd_result_details_display: true})),
+            onMouseLeave: (e => this.setState({thredd_result_details_display: false}))
+        }, scrollerItemContent);
         return scrollerItem;
     }
 }

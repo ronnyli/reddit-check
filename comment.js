@@ -1,11 +1,3 @@
-
-
-function parseCurrentUrl(callback) {
-    var window_url = new URI(window.location.href);
-    var query = window_url.search(true);
-    callback(query)
-}
-
 function iterateComments(index, comment, archived, $element) {
     const $collapsed = renderCollapsedComment(comment);
     const $comment = renderComment(comment, archived);
@@ -166,7 +158,24 @@ function makeDisplay(submission) {
     $('.ckueCN a').each(function () {
         $( this ).attr('title', $( this ).attr('href'));
     });
+    scrollToSearchResult();
     $("#loading").hide();
+}
+
+function scrollToSearchResult() {
+    const fragment = new URI(window.location.href).fragment();
+    if (fragment) {
+        const search_result_elem = document.getElementById(fragment);
+        if (search_result_elem) {
+            search_result_elem.scrollIntoView({
+                behavior: 'smooth'
+            });
+            search_result_elem.style.backgroundColor = '#E6F7FA';
+        } else {
+            $('#element_not_found').show();
+        }
+
+    }
 }
 
 function displayReplyComment(comment_id, $form, replyable_content_type) {
@@ -260,14 +269,12 @@ $(document).ready(function(){
     var window_url = new URI(window.location.href);
     var query = window_url.search(true);
 
-    parseCurrentUrl(function(query) {
-        var submission = lscache.get("Submission:" + query.id);
-        if ((submission.comments && submission.comments.length > 0) ||
-             query.num_comments === 0) {
-            makeDisplay(submission);
-        } else {
-            getSubmission(query.id, makeDisplay);
-        }
-    });
+    var submission = SubmissionLscache.get(query.id) || {};
+    if ((submission.comments && submission.comments.length > 0) ||
+        query.num_comments === 0) {
+        makeDisplay(submission);
+    } else {
+        getSubmission(query.id, makeDisplay);
+    }
 
 });

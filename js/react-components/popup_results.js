@@ -2,6 +2,7 @@ class PopupResults extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            fetched_subreddit: false,
             visible: this.props.posts.map(() => true)  // all posts visible
         }
     }
@@ -9,7 +10,13 @@ class PopupResults extends React.Component {
     componentWillMount() {
         const subreddit_ids = this.props.posts.map(elem => elem.subreddit_id);
         getSubredditBatch(subreddit_ids, subreddits => {
-            $(document).trigger('fetched-subreddits', {subreddits});
+            this.props.posts.map(post => {
+                post.fetched_subreddit = subreddits.find(elem => {
+                    return elem.name == post.subreddit_id;
+                });
+            });
+            SubmissionLscache.update(this.props.posts);
+            this.setState({fetched_subreddit: true});
         });
     }
 
