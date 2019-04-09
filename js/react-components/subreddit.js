@@ -15,16 +15,12 @@ class SubredditBase extends React.Component {
       event.preventDefault();
 
       if (this.props.created_utc) {
-        this.setState({ showTooltip: true }, () => {
-          document.addEventListener('click', this.closeTooltip);
-        });
+        this.setState({ showTooltip: true });
       }
     }
 
     closeTooltip(event) {
-        this.setState({ showTooltip: false }, () => {
-            document.removeEventListener('click', this.closeTooltip);
-        });
+        this.setState({ showTooltip: false });
     }
 
     renderTooltip(showTooltip) {
