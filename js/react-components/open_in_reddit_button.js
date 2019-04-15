@@ -1,6 +1,11 @@
 function OpenInRedditButton(props) {
     function onOpen() {
-        let reddit_window = window.open('https://www.reddit.com/' + props.content_id, '_blank');
+        let reddit_window = window.open(
+            'https://www.reddit.com/' +
+            props.permalink +
+            props.comment_id +
+            '?context=1000',
+            '_blank');
         reddit_window.opener = null;
     }
 
@@ -14,5 +19,5 @@ function OpenInRedditButton(props) {
     }),
     React.createElement('span', {
         className: '_6_44iTtZoeY6_XChKt5b0'
-    }, 'Go to Reddit')));
+    }, 'Reddit')));
 }
