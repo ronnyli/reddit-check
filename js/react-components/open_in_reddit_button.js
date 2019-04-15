@@ -1,10 +1,7 @@
 function OpenInRedditButton(props) {
     function onOpen() {
         let reddit_window = window.open(
-            'https://www.reddit.com/' +
-            props.permalink +
-            props.comment_id +
-            '?context=1000',
+            'https://www.reddit.com/' + props.permalink,
             '_blank');
         reddit_window.opener = null;
     }

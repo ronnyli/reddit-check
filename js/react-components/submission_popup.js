@@ -61,9 +61,7 @@ class SubmissionPopup extends Content {
                 handleSave: ((e) => this.handleSave(e))
             }),
             React.createElement(OpenInRedditButton, {
-                permalink: this.props.permalink,
-                comment_id: this.props.thredd_result_details ?
-                    this.props.thredd_result_details.id : ''
+                permalink: this.props.permalink
             }),
             ((lscache.get('is_logged_in_reddit') &&
             ((this.props.author.name || this.props.author) === lscache.get('reddit_username'))) ?
