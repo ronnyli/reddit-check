@@ -36,7 +36,7 @@ class SubmissionExpand extends Content {
                 React.createElement('div', {
                     className: 's1fyj3kn-15 UVOUP b1zwxr-0 hxpTao'
                 }, React.createElement(OpenInRedditButton, {
-                    content_id: this.props.id
+                    permalink: this.props.permalink
                 }))
             ],
             menu_style: {left:'auto', right:0}

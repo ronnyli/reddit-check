@@ -2,7 +2,7 @@ class ThreddResultDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            details: null,
+            url: null,
             showTooltip: false
         };
 
@@ -13,45 +13,18 @@ class ThreddResultDetails extends React.Component {
 
     componentWillMount() {
         let this_ = this;
-        if (this.props.thredd_result_type != 'link post') {
-            const details_style = {
-                className: 'ckueCN',
-                style: {
-                    backgroundColor: 'white',
-                    borderRadius: '15px',
-                    padding: '10px'
-                }
-            }
-            chrome.tabs.query({
-                active: true,
-                currentWindow: true
-            }, function(tabs) {
-                const url_raw = tabs[0].url;
-                let url = url_raw
-                    .split('://')[1]
-                    .split('#')[0]
-                    .split('?')[0];
-                const url_start_index = this_.props.body.indexOf(url);
-                const url_end_index = url_start_index + url.length;
-                const truncated_start = url_start_index - 200;
-                const truncated_end = url_end_index + 100;
-                const is_truncated_start = truncated_start < 0 ? '' : '...';
-                const is_truncated_end = truncated_end > this_.props.body.length ? '' : '...';
-                const output_html = is_truncated_start +
-                    this_.props.body.substring(truncated_start, url_start_index) +
-                    "<span style='background-color:yellow;'>" +
-                    this_.props.body.substring(url_start_index, url_end_index) +
-                    "</span>" +
-                    this_.props.body.substring(url_end_index, truncated_end) +
-                    is_truncated_end;
 
-                this_.setState ({
-                    details: React.createElement('div', Object.assign(details_style, {
-                        dangerouslySetInnerHTML: {__html: output_html}
-                    }))
-                });
-            });
-        }
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true
+        }, function(tabs) {
+            const url_raw = tabs[0].url;
+            let url = url_raw
+                .split('://')[1]
+                .split('#')[0]
+                .split('?')[0];
+            this_.setState ({ url });
+        });
     }
 
     showTooltip(event) {
@@ -63,22 +36,62 @@ class ThreddResultDetails extends React.Component {
     }
 
     renderReason() {
-        const verb = this.props.thredd_result_type == 'link post' ?
-            ' started a discussion about this URL.' :
-            ' mentioned your URL in the thread:';
+        let reason = null;
+        if (this.props.thredd_result_type != 'link post') {
+            reason =  [
+                React.createElement('a', {
+                    className: 'RVnoX',
+                    href: 'https://www.reddit.com/user/' + this.props.author,
+                    target: "_blank"
+                }, this.props.author),
+                React.createElement('span', {
+                    className: 'cFQOcm'
+                }, ' mentioned your URL in the thread:')
+            ];
+        } else {
+            reason = [React.createElement('span', {
+                className: 'cFQOcm'
+            }, `Great news! The entire post is about `),
+            React.createElement('span', {
+                className: 'RVnoX',
+            }, this.state.url)
+        ];
+        }
         return React.createElement('div', {
             className: 'hPglCh',
             style: {paddingBottom: '2%'}
-        }, [
-            React.createElement('a', {
-                className: 'RVnoX',
-                href: 'https://www.reddit.com/user/' + this.props.author,
-                target: "_blank"
-            }, this.props.author),
-            React.createElement('span', {
-                className: 'cFQOcm'
-            }, verb)
-        ]);
+        }, reason);
+    }
+
+    renderDetails() {
+        if (this.state.url && this.props.thredd_result_type != 'link post') {
+            const details_style = {
+                className: 'ckueCN',
+                style: {
+                    backgroundColor: 'white',
+                    borderRadius: '15px',
+                    padding: '10px'
+                }
+            }
+            const url_start_index = this.props.body.indexOf(this.state.url);
+            const url_end_index = url_start_index + this.state.url.length;
+            const truncated_start = url_start_index - 200;
+            const truncated_end = url_end_index + 100;
+            const is_truncated_start = truncated_start < 0 ? '' : '...';
+            const is_truncated_end = truncated_end > this.props.body.length ? '' : '...';
+            const output_html = is_truncated_start +
+                this.props.body.substring(truncated_start, url_start_index) +
+                "<span style='background-color:yellow;'>" +
+                this.props.body.substring(url_start_index, url_end_index) +
+                "</span>" +
+                this.props.body.substring(url_end_index, truncated_end) +
+                is_truncated_end;
+            return React.createElement('div', Object.assign(details_style, {
+                dangerouslySetInnerHTML: {__html: output_html}
+            }));
+        } else {
+            return null;
+        }
     }
 
     renderTooltip(showTooltip) {
@@ -96,7 +109,7 @@ class ThreddResultDetails extends React.Component {
                         }) + `#${this.props.id}`
                     }, [
                         this.renderReason(),
-                        this.state.details
+                        this.renderDetails()
                     ])
                 ])
             ) : null
