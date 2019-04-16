@@ -39,12 +39,15 @@ class SubmissionPopup extends Content {
             );
         let comment = React.createElement('a', {
                 className:'comments-page-link _1UoeAeSRhOKSNdY_h3iS1O _1Hw7tY9pMr-T1F4P1C-xNU s9fusyd-13 dQlfjM',
+                style: {
+                    width: '160px'
+                },
                 href: `${buildCommentUrl(this.props)}`
             }, React.createElement('i', {
                 className: 'icon icon-comment _3ch9jJ0painNf41PmU4F9i _3DVrpDrMM9NLT6TlsTUMxC'
             }), React.createElement('span', {
                 className: 'FHCV02u6Cp2zYL0fhQPsO'
-            }, `${numToString(this.props.num_comments)}`));
+            }, `Open ${numToString(this.props.num_comments)} comments`));
 
         let buttons = React.createElement('div',
             {className: '_1UoeAeSRhOKSNdY_h3iS1O',
