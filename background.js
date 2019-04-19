@@ -3,6 +3,30 @@
 // lscache doesn't know to flush them
 lscache.flush();
 
+chrome.browserAction.onClicked.addListener(function(tab) {
+    chrome.tabs.executeScript({
+        code: `
+        if (document.getElementById('thredd-overlay') && document.getElementById('thredd-overlay').style.display == "none") {
+            document.getElementById('thredd-overlay').style.display = "block";
+        } else if (document.getElementById('thredd-overlay')) {
+            document.getElementById('thredd-overlay').style.display = "none";
+        } else {
+            var overlay=document.createElement('iframe');
+            overlay.id = 'thredd-overlay';
+            overlay.src = "${chrome.extension.getURL("popup.html")}";
+            style = overlay.style;
+            style.position = "fixed";
+            style.width = "510px";
+            style.height = "100%";
+            style.zIndex = 9999;
+            style.top = 0;
+            style.right = 0;
+            style.background = "#FFFFFF";
+            document.body.appendChild(overlay);
+        }`
+    });
+  });
+
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
     console.log('onUpdated: ' + tabId)

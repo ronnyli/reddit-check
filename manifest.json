@@ -6,7 +6,6 @@
     },
     "browser_action": {
        "default_icon": { "19": "images/thredd19.png", "38": "images/thredd38.png" },
-       "default_popup": "overlay.html",
        "default_title": "Thredd"
     },
     "description": "Get reviews for the page you're reading or recommendations for similar content - crowdsourced from Reddit!",
@@ -22,12 +21,15 @@
     "name": "Thredd - Collaborative Browsing",
     "short_name": "Thredd",
     "permissions": [
-        "activeTab",
         "identity",
         "contextMenus",
         "tabs",
-        "http://www.reddit.com/*",
+        "*://*/*",
         "storage"],
     "update_url": "http://clients2.google.com/service/update2/crx",
-    "version": "1.2.0"
+    "version": "1.2.0",
+    "web_accessible_resources": [
+        "comment.html",
+        "popup.html"
+    ]
 }
