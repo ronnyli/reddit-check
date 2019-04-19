@@ -1,8 +1,5 @@
-if (document.getElementById('thredd-overlay') &&
-    document.getElementById('thredd-overlay').style.display == "none") {
-    document.getElementById('thredd-overlay').style.display = "block";
-} else if (document.getElementById('thredd-overlay')) {
-    document.getElementById('thredd-overlay').style.display = "none";
+if (document.getElementById('thredd-overlay')) {
+    document.getElementById("thredd-overlay").remove();
 } else {
     let thredd_overlay = document.createElement('div');
     thredd_overlay.id = 'thredd-overlay';
