@@ -15,3 +15,5 @@ Whether you're learning to play guitar, searching for a homework tutor, or plann
 ![Image 2](http://thredd.io/wp-content/uploads/2019/02/g2893.png)
 ![Image 3](http://thredd.io/wp-content/uploads/2019/02/g3011.png)
 ![Image 4](http://thredd.io/wp-content/uploads/2019/02/rect3085.png)
+
+[![Browserstack](http://thredd.io/wp-content/uploads/2019/04/Browserstack-logo@2x-e1556636422436.png)](https://www.browserstack.com)
