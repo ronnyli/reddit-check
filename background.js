@@ -93,7 +93,9 @@ function getURLInfo(tab, override_url){
     if (posts != null) {
         console.log('getURLInfo: cached.')
         updateBadge(posts.length, tab);
-        return;
+        return new Promise(function(resolve, reject) {
+            resolve(SubmissionCollectionLscache.get(url) || []);
+        });
     } else if (tab.url.indexOf('http') == -1) {
         return new Promise(function(resolve, reject) {
             resolve([]);
@@ -776,9 +778,5 @@ chrome.runtime.onInstalled.addListener(function(details) {
     if (details.reason == 'install') {
         let install_window = window.open('http://thredd.io/thank-you/', '_blank');
         install_window.opener = null;
-    }
-    if (details.reason == 'update') {
-        let update_window = window.open('http://thredd.io/changelog/', '_blank');
-        update_window.opener = null;
     }
 });
