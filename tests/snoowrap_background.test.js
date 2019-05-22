@@ -1,4 +1,6 @@
 CLIENT_ID_DEV = 'FAKE ID';
+const snoowrap = jest.mock('snoowrap');
+window.snoowrap = snoowrap;
 const chrome = require("sinon-chrome");
 window.chrome = chrome;
 const lscache = {
@@ -10,14 +12,107 @@ const lscache = {
 window.lscache = lscache;
 const snoo = require('../js/snoowrap_background');
 
+afterEach(() => {
+    jest.clearAllMocks();
+    chrome.flush();
+})
+
+test('setSnoowrapFromAuthCode success', async () => {
+    const first_run=1;
+    window.first_run = first_run;
+    const callback = jest.fn();
+    const logoutContextMenu = jest.fn();
+    window.logoutContextMenu = logoutContextMenu;
+    const loginContextMenu = jest.fn();
+    window.loginContextMenu = loginContextMenu;
+    snoowrap.fromAuthCode = jest.fn().mockResolvedValue(new Promise(function(resolve, reject) {
+        const fake_user = {
+            name: 'fake'
+        }
+        resolve({
+            getMe: jest.fn().mockResolvedValue(fake_user)
+        })
+    }));
+    const status = await snoo.setSnoowrapFromAuthCode('foo', callback)
+    expect(status).toBe('Success')
+    expect(callback).toBeCalledWith('Success');
+    expect(snoowrap.fromAuthCode).toBeCalledWith({
+        code: 'foo',
+        userAgent: chrome.runtime.id + ':' + 'v0.0.1' + ' (by /u/sirius_li)',
+        clientId: CLIENT_ID_DEV,
+        redirectUri: chrome.identity.getRedirectURL('provider_cb')
+    })
+    expect(loginContextMenu).not.toHaveBeenCalled();
+    expect(logoutContextMenu).toBeCalledWith(false);
+});
+
+test('setSnoowrapFromAuthCode catches error', async () => {
+    const callback = jest.fn();
+    snoowrap.fromAuthCode = jest.fn().mockResolvedValue(new Promise(function(resolve, reject) {
+        reject('FAKE ERROR')
+    }));
+    const status = await snoo.setSnoowrapFromAuthCode('foo', callback)
+    expect(status).toBe('FAKE ERROR')
+    expect(callback).toBeCalledWith('FAKE ERROR');
+    expect(snoowrap.fromAuthCode).toBeCalledWith({
+        code: 'foo',
+        userAgent: chrome.runtime.id + ':' + 'v0.0.1' + ' (by /u/sirius_li)',
+        clientId: CLIENT_ID_DEV,
+        redirectUri: chrome.identity.getRedirectURL('provider_cb')
+    })
+    expect(logoutContextMenu).not.toHaveBeenCalled();
+    expect(loginContextMenu).toBeCalledWith(false);
+});
+
+test('checkRedirectUrl invalid redirect URI', () => {
+    const url = '';
+    expect(() => snoo.checkRedirectUrl(url)).toThrow('Invalid redirect URI');
+});
+
+test('checkRedirectUrl chrome runtime error', () => {
+    chrome.runtime.lastError = 'chrome runtime error';
+    const url = '';
+    expect(() => snoo.checkRedirectUrl(url)).toThrow('chrome runtime error');
+});
+
+test('checkRedirectUrl', () => {
+    const redirectUri = 'https://app-id.chromiumapp.org/provider_cb';
+    chrome.identity.getRedirectURL.returns(redirectUri);
+    const urlinput = redirectUri + '?code=fake_code';
+    const spy = jest.spyOn(snoo, 'setSnoowrapFromAuthCode');
+    const callback = jest.fn();
+    snoo.checkRedirectUrl(urlinput, callback);
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith('fake_code');
+});
+
 test('cached logInReddit', () => {
-    lscache.get.mockReturnValue(true);
+    lscache.get.mockReturnValueOnce(true);
     snoo.logInReddit(null, (status) => {
+        expect(chrome.identity.launchWebAuthFlow.notCalled).toBe(true);
         expect(status).toBe('Success');
     })
 });
 
 test('logInReddit', () => {
+    snoowrap.getAuthUrl = jest.fn().mockReturnValueOnce('abcdef');
+    snoo.logInReddit(12345, (status) => {});
+    expect(chrome.identity.launchWebAuthFlow.calledOnce).toBe(true);
+    const callArgs = chrome.identity.launchWebAuthFlow.getCall(0).args;
+    expect(callArgs[0]).toEqual({
+        'interactive': 12345,
+        'url': 'abcdef'
+    });
+    const anonFun = (redirecturl) => {
+        checkRedirectUrl(redirecturl, (code) => {
+            setSnoowrapFromAuthCode(code, callback)
+        });
+    }
+    // check that the anonymous function strings match
+    // source: https://stackoverflow.com/q/45644098
+    expect((''+callArgs[1]).replace(/\s+/g, '')).toBe((''+anonFun).replace(/\s+/g, ''));
+    expect(lscache.get).toBeCalledWith('is_logged_in_reddit');
+    expect(lscache.get.mock.calls.length).toBe(1);
 });
 
 // test('submitPost', () => {

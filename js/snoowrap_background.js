@@ -4,7 +4,7 @@ function backgroundSnoowrap() {
     'use strict';
     var clientId = CLIENT_ID_DEV;
     var redirectUri = chrome.identity.getRedirectURL('provider_cb');
-    var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
+    console.log(redirectUri);
     // TODO: bogus userAgent
     var userAgent = chrome.runtime.id + ':' + 'v0.0.1' + ' (by /u/sirius_li)';
 
@@ -53,7 +53,53 @@ function backgroundSnoowrap() {
         })
     }
 
+    function setSnoowrapFromAuthCode(auth_code, callback) {
+        var snoowrap_promise = snoowrap.fromAuthCode({
+            code: auth_code,
+            userAgent: userAgent,
+            clientId: clientId,
+            redirectUri: redirectUri
+        }).then(r => {
+            lscache.set('is_logged_in_reddit', true, 59);
+            r.getMe().then(u => lscache.set('reddit_username', u.name));
+            snoowrap_requester = r;
+            logoutContextMenu(first_run=false);
+            return 'Success'
+        }).catch(err => {
+            lscache.set('is_logged_in_reddit', null);
+            console.error(err);
+            loginContextMenu(first_run=false);
+            return err.toString();
+        });
+        // popup window closes before callback can run so this
+        // will throw the following error:
+        // Unhandled rejection Error: Attempting to use a disconnected port object
+        // It's okay though because the login was successful
+        return snoowrap_promise.then(status => {
+            callback(status);
+            return status;
+        });
+    }
+
+    function checkRedirectUrl(urlinput, callback) {
+        if (chrome.runtime.lastError) {
+            throw new Error(chrome.runtime.lastError);
+        }
+        const redirectUri = chrome.identity.getRedirectURL('provider_cb');
+        var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
+        var matches = urlinput.match(redirectRe);
+        if (matches && matches.length > 1) {
+            var code = new URL(urlinput).searchParams.get('code');
+            callback(code);
+        } else {
+            throw new Error('Invalid redirect URI');
+        }
+    }
+
     return {
+        setSnoowrapFromAuthCode: setSnoowrapFromAuthCode,
+
+        checkRedirectUrl: checkRedirectUrl,
 
         logInReddit: function(interactive, callback) {
             // In case we already have a snoowrap requester cached, simply return it.
@@ -82,44 +128,11 @@ function backgroundSnoowrap() {
                 'interactive': interactive,
                 'url': authenticationUrl
             }
-            chrome.identity.launchWebAuthFlow(options, function(redirectUri) {
-                if (chrome.runtime.lastError) {
-                    new Error(chrome.runtime.lastError);
-                }
-
-                var matches = redirectUri.match(redirectRe);
-                if (matches && matches.length > 1) {
-                    var code = new URL(redirectUri).searchParams.get('code');
-                    setSnoowrapFromAuthCode(code);
-                } else {
-                    new Error('Invalid redirect URI');
-                }
-            });
-
-            function setSnoowrapFromAuthCode(auth_code) {
-                var snoowrap_promise = snoowrap.fromAuthCode({
-                    code: auth_code,
-                    userAgent: userAgent,
-                    clientId: clientId,
-                    redirectUri: redirectUri
-                }).then(r => {
-                    lscache.set('is_logged_in_reddit', true, 59);
-                    r.getMe().then(u => lscache.set('reddit_username', u.name));
-                    snoowrap_requester = r;
-                    logoutContextMenu(first_run=false);
-                    return 'Success'
-                }).catch(err => {
-                    lscache.set('is_logged_in_reddit', null);
-                    console.error(err);
-                    loginContextMenu(first_run=false);
-                    return err.toString();
+            chrome.identity.launchWebAuthFlow(options, (redirecturl) => {
+                checkRedirectUrl(redirecturl, (code) => {
+                    setSnoowrapFromAuthCode(code, callback)
                 });
-                // popup window closes before callback can run so this
-                // will throw the following error:
-                // Unhandled rejection Error: Attempting to use a disconnected port object
-                // It's okay though because the login was successful
-                snoowrap_promise.then(status => callback(status));
-            }
+            })
         },
 
         submitPost: function(subreddit, title, url, callback) {

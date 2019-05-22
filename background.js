@@ -74,6 +74,7 @@ function getURLInfo(tab, override_url){
         });
     }
 }
+global.getURLInfo = getURLInfo;
 
 function disableBadge(tab){
     var title = "Not running on this page"
@@ -133,7 +134,7 @@ function flashBadge(text, tabId) {
     });
 }
 
-var snoo = require('./js/snoowrap_background');
+global.snoo = require('./js/snoowrap_background');  // global to access snoo in other files
 snoo.fetchAnonymousToken();
 
 function onRequest(request, sender, callback) {
