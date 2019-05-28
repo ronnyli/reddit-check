@@ -24,8 +24,31 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Install Dependencies"
-          command: echo "You can also install Yarn, NPM, or anything else you need to use to build and test your extension."
+          name: "Install Dependencies Part 1"
+          command: |
+            apk update
+            apk add nodejs
+      - run:
+          name: "Hacky fix for NPM: https://stackoverflow.com/a/52196681"
+          command: |
+            npm config set unsafe-perm true
+      - run:
+          name: "Install Dependencies Part 2"
+          command: |
+            npm install -g browserify
+      - restore_cache: # special step to restore the dependency cache
+          # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-npm-wee
+          command: npm install
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: browserify
+          command: browserify background.js > background_browserify.js
       - run:
           name: "Create js/secret.js"
           command: |
@@ -33,7 +56,7 @@ jobs:
             echo "const CLIENT_ID_PROD = '$SNOOWRAP_CLIENT_ID_PROD';" >> js/secret.js
       - run:
           name: "Run Tests"
-          command: echo "Run any tests here."
+          command: npm run test
       - run:
           name: "git config"
           command: |
@@ -44,8 +67,11 @@ jobs:
           command: |
             rm .gitignore
             git add js/secret.js
+            git add background_browserify.js
             git commit -m "DO NOT MERGE"
             git archive -o thredd.zip HEAD
+      - store_artifacts:
+          path: thredd.zip
       - persist_to_workspace:
           root: /root/project
           paths:
