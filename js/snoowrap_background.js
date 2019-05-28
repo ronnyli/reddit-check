@@ -1,4 +1,5 @@
 const url_utils = require('./URL_utils');
+const snoowrap = require('snoowrap');
 
 function backgroundSnoowrap() {
     'use strict';
