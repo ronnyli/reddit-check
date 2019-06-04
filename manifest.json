@@ -27,7 +27,7 @@
         "*://*/*",
         "storage"],
     "update_url": "http://clients2.google.com/service/update2/crx",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "web_accessible_resources": [
         "comment.html",
         "options.html",
