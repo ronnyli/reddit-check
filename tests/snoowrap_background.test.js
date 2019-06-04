@@ -1,6 +1,4 @@
 CLIENT_ID_DEV = 'FAKE ID';
-const snoowrap = jest.mock('snoowrap');
-window.snoowrap = snoowrap;
 const chrome = require("sinon-chrome");
 window.chrome = chrome;
 const lscache = {
@@ -25,7 +23,8 @@ test('setSnoowrapFromAuthCode success', async () => {
     window.logoutContextMenu = logoutContextMenu;
     const loginContextMenu = jest.fn();
     window.loginContextMenu = loginContextMenu;
-    snoowrap.fromAuthCode = jest.fn().mockResolvedValue(new Promise(function(resolve, reject) {
+    const snoowrap = require('snoowrap');
+    const spy = jest.spyOn(snoowrap, 'fromAuthCode').mockResolvedValue(new Promise(function(resolve, reject) {
         const fake_user = {
             name: 'fake'
         }
@@ -44,11 +43,13 @@ test('setSnoowrapFromAuthCode success', async () => {
     })
     expect(loginContextMenu).not.toHaveBeenCalled();
     expect(logoutContextMenu).toBeCalledWith(false);
+    spy.mockRestore();
 });
 
 test('setSnoowrapFromAuthCode catches error', async () => {
     const callback = jest.fn();
-    snoowrap.fromAuthCode = jest.fn().mockResolvedValue(new Promise(function(resolve, reject) {
+    const snoowrap = require('snoowrap');
+    const spy = jest.spyOn(snoowrap, 'fromAuthCode').mockResolvedValue(new Promise(function(resolve, reject) {
         reject('FAKE ERROR')
     }));
     const status = await snoo.setSnoowrapFromAuthCode('foo', callback)
@@ -62,6 +63,7 @@ test('setSnoowrapFromAuthCode catches error', async () => {
     })
     expect(logoutContextMenu).not.toHaveBeenCalled();
     expect(loginContextMenu).toBeCalledWith(false);
+    spy.mockRestore();
 });
 
 test('checkRedirectUrl invalid redirect URI', () => {
@@ -95,7 +97,8 @@ test('cached logInReddit', () => {
 });
 
 test('logInReddit', () => {
-    snoowrap.getAuthUrl = jest.fn().mockReturnValueOnce('abcdef');
+    const snoowrap = require('snoowrap');
+    const spy = jest.spyOn(snoowrap, 'getAuthUrl').mockReturnValueOnce('abcdef');
     snoo.logInReddit(12345, (status) => {});
     expect(chrome.identity.launchWebAuthFlow.calledOnce).toBe(true);
     const callArgs = chrome.identity.launchWebAuthFlow.getCall(0).args;
@@ -113,6 +116,7 @@ test('logInReddit', () => {
     expect((''+callArgs[1]).replace(/\s+/g, '')).toBe((''+anonFun).replace(/\s+/g, ''));
     expect(lscache.get).toBeCalledWith('is_logged_in_reddit');
     expect(lscache.get.mock.calls.length).toBe(1);
+    spy.mockRestore();
 });
 
 // test('submitPost', () => {
