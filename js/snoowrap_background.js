@@ -5,7 +5,7 @@ const snoowrap = require('snoowrap');
 
 function backgroundSnoowrap() {
     'use strict';
-    var clientId = CLIENT_ID_DEV;
+    var clientId = FIREFOX_CLIENT_ID_DEV;
     var redirectUri = chrome.identity.getRedirectURL('provider_cb');
     // TODO: bogus userAgent
     var userAgent = chrome.runtime.id + ':' + 'v0.0.1' + ' (by /u/sirius_li)';
