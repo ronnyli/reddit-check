@@ -6,12 +6,6 @@ const page = require('./js/page/page');
 // lscache doesn't know to flush them
 lscache.flush();
 
-chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.tabs.executeScript({
-        file: 'overlay.js'
-    });
-});
-
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, changeinfo, tab) {
     const url = tab.url;
