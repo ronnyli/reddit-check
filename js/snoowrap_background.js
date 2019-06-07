@@ -3,6 +3,14 @@ const url_utils = require('./URL_utils');
 const marked = require('marked');
 const snoowrap = require('snoowrap');
 
+// chrome.identity is not implemented in Firefox for Android
+if (!chrome.identity) {
+    chrome.identity = {
+        getRedirectURL: console.log,
+        launchWebAuthFlow: console.log
+    }
+}
+
 function backgroundSnoowrap() {
     'use strict';
     var clientId = FIREFOX_CLIENT_ID_DEV;

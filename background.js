@@ -123,15 +123,21 @@ function updateBadge(numPosts, tab) {
 
 function setBadge(title, text, badgeColor, tab, flash=false) {
     var tabId = tab.id
-    chrome.browserAction.setTitle({"title": title, "tabId": tabId})
-    !badgeColor || chrome.browserAction.setBadgeBackgroundColor({
-        "color": badgeColor, 
-        "tabId": tabId
-    })
-    chrome.browserAction.setBadgeText({
-        "text": text,
-        "tabId": tabId
-    })
+    if (typeof chrome.browserAction.setTitle === 'function') {
+        chrome.browserAction.setTitle({"title": title, "tabId": tabId})
+    }
+    if (typeof chrome.browserAction.setBadgeBackgroundColor === 'function') {
+        !badgeColor || chrome.browserAction.setBadgeBackgroundColor({
+            "color": badgeColor,
+            "tabId": tabId
+        })
+    }
+    if (typeof chrome.browserAction.setBadgeText === 'function') {
+        chrome.browserAction.setBadgeText({
+            "text": text,
+            "tabId": tabId
+        })
+    }
     if (flash) {
         flashBadge(text, tabId);
     }
@@ -141,16 +147,18 @@ function flashBadge(text, tabId) {
     chrome.storage.sync.get('disable_flashing_notification', function(settings) {
         if (!(settings['disable_flashing_notification'])) {
             const flashInterval = setInterval(function() {
-                setTimeout(function() {
+                if (typeof chrome.browserAction.setBadgeText === 'function') {
+                    setTimeout(function() {
+                        chrome.browserAction.setBadgeText({
+                            "text": text,
+                            "tabId": tabId
+                        });
+                    }, 333);
                     chrome.browserAction.setBadgeText({
-                        "text": text,
+                        "text": '',
                         "tabId": tabId
                     });
-                }, 333);
-                chrome.browserAction.setBadgeText({
-                    "text": '',
-                    "tabId": tabId
-                });
+                }
             }, 666);
             setTimeout(function() {
                 clearInterval(flashInterval);
