@@ -195,7 +195,6 @@ chrome.runtime.onInstalled.addListener(function(details) {
         }
     }
     if (details.reason == 'install') {
-        let install_window = window.open('http://thredd.io/thank-you/', '_blank');
-        install_window.opener = null;
+        chrome.tabs.create({ url: 'http://thredd.io/thank-you/' });
     }
 });
