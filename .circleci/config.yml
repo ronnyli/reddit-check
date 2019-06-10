@@ -53,6 +53,6 @@ jobs:
       - run:
           name: "Package Extension"
           command: |
-            web-ext build
+            web-ext build --ignore-files tests/
       - store_artifacts:
           path: web-ext-artifacts/
