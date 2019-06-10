@@ -1,9 +1,6 @@
 function OpenInRedditButton(props) {
     function onOpen() {
-        let reddit_window = window.open(
-            'https://www.reddit.com/' + props.permalink,
-            '_blank');
-        reddit_window.opener = null;
+        chrome.tabs.create({ url: 'https://www.reddit.com/' + props.permalink });
     }
 
     return React.createElement('div', {
