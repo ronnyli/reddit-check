@@ -135,10 +135,6 @@ test('logInReddit', () => {
 //     expect(0).toBe(1);
 // });
 
-// test('getSubredditBatch', () => {
-//     expect(0).toBe(1);
-// });
-
 // test('leaveComment', () => {
 //     expect(0).toBe(1);
 // });

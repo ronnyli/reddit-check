@@ -1,3 +1,5 @@
+const { PopupResults } = require('./js/react-components/popup_results');
+
 // parse json data
 function parsePosts(globalPage, tab) {
     let window_url = new URI(window.location.href);
@@ -91,6 +93,7 @@ function buildCommentUrl(permalink) {
     }
     return uri.search(query);
 }
+global.buildCommentUrl = buildCommentUrl;
 
 chrome.runtime.getBackgroundPage(function (global) {
     chrome.tabs.getSelected(null, function(tab){
