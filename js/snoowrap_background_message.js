@@ -14,13 +14,6 @@ function getSubmission(id, callback)  {
     }, callback)
 }
 
-function getSubredditBatch(subreddit_ids, callback)  {
-    chrome.runtime.sendMessage({
-        'action' : 'getSubredditBatch',
-        subreddit_ids
-    }, callback)
-}
-
 function logInReddit(callback) {
     chrome.runtime.sendMessage({
         'action' : 'logInReddit',

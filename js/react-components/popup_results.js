@@ -1,3 +1,5 @@
+const reddit_api = require('../reddit_api');
+
 class PopupResults extends React.Component {
     constructor(props) {
         super(props);
@@ -9,7 +11,8 @@ class PopupResults extends React.Component {
 
     componentWillMount() {
         const subreddit_ids = this.props.posts.map(elem => elem.subreddit_id);
-        getSubredditBatch(subreddit_ids, subreddits => {
+        reddit_api.getBatchIds(subreddit_ids)
+        .then(subreddits => {
             this.props.posts.map(post => {
                 post.fetched_subreddit = subreddits.find(elem => {
                     return elem.name == post.subreddit_id;
@@ -43,4 +46,8 @@ class PopupResults extends React.Component {
         const descending_num = descending ? 1 : -1;
         return descending_num * (postB[sortKey] - postA[sortKey])
     }
+}
+
+module.exports = {
+    PopupResults: PopupResults
 }

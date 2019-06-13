@@ -139,10 +139,7 @@ snoo.fetchAnonymousToken();
 
 function onRequest(request, sender, callback) {
     console.log(request);
-    if (request.action == 'getSubredditBatch') {
-        snoo.getSubredditBatch(request.subreddit_ids, callback);
-        return true;
-    } else if (request.action == 'logInReddit') {
+    if (request.action == 'logInReddit') {
         snoo.logInReddit(request.interactive, callback);
         return true;
     } else if (request.action == 'submitPost') {

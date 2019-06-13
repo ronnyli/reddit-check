@@ -1,3 +1,4 @@
+const reddit_api = require('./reddit_api');
 const url_utils = require('./URL_utils');
 const snoowrap = require('snoowrap');
 
@@ -185,42 +186,6 @@ function backgroundSnoowrap() {
             });
         },
 
-        getSubredditBatch: function(subreddit_ids, callback) {
-            let unique_ids = [...new Set(subreddit_ids)];
-            let batch_ids = [];
-            let promises = [];
-            while (unique_ids.length > 0) {
-                batch_ids.push(unique_ids.shift());
-                if (unique_ids.length == 0 || batch_ids.length >= 100) {
-                    const ids_str = batch_ids.join(',');
-                    batch_ids = [];
-                    promises.push(
-                        fetch('https://api.reddit.com/api/info.json?id=' + ids_str)
-                        .then(response => response.json())
-                        .then(resp => resp.data.children)
-                        .then(listing => {
-                            if (listing.length > 0) {
-                                return listing.map(elem => elem.data);
-                            } else {
-                                return [];
-                            }
-                        })
-                        .catch(error => {
-                            console.error(error);
-                            return [];
-                        })
-                    );
-                }
-                if (unique_ids.length == 0) {
-                    return Promise.all(promises)
-                        .then(values => [].concat.apply([], values))
-                        .then(subreddits => {
-                            callback(subreddits);
-                        });
-                }
-            }
-        },
-
         leaveComment: function(id, text, replyable_content_type, callback) {
             if (replyable_content_type == 'submission') {
                 snoowrap_requester.getSubmission(id)
@@ -325,7 +290,8 @@ function backgroundSnoowrap() {
                 const u = url_utils.trimURL(url);
                 // Filter out NSFW results
                 if (true) {  // TODO: convert this to an option
-                    listing_filtered = listing.filter((el) => {return !el.over_18});
+                    listing_filtered = listing
+                    .filter((el) => {return !el.over_18});
                 }
                 if (!is_youtube) {
                     const too_much = new RegExp(escapeRegExp(u) + '/?\\w');
@@ -389,6 +355,12 @@ function backgroundSnoowrap() {
                     fetch(comment_api + 'q="' + URI.encode(u) + '"&fields=' + fields.join(','))
                     .then(response => response.json())
                     .then(resp => resp.data)
+                    .then(data => {
+                        // get up-to-date info from Reddit
+                        // TODO: remove when pushshift is synced with Reddit
+                        const comment_ids = data.map(elem => 't1_' + elem.id);
+                        return reddit_api.getBatchIds(comment_ids);
+                    })
                     .then(data => {
                         if (is_youtube) {
                             return data;
