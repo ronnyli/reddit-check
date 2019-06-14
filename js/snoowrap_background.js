@@ -291,7 +291,8 @@ function backgroundSnoowrap() {
                 // Filter out NSFW results
                 if (true) {  // TODO: convert this to an option
                     listing_filtered = listing
-                    .filter((el) => {return !el.over_18});
+                    .filter((el) => {return !el.over_18})
+                    .filter(el => el.num_comments > 0);
                 }
                 if (!is_youtube) {
                     const too_much = new RegExp(escapeRegExp(u) + '/?\\w');
@@ -341,10 +342,8 @@ function backgroundSnoowrap() {
                 urls = [url];
             }
             const comment_api = 'https://api.pushshift.io/reddit/search/comment/?';
-            const submission_api = 'https://api.pushshift.io/reddit/search/submission/?';
             const fields = ['author', 'body', 'created_utc', 'id', 'link_id', 'score'];
             let promises = [];
-            let comments = [];
 
             function escapeRegExp(string) {
                 return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
@@ -373,10 +372,6 @@ function backgroundSnoowrap() {
                             });
                         }
                     })
-                    .then(data => data.map(elem => {
-                        comments.push(elem);
-                        return elem.link_id;  // array of submission IDs
-                    }))
                     .catch(error => {
                         console.error(error);
                         return [];
@@ -386,47 +381,7 @@ function backgroundSnoowrap() {
 
             return Promise.all(promises)
             .then(values => [].concat.apply([], values))
-            .then(ids => {
-                if (ids.length == 0) {
-                    throw new Error('aborting pushshift api call');
-                    return [];
-                } else {
-                    // pushshift submission_api is not as up-to-date as Reddit's
-                    // but the benefit is that there's only one API call
-                    return fetch(submission_api + 'ids=' + ids.toString());
-                }
-            })
-            .then(response => response.json())
-            .then(resp => resp.data)
-            .then(listing => {
-                let listing_filtered = listing;
-                // Filter out NSFW results
-                if (true) {  // TODO: convert this to an option
-                    listing_filtered = listing.filter((el) => {return !el.over_18});
-                }
-                return listing_filtered;
-            })
-            .then(listing => listing.map(function(el) {
-                el.thredd_result_type = 'comment';
-                el.thredd_result_details = comments.find(comment => {
-                    const submission_id = el.id.indexOf('_') != -1 ? el.id : 't3_' + el.id;
-                    return comment.link_id == submission_id;
-                });
-                if (el.subreddit_type === 'user') {
-                    el.subreddit_name_prefixed = el.subreddit.replace('_', '/');
-                    return el;
-                } else {
-                    el.subreddit_name_prefixed = 'r/' + el.subreddit;
-                    return el;
-                }
-            }))
-            .catch(error => {
-                if (error.message === 'aborting pushshift api call') {
-                    return [];
-                } else {
-                    throw error;
-                }
-            });
+            .then(comments => comments.filter(elem => elem.score > 1))
         },
 
         saveReddit: function(id, save_type, replyable_content_type, callback) {

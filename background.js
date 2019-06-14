@@ -1,3 +1,4 @@
+const reddit_parser = require('./js/reddit_parser');
 const url_utils = require('./js/URL_utils');
 
 // Bug with lscache when Thredd is updated:
@@ -68,9 +69,10 @@ function getURLInfo(tab, override_url){
             return [].concat.apply([], values);
         })
         .then(function(listing) {
-            updateBadge(listing.length, tab);
+            // updateBadge(listing.length, tab); update based on links found
+            const links = reddit_parser.findLinks(listing);
             SubmissionLscache.insert(listing, url);
-            return listing;
+            return links;
         });
     }
 }
