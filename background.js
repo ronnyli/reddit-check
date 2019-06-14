@@ -1,5 +1,6 @@
 const reddit_parser = require('./js/reddit_parser');
 const url_utils = require('./js/URL_utils');
+global.URI = URI;
 
 // Bug with lscache when Thredd is updated:
 // pre-existing cached items lose the -cacheexpiration suffix so

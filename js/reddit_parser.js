@@ -1,33 +1,39 @@
 const snoo = require('./snoowrap_background');
 
 function findLinksText(text) {
-
+    links = [];
+    URI.withinString(text, function(url) {
+        links.push(url);
+        return url;
+    });
+    return links;
 }
 
 function _parseReddit(content) {
     const fullname = content.name || 't1_' + content.id;
     const content_type = fullname.split('_')[0];
-    let text;
+    let txt_promise;
     if (content_type == 't3') {
-        if (content.domain) {
-            // link post
-            // join top replies into single string
-            snoo.getSubmission(id, submission => {
+        if (content.domain) {  // link post
+            txt_promise = snoo.getSnoowrapRequester()
+            .then(r => r.getSubmission(fullname).fetch())
+            .then(submission => {
                 const replies = submission.replies.map(reply => reply.body);
-                text = replies.join(' ');
+                return replies.join(' ');
             });
-            // findLinksText
-        } else {
+        } else {  // selftext post
             text = content.selftext;
         }
-    } else if (content_type == 't1') {
+    } else if (content_type == 't1') {  // comment
         text = content.body;
     }
-    const links = findLinksText(text);
-    return links.map(link => {return {
+    txt_promise = txt_promise || new Promise(resolve => resolve(text));
+    return txt_promise
+    .then(findLinksText)
+    .then(links => links.map(link => {return {
         link: link,
-        fullname: fullname
-    }});
+        content: content
+    }}));
 }
 
 function _groupby(arr, key) {
@@ -42,7 +48,7 @@ function findLinks(listing) {
     let all_links = [];
     let listing_filtered = [];
     listing.map(elem => {
-        const links = _parseReddit(elem);  // [{link: link, fullname: elem.fullname}]
+        const links = _parseReddit(elem);  // [{link: link, content: elem}]
         links.length > 0 ? listing_filtered.push(elem) : undefined;
         links.forEach(link => {
             all_links.push(link);
