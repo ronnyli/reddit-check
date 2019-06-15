@@ -1,12 +1,15 @@
+const anchorme = require("anchorme").default;
 const snoo = require('./snoowrap_background');
 
 function findLinksText(text) {
-    links = [];
-    URI.withinString(text, function(url) {
-        links.push(url);
-        return url;
+    let anchorme_links = anchorme(text,{
+        list: true,
+        emails: false,
+        ips: false,
+        files: false
     });
-    return links;
+    let links = anchorme_links.map(link_obj => link_obj.encoded);
+    return [...new Set(links)];
 }
 
 function _parseReddit(content) {
@@ -44,12 +47,10 @@ function _groupby(arr, key) {
     }, Object.create(null));
 }
 
-function findLinks(listing) {
+async function findLinks(listing) {
     let all_links = [];
-    let listing_filtered = [];
-    listing.map(elem => {
-        const links = _parseReddit(elem);  // [{link: link, content: elem}]
-        links.length > 0 ? listing_filtered.push(elem) : undefined;
+    listing.map(async (elem) => {
+        const links = await _parseReddit(elem);  // [{link: link, content: elem}]
         links.forEach(link => {
             all_links.push(link);
         });
@@ -58,3 +59,6 @@ function findLinks(listing) {
 }
 
 exports.findLinks = findLinks;
+exports.findLinksText = findLinksText;
+exports._groupby = _groupby;
+exports._parseReddit = _parseReddit;
