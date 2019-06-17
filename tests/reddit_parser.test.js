@@ -34,33 +34,6 @@ test('_groupby success', () => {
     });
 });
 
-// findLinks
-test('findLinks success', async () => {
-    const spy1 = jest.spyOn(reddit_parser, '_parseReddit').mockResolvedValueOnce(() => {
-        return [{
-            link: 1
-        }, {
-            link: 2
-        }]
-    });
-    const spy2 = jest.spyOn(reddit_parser, '_parseReddit').mockResolvedValueOnce(() => {
-        return [{
-            link: 3
-        }, {
-            link: 1
-        }]
-    });
-    const listing = [1,2];
-    const actual = await reddit_parser.findLinks(listing);
-    expect(actual).toEqual({
-        1: [{link: 1}, {link: 1}],
-        2: [{link: 2}],
-        3: [{link: 3}]
-    })
-    spy1.mockRestore();
-    spy2.mockRestore();
-});
-
 test('_parseReddit selftext success', async () => {
     const content = {
         name: 't3_abc',
@@ -126,7 +99,6 @@ test('_parseReddit comment success', async () => {
     }]);
 });
 
-// findLinksText
 test('findLinksText only returns unique URLs', () => {
     let text = 'wwwalsasdf [http://www.abc.com](www.abc.com) and www.google.com kadsfsadf';
     let links = reddit_parser.findLinksText(text);
@@ -134,4 +106,20 @@ test('findLinksText only returns unique URLs', () => {
         'www.abc.com',
         'www.google.com'
     ])
+});
+
+test('findLinks success', async () => {
+    const listing = [{
+        id: 'abc',
+        body: 'wwwalsasdf [http://www.abc.com](www.abc.com) and www.google.com kadsfsadf'
+    }, {id: 'cdf',
+        body: 'wwwalsasdf [http://www.xyz.com](www.abc.com) and www.zzzzze.com kadsfsadf'
+    }];
+    const actual = await reddit_parser.findLinks(listing);
+    expect(actual).toEqual({
+        "www.abc.com": [{link: "www.abc.com", content: listing[0]}, {link: "www.abc.com", content: listing[1]}],
+        "www.google.com": [{link: "www.google.com", content: listing[0]}],
+        "www.xyz.com": [{link: "www.xyz.com", content: listing[1]}],
+        "www.zzzzze.com": [{link: "www.zzzzze.com", content: listing[1]}],
+    });
 });

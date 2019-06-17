@@ -48,13 +48,9 @@ function _groupby(arr, key) {
 }
 
 async function findLinks(listing) {
-    let all_links = [];
-    listing.map(async (elem) => {
-        const links = await _parseReddit(elem);  // [{link: link, content: elem}]
-        links.forEach(link => {
-            all_links.push(link);
-        });
-    });
+    const all_links = await Promise.all(
+        listing.map(async (elem) => await _parseReddit(elem))
+    ).then(values => [].concat.apply([], values));
     return _groupby(all_links, key='link');
 }
 
