@@ -123,3 +123,8 @@ test('findLinks success', async () => {
         "www.zzzzze.com": [{link: "www.zzzzze.com", content: listing[1]}],
     });
 });
+
+test('findLinks empty argument', async () => {
+    const actual = await reddit_parser.findLinks([]);
+    expect(actual).toEqual({});
+});
