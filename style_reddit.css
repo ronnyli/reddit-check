@@ -832,6 +832,17 @@
     border-right: 2px solid rgb(0, 121, 211);
 }
 
+.efNcNS > .submission-threadline {
+    display: block;
+    height: 100%;
+    width: 50%;
+    border-right: 2px solid rgb(186, 186, 186);
+}
+
+.submission-threadline:hover {
+    border-right: 2px solid rgb(0, 121, 211);
+}
+
 .MAIAY.top-level {
     margin-top: 16px;
 }
@@ -857,6 +868,10 @@
     text-align: center;
     z-index: 3;
     margin: 6px -1px -2px 9px;
+}
+
+.eUvHWc.no-height {
+    height: 1px;
 }
 
 .jHfOJm {

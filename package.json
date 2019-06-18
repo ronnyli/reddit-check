@@ -7,7 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "npm run browserify:background && npm run browserify:popup",
+    "browserify:background": "browserify background.js > background_browserify.js",
+    "browserify:popup": "browserify popup.js > popup_browserify.js"
   },
   "repository": {
     "type": "git",

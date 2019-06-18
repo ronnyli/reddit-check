@@ -3,12 +3,9 @@ class ThreddResultDetails extends React.Component {
         super(props);
         this.state = {
             url: null,
-            showTooltip: false
+            expand: false,
+            minimize: false
         };
-
-        this.showTooltip = this.showTooltip.bind(this);
-        this.closeTooltip = this.closeTooltip.bind(this);
-        this.tooltip = React.createRef();
     }
 
     componentWillMount() {
@@ -27,12 +24,8 @@ class ThreddResultDetails extends React.Component {
         });
     }
 
-    showTooltip(event) {
-        this.setState({ showTooltip: true });
-    }
-
-    closeTooltip(event) {
-        this.setState({ showTooltip: false });
+    toggleExpand(event) {
+        this.setState({ expand: !this.state.expand });
     }
 
     renderReason() {
@@ -66,7 +59,7 @@ class ThreddResultDetails extends React.Component {
     renderDetails() {
         if (this.state.url && this.props.thredd_result_type != 'link post') {
             const details_style = {
-                className: 'ckueCN',
+                className: 'ckueCN cFQOcm',
                 style: {
                     backgroundColor: 'white',
                     borderRadius: '15px',
@@ -75,10 +68,10 @@ class ThreddResultDetails extends React.Component {
             }
             const url_start_index = this.props.body.indexOf(this.state.url);
             const url_end_index = url_start_index + this.state.url.length;
-            const truncated_start = url_start_index - 200;
-            const truncated_end = url_end_index + 100;
-            const is_truncated_start = truncated_start < 0 ? '' : '...';
-            const is_truncated_end = truncated_end > this.props.body.length ? '' : '...';
+            const truncated_start = this.state.expand ? 0 : url_start_index - 200;
+            const truncated_end = this.state.expand ? this.props.body.length + 1 : url_end_index + 100;
+            const is_truncated_start = truncated_start <= 0 ? '' : '...';
+            const is_truncated_end = truncated_end >= this.props.body.length ? '' : '...';
             const output_html = is_truncated_start +
                 this.props.body.substring(truncated_start, url_start_index) +
                 "<span style='background-color:yellow;'>" +
@@ -94,45 +87,91 @@ class ThreddResultDetails extends React.Component {
         }
     }
 
-    renderTooltip(showTooltip) {
-        return (
-            showTooltip ? (
+    renderCollapsedComment(comment) {
+        return $(`
+        <li class="s136il31-0 cMWqxb" id="${this.props.id}-collapsed" tabindex="-1" style="display:none">
+            <div class="Comment ${this.props.id} c497l3-5 MAIAY">
+                <button class="${this.props.id} c497l3-0 jtKgEe">
+                    <i class="icon icon-expand qjrkk1-0 JnYFK"></i>
+                </button>
+                <div class="c497l3-4 bWacBs">
+                    <div class="c497l3-3 cFXBbI">
+                        <div>
+                            <a class="s1461iz-1 RVnoX" href="https://www.reddit.com/user/${this.props.author}" target="_blank">${this.props.author}</a>
+                        </div>
+                        <span class="h5svje-0 cFQOcm">${numToString(this.props.score)} points</span>
+                        <span class="h5svje-0 cFQOcm"> &middot; </span>
+                        <a class="s17xjtj0-13 hsxhRU" href="https://www.reddit.com/${this.props.permalink}" id="CommentTopMeta--Created--t1_e7i7pcvinOverlay" rel="nofollow" target="_blank">
+                            <span>${getAge(this.props.created_utc)}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </li>
+        `)
+    }
+
+    renderComment() {
+        return React.createElement('div', {
+            className: 's136il31-0 cMWqxb'
+        }, [
+            React.createElement('div', {
+                className: 'fxv3b9-1 jDSCcP fxv3b9-2 czhQfm'
+            }, [React.createElement('div',{
+                className: 'fxv3b9-0 efNcNS',
+                style: {height: 'calc(100% - 20px'}
+            }, [
+                React.createElement('i', {
+                    className: 'submission-threadline'
+                })
+            ])]),
+            React.createElement('div', {
+                className: `Comment ${this.props.id} c497l3-5 MAIAY`
+            }, [
                 React.createElement('div', {
-                    className: 'links-background'
+                    className: 'c497l3-2 eUvHWc no-height'
+                }),
+                React.createElement('div', {
+                    className: 'c497l3-4 jHfOJm'
                 }, [
-                    React.createElement('a', {
-                        href: buildCommentUrl({
-                            id: this.props.link_id.indexOf('_') != -1 ?
-                                this.props.link_id.split('_')[1] :
-                                this.props.link_id,
-                            num_comments: this.props.num_comments
-                        }) + `#${this.props.id}`
+                    React.createElement('div', {
+                        className: 'c497l3-3 clkVGJ s17xjtj0-21 heFPGG'
                     }, [
-                        this.renderReason(),
-                        this.renderDetails()
-                    ])
+                        React.createElement('div', {
+                            className: 'wx076j-0 hPglCh'
+                        }, [
+                            React.createElement('a', {
+                                className: 's1461iz-1 RVnoX',
+                                href: `https://www.reddit.com/user/${this.props.author}`,
+                                target: '_blank'
+                            }, `${this.props.author}`)
+                        ])
+                    ]),
+                    React.createElement('div', {
+                        className: 'c497l3-6 eCeBkc s1hmcfrd-0 ckueCN'
+                    }, `${this.props.body}`)
                 ])
-            ) : null
+            ]),
+        ]);
+    }
+
+    renderTooltip() {
+        return (
+            React.createElement('div', {
+                className: 'links-background'
+            }, [
+                React.createElement('a', {
+                    title: this.state.expand ? 'Click to collapse' : 'Click to expand',
+                    onClick: ((e) => this.toggleExpand(e))
+                }, [
+                    this.renderReason(),
+                    this.renderDetails()
+                ])
+            ])
         );
     }
 
     render () {
-        let tooltip = this.renderTooltip(this.state.showTooltip);
-        return React.createElement('span', {
-            onClick: this.showTooltip,
-            style: {cursor: 'pointer'}
-        }, [
-            React.createElement("span", {
-                className: "s1461iz-1 icon icon-info RVnoX",
-                title: "Search for the most relevant comment in this post"
-            }, React.createElement('span', {
-                style: {display: this.props.display ? 'inline' : 'none'}
-            }, '  Why is this post relevant?')),
-            React.createElement('div', {
-                className: 'dMZkik',
-                onMouseLeave: this.closeTooltip,
-                ref: this.tooltip
-            }, tooltip)
-        ]);
+        return this.renderComment();
     }
 }
