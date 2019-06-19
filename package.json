@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "lscache": "^1.3.0",
+    "marked": "^0.6.2",
     "snoowrap": "^1.15.2"
   }
 }

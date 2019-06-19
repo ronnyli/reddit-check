@@ -1,5 +1,6 @@
 const reddit_api = require('./reddit_api');
 const url_utils = require('./URL_utils');
+const marked = require('marked');
 const snoowrap = require('snoowrap');
 
 function backgroundSnoowrap() {
@@ -374,6 +375,7 @@ function backgroundSnoowrap() {
                         }
                     })
                     .then(data => data.map(elem => {
+                        elem.body_html = elem.body_html || marked(elem.body);
                         comments.push(elem);
                         return elem.link_id;  // array of submission IDs
                     }))

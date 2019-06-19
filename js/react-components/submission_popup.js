@@ -4,7 +4,7 @@ class SubmissionPopup extends Content {
             this.props.thredd_result_details :
             {
                 author: this.props.author.name || this.props.author,
-                body: this.props.selftext_html || this.props.selftext,
+                body_html: this.props.selftext_html || this.props.selftext,
                 id: this.props.id,
                 link_id: this.props.id,
                 num_comments: this.props.num_comments

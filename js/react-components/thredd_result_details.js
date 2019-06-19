@@ -9,6 +9,7 @@ class ThreddResultDetails extends React.Component {
     }
 
     componentWillMount() {
+        console.log(this.props.body_html)
         let this_ = this;
 
         chrome.tabs.query({
@@ -33,46 +34,57 @@ class ThreddResultDetails extends React.Component {
     }
 
     renderDetails() {
-        const url_start_index = this.props.body.indexOf(this.state.url);
+        const url_start_index = this.props.body_html.indexOf(this.state.url);
         const url_end_index = url_start_index + this.state.url.length;
         const truncated_start = this.state.expand ? 0 : url_start_index - 200;
-        const truncated_end = this.state.expand ? this.props.body.length + 1 : url_end_index + 100;
+        const truncated_end = this.state.expand ? this.props.body_html.length + 1 : url_end_index + 100;
         const is_truncated_start = truncated_start <= 0 ? '' : '...';
-        const is_truncated_end = truncated_end >= this.props.body.length ? '' : '...';
-        const output_html = is_truncated_start +
-            this.props.body.substring(truncated_start, url_start_index) +
-            "<span style='background-color:yellow;'>" +
-            this.props.body.substring(url_start_index, url_end_index) +
-            "</span>" +
-            this.props.body.substring(url_end_index, truncated_end) +
-            is_truncated_end;
+        const is_truncated_end = truncated_end >= this.props.body_html.length ? '' : '...';
+        // const output_html = is_truncated_start +
+        //     this.props.body_html.substring(truncated_start, url_start_index) +
+        //     "<span style='background-color:yellow;'>" +
+        //     this.props.body_html.substring(url_start_index, url_end_index) +
+        //     "</span>" +
+        //     this.props.body_html.substring(url_end_index, truncated_end) +
+        //     is_truncated_end;
+        const output_html = this.props.body_html.substring(truncated_start, truncated_end);
         return React.createElement('div', {
-            dangerouslySetInnerHTML: {__html: output_html}
+            dangerouslySetInnerHTML: {__html: this.props.body_html}
         });
     }
 
     renderCollapsedComment(comment) {
-        return $(`
-        <li class="s136il31-0 cMWqxb" id="${this.props.id}-collapsed" tabindex="-1" style="display:none">
-            <div class="Comment ${this.props.id} c497l3-5 MAIAY">
-                <button class="${this.props.id} c497l3-0 jtKgEe">
-                    <i class="icon icon-expand qjrkk1-0 JnYFK"></i>
-                </button>
-                <div class="c497l3-4 bWacBs">
-                    <div class="c497l3-3 cFXBbI">
-                        <div>
-                            <a class="s1461iz-1 RVnoX" href="https://www.reddit.com/user/${this.props.author}" target="_blank">${this.props.author}</a>
-                        </div>
-                        <span class="h5svje-0 cFQOcm">${numToString(this.props.score)} points</span>
-                        <span class="h5svje-0 cFQOcm"> &middot; </span>
-                        <a class="s17xjtj0-13 hsxhRU" href="https://www.reddit.com/${this.props.permalink}" id="CommentTopMeta--Created--t1_e7i7pcvinOverlay" rel="nofollow" target="_blank">
-                            <span>${getAge(this.props.created_utc)}</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </li>
-        `)
+        return React.createElement('div', {
+            className: 's136il31-0 cMWqxb',
+            onClick: ((e) => this.toggleMinimize(e))
+        }, [
+            React.createElement('div', {
+                className: 'Comment c497l3-5 MAIAY'
+            }, [
+                React.createElement('button', {
+                    className: 'c497l3-0 jtKgEe'
+                }, [
+                    React.createElement('i', {
+                        className: 'icon icon-expand qjrkk1-0 JnYFK'
+                    })
+                ]),
+                React.createElement('div', {
+                    className: 'c497l3-4 bWacBs'
+                }, [
+                    React.createElement('div', {
+                        className: 'c497l3-3 cFXBbI'
+                    }, [
+                        React.createElement('a', {
+                            className: 's1461iz-1 RVnoX',
+                            href: `https://www.reddit.com/user/${this.props.author}`
+                        }, `${this.props.author}`),
+                        React.createElement('span', {
+                            className: 'cFQOcm'
+                        }, 'commented. Click to expand.')
+                    ])
+                ])
+            ])
+        ]);
     }
 
     renderComment() {
@@ -87,6 +99,7 @@ class ThreddResultDetails extends React.Component {
             }, [
                 React.createElement('i', {
                     className: 'submission-threadline',
+                    title: 'Click to minimize',
                     onClick: ((e) => this.toggleMinimize(e))
                 })
             ])]),
