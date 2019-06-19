@@ -4,7 +4,7 @@ class ThreddResultDetails extends React.Component {
         this.state = {
             url: null,
             expand: false,
-            minimize: false
+            collapse: false
         };
     }
 
@@ -28,63 +28,27 @@ class ThreddResultDetails extends React.Component {
         this.setState({ expand: !this.state.expand });
     }
 
-    renderReason() {
-        let reason = null;
-        if (this.props.thredd_result_type != 'link post') {
-            reason =  [
-                React.createElement('a', {
-                    className: 'RVnoX',
-                    href: 'https://www.reddit.com/user/' + this.props.author,
-                    target: "_blank"
-                }, this.props.author),
-                React.createElement('span', {
-                    className: 'cFQOcm'
-                }, ' mentioned your URL in the thread:')
-            ];
-        } else {
-            reason = [React.createElement('span', {
-                className: 'cFQOcm'
-            }, `Great news! The entire post is about `),
-            React.createElement('span', {
-                className: 'RVnoX',
-            }, this.state.url)
-        ];
-        }
-        return React.createElement('div', {
-            className: 'hPglCh',
-            style: {paddingBottom: '2%'}
-        }, reason);
+    toggleMinimize(event) {
+        this.setState({ collapse: !this.state.collapse });
     }
 
     renderDetails() {
-        if (this.state.url && this.props.thredd_result_type != 'link post') {
-            const details_style = {
-                className: 'ckueCN cFQOcm',
-                style: {
-                    backgroundColor: 'white',
-                    borderRadius: '15px',
-                    padding: '10px'
-                }
-            }
-            const url_start_index = this.props.body.indexOf(this.state.url);
-            const url_end_index = url_start_index + this.state.url.length;
-            const truncated_start = this.state.expand ? 0 : url_start_index - 200;
-            const truncated_end = this.state.expand ? this.props.body.length + 1 : url_end_index + 100;
-            const is_truncated_start = truncated_start <= 0 ? '' : '...';
-            const is_truncated_end = truncated_end >= this.props.body.length ? '' : '...';
-            const output_html = is_truncated_start +
-                this.props.body.substring(truncated_start, url_start_index) +
-                "<span style='background-color:yellow;'>" +
-                this.props.body.substring(url_start_index, url_end_index) +
-                "</span>" +
-                this.props.body.substring(url_end_index, truncated_end) +
-                is_truncated_end;
-            return React.createElement('div', Object.assign(details_style, {
-                dangerouslySetInnerHTML: {__html: output_html}
-            }));
-        } else {
-            return null;
-        }
+        const url_start_index = this.props.body.indexOf(this.state.url);
+        const url_end_index = url_start_index + this.state.url.length;
+        const truncated_start = this.state.expand ? 0 : url_start_index - 200;
+        const truncated_end = this.state.expand ? this.props.body.length + 1 : url_end_index + 100;
+        const is_truncated_start = truncated_start <= 0 ? '' : '...';
+        const is_truncated_end = truncated_end >= this.props.body.length ? '' : '...';
+        const output_html = is_truncated_start +
+            this.props.body.substring(truncated_start, url_start_index) +
+            "<span style='background-color:yellow;'>" +
+            this.props.body.substring(url_start_index, url_end_index) +
+            "</span>" +
+            this.props.body.substring(url_end_index, truncated_end) +
+            is_truncated_end;
+        return React.createElement('div', {
+            dangerouslySetInnerHTML: {__html: output_html}
+        });
     }
 
     renderCollapsedComment(comment) {
@@ -122,7 +86,8 @@ class ThreddResultDetails extends React.Component {
                 style: {height: 'calc(100% - 20px'}
             }, [
                 React.createElement('i', {
-                    className: 'submission-threadline'
+                    className: 'submission-threadline',
+                    onClick: ((e) => this.toggleMinimize(e))
                 })
             ])]),
             React.createElement('div', {
@@ -144,34 +109,31 @@ class ThreddResultDetails extends React.Component {
                                 className: 's1461iz-1 RVnoX',
                                 href: `https://www.reddit.com/user/${this.props.author}`,
                                 target: '_blank'
-                            }, `${this.props.author}`)
+                            }, `${this.props.author}`),
+                            React.createElement('span', {
+                                className: 'cFQOcm'
+                            }, ' says:')
                         ])
                     ]),
                     React.createElement('div', {
-                        className: 'c497l3-6 eCeBkc s1hmcfrd-0 ckueCN'
-                    }, `${this.props.body}`)
+                        className: 'c497l3-6 eCeBkc s1hmcfrd-0 ckueCN',
+                        title: this.state.expand ? 'Click to collapse' : 'Click to expand',
+                        onClick: ((e) => this.toggleExpand(e))
+                    }, this.renderDetails())
                 ])
             ]),
         ]);
     }
 
-    renderTooltip() {
-        return (
-            React.createElement('div', {
-                className: 'links-background'
-            }, [
-                React.createElement('a', {
-                    title: this.state.expand ? 'Click to collapse' : 'Click to expand',
-                    onClick: ((e) => this.toggleExpand(e))
-                }, [
-                    this.renderReason(),
-                    this.renderDetails()
-                ])
-            ])
-        );
-    }
-
     render () {
-        return this.renderComment();
+        if (this.state.url && this.props.thredd_result_type != 'link post') {
+            if (this.state.collapse) {
+                return this.renderCollapsedComment();
+            } else {
+                return this.renderComment();
+            }
+        } else {
+            return null;
+        }
     }
 }
