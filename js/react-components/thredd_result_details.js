@@ -138,7 +138,7 @@ class ThreddResultDetails extends React.Component {
                             }, `${this.props.author}`),
                             React.createElement('span', {
                                 className: 'cFQOcm'
-                            }, ' says:')
+                            }, ' replied:')
                         ])
                     ]),
                     React.createElement('div', {
