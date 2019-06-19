@@ -55,7 +55,7 @@ test('_parseReddit linkpost success', async () => {
         domain: 'imgur.com'
     };
     const mockSuccessResponse = {
-        replies: [{
+        comments: [{
             body: 'abcdefg\\'
         }, {
             body: 'www.google.com'
@@ -84,6 +84,23 @@ test('_parseReddit linkpost success', async () => {
     }]);
     spy.mockRestore();
 });
+
+test('_parseReddit when submission has domain but is a selftext post', async () => {
+    const content = {
+        name: 't3_abc',
+        domain: 'self.Entrepreneur',
+        selftext: 'wwwalsasdf [http://www.abc.com](www.abc.com) and www.google.com kadsfsadf'
+    };
+    const actual = await reddit_parser._parseReddit(content);
+    expect(actual).toEqual([{
+        link: 'www.abc.com',
+        content: content
+    }, {
+        link: 'www.google.com',
+        content: content
+    }]);
+});
+
 test('_parseReddit comment success', async () => {
     const content = {
         id: 'abc',

@@ -17,15 +17,18 @@ function _parseReddit(content) {
     const content_type = fullname.split('_')[0];
     let txt_promise;
     if (content_type == 't3') {
-        if (content.domain) {  // link post
+        if (content.selftext) {
+            text = content.selftext;
+        } else {  // link post
             txt_promise = snoo.getSnoowrapRequester()
             .then(r => r.getSubmission(fullname).fetch())
             .then(submission => {
-                const replies = submission.replies.map(reply => reply.body);
+                // if (!submission.comments) {
+                //     console.log(submission);
+                // }
+                const replies = submission.comments.map(reply => reply.body);
                 return replies.join(' ');
             });
-        } else {  // selftext post
-            text = content.selftext;
         }
     } else if (content_type == 't1') {  // comment
         text = content.body;

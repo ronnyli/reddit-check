@@ -69,9 +69,10 @@ function getURLInfo(tab, override_url){
         .then(values => {
             return [].concat.apply([], values);
         })
-        .then(function(listing) {
-            // updateBadge(listing.length, tab); update based on links found
-            const links = reddit_parser.findLinks(listing);
+        .then(listing => reddit_parser.findLinks(listing))
+        .then(function(links) {
+            console.log(links);
+            updateBadge(Object.keys(links).length, tab);
             SubmissionLscache.insert(listing, url);
             return links;
         });
