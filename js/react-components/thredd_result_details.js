@@ -9,7 +9,6 @@ class ThreddResultDetails extends React.Component {
     }
 
     componentWillMount() {
-        console.log(this.props.body_html)
         let this_ = this;
 
         chrome.tabs.query({
@@ -26,6 +25,9 @@ class ThreddResultDetails extends React.Component {
     }
 
     toggleExpand(event) {
+        if($(event.target).is("a")) {
+            return true;
+        }
         this.setState({ expand: !this.state.expand });
     }
 
@@ -33,23 +35,33 @@ class ThreddResultDetails extends React.Component {
         this.setState({ collapse: !this.state.collapse });
     }
 
+    htmlDecode(input) {
+        // Copied from https://stackoverflow.com/a/34064434
+        var doc = new DOMParser().parseFromString(input, "text/html");
+        return doc.documentElement.textContent;
+    }
+
     renderDetails() {
-        const url_start_index = this.props.body_html.indexOf(this.state.url);
-        const url_end_index = url_start_index + this.state.url.length;
+        const decoded_html = this.htmlDecode(this.props.body_html);
+        let comment_html;
+        if (decoded_html.indexOf('</a>') != -1) {
+            comment_html = decoded_html;
+        } else {
+            comment_html = this.props.body_html;
+        }
+        const url_start_index = comment_html.indexOf(this.state.url);
+        const url_end_index = url_start_index + this.state.url.length + 1;
         const truncated_start = this.state.expand ? 0 : url_start_index - 200;
-        const truncated_end = this.state.expand ? this.props.body_html.length + 1 : url_end_index + 100;
+        const truncated_end = this.state.expand ? comment_html.length + 1 : url_end_index + 100;
         const is_truncated_start = truncated_start <= 0 ? '' : '...';
-        const is_truncated_end = truncated_end >= this.props.body_html.length ? '' : '...';
-        // const output_html = is_truncated_start +
-        //     this.props.body_html.substring(truncated_start, url_start_index) +
-        //     "<span style='background-color:yellow;'>" +
-        //     this.props.body_html.substring(url_start_index, url_end_index) +
-        //     "</span>" +
-        //     this.props.body_html.substring(url_end_index, truncated_end) +
-        //     is_truncated_end;
-        const output_html = this.props.body_html.substring(truncated_start, truncated_end);
+        const is_truncated_end = truncated_end >= comment_html.length ? '' : '...';
+        const output_html = is_truncated_start +
+            comment_html.substring(truncated_start, url_end_index) +
+            " style='background-color:rgb(252, 252, 200);'" +
+            comment_html.substring(url_end_index, truncated_end) +
+            is_truncated_end;
         return React.createElement('div', {
-            dangerouslySetInnerHTML: {__html: this.props.body_html}
+            dangerouslySetInnerHTML: {__html: output_html}
         });
     }
 
@@ -76,7 +88,8 @@ class ThreddResultDetails extends React.Component {
                     }, [
                         React.createElement('a', {
                             className: 's1461iz-1 RVnoX',
-                            href: `https://www.reddit.com/user/${this.props.author}`
+                            href: `https://www.reddit.com/user/${this.props.author}`,
+                            target: '_blank'
                         }, `${this.props.author}`),
                         React.createElement('span', {
                             className: 'cFQOcm'
