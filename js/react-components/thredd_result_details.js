@@ -41,6 +41,38 @@ class ThreddResultDetails extends React.Component {
         return doc.documentElement.textContent;
     }
 
+    getRemainingHtmlTag(str, forward_search=true) {
+        // iteratively check each character of `str`
+        // until either < or > appears (or end of str)
+        // If it matches `target_char` then return visited characters
+        let search_chars = str.split('');
+        let target_char;
+        let opposite_char;
+        if (forward_search) {
+            target_char = '>';
+            opposite_char = '<';
+        } else {
+            target_char = '<';
+            opposite_char = '>';
+            search_chars = search_chars.reverse();
+        }
+        let visited_chars = [];
+        for (var i = 0; i < search_chars.length; i++) {
+            const char = search_chars[i];
+            visited_chars.push(char);
+            if (char == target_char) {
+                if (forward_search) {
+                    return visited_chars.join('');
+                } else {
+                    return visited_chars.reverse().join('');
+                }
+            } else if (char == opposite_char) {
+                return '';
+            }
+        }
+        return '';
+    }
+
     renderDetails() {
         const decoded_html = this.htmlDecode(this.props.body_html);
         let comment_html;
@@ -58,9 +90,11 @@ class ThreddResultDetails extends React.Component {
         const is_truncated_end = truncated_end >= comment_html.length ? '' : '...';
         const highlight_style = url_start_index > -1 ? " style='background-color:rgb(252, 252, 200);' " : '';
         const output_html = is_truncated_start +
+            this.getRemainingHtmlTag(comment_html.substring(0, truncated_start), false)+
             comment_html.substring(truncated_start, url_start_index) +
             highlight_style +
             comment_html.substring(url_start_index, truncated_end) +
+            this.getRemainingHtmlTag(comment_html.substring(truncated_end, comment_html.length), true)+
             is_truncated_end;
         return React.createElement('div', {
             dangerouslySetInnerHTML: {__html: output_html}
