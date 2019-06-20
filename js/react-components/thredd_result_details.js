@@ -49,16 +49,18 @@ class ThreddResultDetails extends React.Component {
         } else {
             comment_html = this.props.body_html;
         }
-        const url_start_index = comment_html.indexOf(this.state.url);
-        const url_end_index = url_start_index + this.state.url.length + 1;
+        const url_href_regex  = new RegExp('href=.(https?://)?' + this.state.url)
+        const url_start_index = comment_html.search(url_href_regex);
+        const url_end_index = url_start_index + this.state.url.length;
         const truncated_start = this.state.expand ? 0 : url_start_index - 200;
         const truncated_end = this.state.expand ? comment_html.length + 1 : url_end_index + 100;
         const is_truncated_start = truncated_start <= 0 ? '' : '...';
         const is_truncated_end = truncated_end >= comment_html.length ? '' : '...';
+        const highlight_style = url_start_index > -1 ? " style='background-color:rgb(252, 252, 200);' " : '';
         const output_html = is_truncated_start +
-            comment_html.substring(truncated_start, url_end_index) +
-            " style='background-color:rgb(252, 252, 200);'" +
-            comment_html.substring(url_end_index, truncated_end) +
+            comment_html.substring(truncated_start, url_start_index) +
+            highlight_style +
+            comment_html.substring(url_start_index, truncated_end) +
             is_truncated_end;
         return React.createElement('div', {
             dangerouslySetInnerHTML: {__html: output_html}
