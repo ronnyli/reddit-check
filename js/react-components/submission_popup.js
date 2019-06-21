@@ -4,7 +4,7 @@ class SubmissionPopup extends Content {
             this.props.thredd_result_details :
             {
                 author: this.props.author.name || this.props.author,
-                body: this.props.selftext_html || this.props.selftext,
+                body_html: this.props.selftext_html || this.props.selftext,
                 id: this.props.id,
                 link_id: this.props.id,
                 num_comments: this.props.num_comments
@@ -22,7 +22,8 @@ class SubmissionPopup extends Content {
                     React.createElement(
                         "a", {
                             "className": "SQnoC3ObvgnGjWt90zD9Z",
-                            href: `${buildCommentUrl(this.props)}`
+                            href: `${buildCommentUrl(this.props)}`,
+                            target: '_self'
                         }, [
                             React.createElement(
                                 "h2",
@@ -42,7 +43,8 @@ class SubmissionPopup extends Content {
                 style: {
                     width: '160px'
                 },
-                href: `${buildCommentUrl(this.props)}`
+                href: `${buildCommentUrl(this.props)}`,
+                target: '_self'
             }, React.createElement('i', {
                 className: 'icon icon-comment _3ch9jJ0painNf41PmU4F9i _3DVrpDrMM9NLT6TlsTUMxC'
             }), React.createElement('span', {
