@@ -49,6 +49,7 @@ jobs:
           command: |
             echo "const CLIENT_ID_DEV = '$SNOOWRAP_CLIENT_ID_DEV';" >> js/secret.js
             echo "const CLIENT_ID_PROD = '$SNOOWRAP_CLIENT_ID_PROD';" >> js/secret.js
+            echo "const FIREFOX_CLIENT_ID_DEV = '$FIREFOX_CLIENT_ID';" >> js/secret.js
       - run:
           name: "Run Tests"
           command: npm run test
