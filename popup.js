@@ -14,7 +14,6 @@ function parsePosts(globalPage, tab) {
         const listing = SubmissionCollectionLscache.get(url);
         renderHeader(listing, encodedUrl);
         if (listing.length > 0) {
-            renderRefinedSearch(tab_url=tab.url, window_url=window_url);
             makeDisplay(listing);
         }
     } else {
@@ -27,27 +26,9 @@ function parsePosts(globalPage, tab) {
         .then(function(listing) {
             renderHeader(listing, encodedUrl);
             if (listing.length > 0) {
-                renderRefinedSearch(tab_url=tab.url, window_url=window_url);
                 makeDisplay(listing);
             }
         });
-    }
-}
-
-function renderRefinedSearch(tab_url, window_url) {
-    if ((tab_url.indexOf('youtube.com') == -1) && (tab_url.indexOf('?') != -1)) {
-        $('#links').before(`
-            <a id="refine-search" class="links-background s1461iz-1 RVnoX"
-               href="#" target="_self"
-               title="Search for your exact URL.\nRemove sensitive information from the URL before clicking.">
-                Refine Search
-            </a>
-        `);
-        $('#refine-search').click(() => {
-            SubmissionCollectionLscache.remove(tab_url);
-            window_url.setSearch('override_url', tab_url);
-            window.open(window_url.toString(), '_self');
-        })
     }
 }
 
