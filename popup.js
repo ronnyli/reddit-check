@@ -1,10 +1,9 @@
 const { PopupResults } = require('./js/react-components/popup_results');
+const url_utils = require('./js/URL_utils');
 
 // parse json data
 function parsePosts(globalPage, tab) {
-    let window_url = new URI(window.location.href);
-    const query = window_url.search(true);
-    const url = query.override_url || tab.url;
+    const url = tab.url;
 
     const encodedUrl = encodeURIComponent(url);
     const redditPosts = lscache.get(URL_STORAGE_KEY + url);
@@ -18,7 +17,7 @@ function parsePosts(globalPage, tab) {
         }
     } else {
         // redditPosts can be empty if the entry expired in lscache
-        globalPage.getURLInfo(tab, query.override_url)
+        globalPage.getURLInfo(tab)
         .then(function(listing) {
             $("div#timeout").hide(0);
             return listing;
@@ -78,15 +77,21 @@ global.buildCommentUrl = buildCommentUrl;
 
 chrome.runtime.getBackgroundPage(function (global) {
     chrome.tabs.getSelected(null, function(tab){
-        isBlacklisted(tab,
-            function(input) {
-                $("div#blacklisted").show(0)
-                $("div#timeout").hide(0);
-            },
-            function (input) {
-                $("div#blacklisted").hide(0)
-                parsePosts(global, tab)
+        url_utils.getTabUrl(function(url) {
+            const fake_tab = {
+                url:url,
+                id: tab.id
+            };
+            isBlacklisted(fake_tab,
+                function(input) {
+                    $("div#blacklisted").show(0)
+                    $("div#timeout").hide(0);
+                },
+                function (input) {
+                    $("div#blacklisted").hide(0)
+                    parsePosts(global, fake_tab)
             });
+        });
     });
 });
 

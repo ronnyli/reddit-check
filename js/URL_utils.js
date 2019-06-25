@@ -41,5 +41,37 @@ function getYoutubeURLs(url){
     return urls;
 }
 
+function getCanonicalUrl(callback) {
+    chrome.tabs.executeScript({
+        code: `document.querySelector("link[rel='canonical']").href;`
+    }, function(results) {
+        if (chrome.runtime.lastError) {
+            callback(null);
+        } else {
+            const canonical_url = results ? results[0] : [null];
+            callback(canonical_url);
+        }
+    });
+};
+
+function getTabUrl(callback) {
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function(tabs) {
+        let tab = tabs[0];
+        let url_raw = tab.url;
+        if (url_raw.indexOf('?') == -1 && url_raw.indexOf('#') == -1) {
+            callback(url_raw);
+        } else {
+            getCanonicalUrl(canonical_url => {
+                canonical_url ? callback(canonical_url) : callback(url_raw);
+            });
+        }
+    });
+}
+
 exports.trimURL = trimURL;
+exports.getCanonicalUrl = getCanonicalUrl;
+exports.getTabUrl = getTabUrl;
 exports.getYoutubeURLs = getYoutubeURLs;
