@@ -48,7 +48,7 @@ function getCanonicalUrl(callback) {
         if (chrome.runtime.lastError) {
             callback(null);
         } else {
-            const canonical_url = results ? results[0] : [null];
+            const canonical_url = results ? results[0] : null;
             callback(canonical_url);
         }
     });
