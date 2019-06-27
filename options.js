@@ -24,7 +24,6 @@ $('body').on('click', 'a.dellink', function() {
 
 function loadBlacklist()
 {
-    console.log('loadBlacklist called.');
     $('#blacklist').text('');
     chrome.storage.sync.get([
         'blacklist',
@@ -58,7 +57,6 @@ function loadBlacklist()
 
 $('#blockform').submit(function() {
     var url = $('input#blockurl').val();
-    console.log(url);
     if (url.length > 0) {
         $('input#blockurl').val('');
         gBlacklist.push(url);

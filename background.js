@@ -9,39 +9,43 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     chrome.tabs.executeScript({
         file: 'overlay.js'
     });
-  });
+});
 
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
-    console.log('onUpdated: ' + tabId)
     changeAction(tab)
 });
 
 // update on selection change
 chrome.tabs.onSelectionChanged.addListener(function(tabId, info) {
-    console.log('onSelectionChanged: ' + tabId)
     chrome.tabs.getSelected(null, function(tab){
         changeAction(tab)
     });
 });
 
 function changeAction(tab) {
-    if (lscache.get(DEDUPE_KEY + tab.url + tab.id) != null) {
-        const posts = lscache.get(URL_STORAGE_KEY + tab.url);
-        updateBadge(posts.length, tab);
-        return // dupe
-    }
-    chrome.storage.sync.get('run_on_click', function(settings) {
-        if (settings['run_on_click']) {
-            setBadge(
-                'Click to search Thredd',
-                '?',
-                [150, 150, 150, 200],  // grey
-                tab);
-        } else {
-            lscache.set(DEDUPE_KEY + tab.url + tab.id, "", 2)
-            isBlacklisted(tab, disableBadge, getURLInfo)
+    url_utils.getTabUrl(function(url) {
+        if (lscache.get(DEDUPE_KEY + url + tab.id) != null) {
+            const posts = lscache.get(URL_STORAGE_KEY + url);
+            updateBadge(posts.length, tab);
+            return // dupe
         }
+        chrome.storage.sync.get('run_on_click', function(settings) {
+            if (settings['run_on_click']) {
+                setBadge(
+                    'Click to search Thredd',
+                    '?',
+                    [150, 150, 150, 200],  // grey
+                    tab);
+            } else {
+                const fake_tab = {
+                    url: url,
+                    id: tab.id
+                };
+                lscache.set(DEDUPE_KEY + url + tab.id, "", 2)
+                isBlacklisted(fake_tab, disableBadge, getURLInfo)
+            }
+        });
     });
 }
 
@@ -49,7 +53,6 @@ function getURLInfo(tab, override_url){
     const url = override_url || tab.url;
     var posts = lscache.get(URL_STORAGE_KEY + url);
     if (posts != null) {
-        console.log('getURLInfo: cached.')
         updateBadge(posts.length, tab);
         return new Promise(function(resolve, reject) {
             resolve(SubmissionCollectionLscache.get(url) || []);
@@ -59,8 +62,7 @@ function getURLInfo(tab, override_url){
             resolve([]);
         });
     } else {
-        console.log('getURLInfo: calling reddit API');
-        const trimmed_url = override_url ? url_utils.trimURL(override_url, http_only=true) : url_utils.trimURL(tab.url);
+        const trimmed_url = url_utils.trimURL(url, http_only=true);
         return Promise.all([
             snoo.searchCommentsForURL(trimmed_url),
             snoo.searchSubmissionsForURL(trimmed_url)])

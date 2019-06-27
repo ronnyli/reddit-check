@@ -7,7 +7,6 @@ function backgroundSnoowrap() {
     'use strict';
     var clientId = CLIENT_ID_DEV;
     var redirectUri = chrome.identity.getRedirectURL('provider_cb');
-    console.log(redirectUri);
     // TODO: bogus userAgent
     var userAgent = chrome.runtime.id + ':' + 'v0.0.1' + ' (by /u/sirius_li)';
 
@@ -43,14 +42,11 @@ function backgroundSnoowrap() {
         // create a new anonymous requester if needed
         return new Promise(function(resolve, reject) {
             if (lscache.get('is_logged_in_reddit')) {
-                console.log('using logged in requester');
                 resolve(snoowrap_requester);
             } else if (anonymous_requester.expiryTime &&
                 new Date().getTime() < anonymous_requester.expiryTime) {
-                console.log('using anonymous requester');
                 resolve(anonymous_requester.r);
             } else {
-                console.log('anonymous requester expired. Fetching new one...');
                 resolve(fetchAnonymousToken());
             }
         })

@@ -1,10 +1,9 @@
 const { PopupResults } = require('./js/react-components/popup_results');
+const url_utils = require('./js/URL_utils');
 
 // parse json data
 function parsePosts(globalPage, tab) {
-    let window_url = new URI(window.location.href);
-    const query = window_url.search(true);
-    const url = query.override_url || tab.url;
+    const url = tab.url;
 
     const encodedUrl = encodeURIComponent(url);
     const redditPosts = lscache.get(URL_STORAGE_KEY + url);
@@ -14,12 +13,11 @@ function parsePosts(globalPage, tab) {
         const listing = SubmissionCollectionLscache.get(url);
         renderHeader(listing, encodedUrl);
         if (listing.length > 0) {
-            renderRefinedSearch(tab_url=tab.url, window_url=window_url);
             makeDisplay(listing);
         }
     } else {
         // redditPosts can be empty if the entry expired in lscache
-        globalPage.getURLInfo(tab, query.override_url)
+        globalPage.getURLInfo(tab)
         .then(function(listing) {
             $("div#timeout").hide(0);
             return listing;
@@ -27,27 +25,9 @@ function parsePosts(globalPage, tab) {
         .then(function(listing) {
             renderHeader(listing, encodedUrl);
             if (listing.length > 0) {
-                renderRefinedSearch(tab_url=tab.url, window_url=window_url);
                 makeDisplay(listing);
             }
         });
-    }
-}
-
-function renderRefinedSearch(tab_url, window_url) {
-    if ((tab_url.indexOf('youtube.com') == -1) && (tab_url.indexOf('?') != -1)) {
-        $('#links').before(`
-            <a id="refine-search" class="links-background s1461iz-1 RVnoX"
-               href="#" target="_self"
-               title="Search for your exact URL.\nRemove sensitive information from the URL before clicking.">
-                Refine Search
-            </a>
-        `);
-        $('#refine-search').click(() => {
-            SubmissionCollectionLscache.remove(tab_url);
-            window_url.setSearch('override_url', tab_url);
-            window.open(window_url.toString(), '_self');
-        })
     }
 }
 
@@ -97,15 +77,21 @@ global.buildCommentUrl = buildCommentUrl;
 
 chrome.runtime.getBackgroundPage(function (global) {
     chrome.tabs.getSelected(null, function(tab){
-        isBlacklisted(tab,
-            function(input) {
-                $("div#blacklisted").show(0)
-                $("div#timeout").hide(0);
-            },
-            function (input) {
-                $("div#blacklisted").hide(0)
-                parsePosts(global, tab)
+        url_utils.getTabUrl(function(url) {
+            const fake_tab = {
+                url:url,
+                id: tab.id
+            };
+            isBlacklisted(fake_tab,
+                function(input) {
+                    $("div#blacklisted").show(0)
+                    $("div#timeout").hide(0);
+                },
+                function (input) {
+                    $("div#blacklisted").hide(0)
+                    parsePosts(global, fake_tab)
             });
+        });
     });
 });
 
