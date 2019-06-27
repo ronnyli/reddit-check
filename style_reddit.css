@@ -1760,6 +1760,19 @@
     border-color: rgb(0, 96, 168);
 }
 
+._1C6NYhYvuXKUDoONxrMR0d {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    line-height: 12px;
+    text-transform: uppercase;
+    -ms-flex-align: center;
+    align-items: center;
+    color: rgb(135, 138, 140);
+    display: flex;
+    padding: 8px 24px;
+}
+
 @font-face {
     font-family: IBMPlexSans;
     font-weight: 400;
