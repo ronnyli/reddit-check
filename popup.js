@@ -7,7 +7,6 @@ function parsePosts(globalPage, tab) {
 
     const encodedUrl = encodeURIComponent(url);
     const redditPosts = lscache.get(URL_STORAGE_KEY + url);
-    renderCreatePost(encodedUrl);
 
     if (redditPosts != null && redditPosts != []) {
         $("div#timeout").hide(0);
@@ -28,6 +27,7 @@ function parsePosts(globalPage, tab) {
             }
         });
     }
+    renderCreatePost(encodedUrl);
 }
 
 function renderCreatePost(encodedUrl) {
@@ -35,6 +35,12 @@ function renderCreatePost(encodedUrl) {
         React.createElement(CreatePost, {
             encodedUrl: encodedUrl
     }), document.getElementById('create-post'));
+}
+
+function renderPopupMenu() {
+    ReactDOM.render(
+        React.createElement(PopupMenu, {}),
+        document.getElementById('popup-menu'));
 }
 
 function makeDisplay(redditPosts) {
@@ -74,3 +80,4 @@ chrome.runtime.getBackgroundPage(function (global) {
     });
 });
 
+renderPopupMenu();

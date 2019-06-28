@@ -9,7 +9,6 @@ function CreatePostButton(props) {
 
 function CreatePost(props) {
     return React.createElement('div', {
-        className: 'links-background',
         style: {
             display: 'flex',
             flexDirection: 'column',
