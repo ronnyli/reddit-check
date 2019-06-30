@@ -198,6 +198,13 @@
     src: url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.9035497831ae339315fec4e0cbdee75b.eot), url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.9035497831ae339315fec4e0cbdee75b.woff), url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.9035497831ae339315fec4e0cbdee75b.ttf), url(https://www.redditstatic.com/desktop2x/fonts/redesignIcon/redesignFont.9035497831ae339315fec4e0cbdee75b.svg)
 }
 
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
 .jJNEjo:visited {
     color: rgb(63, 154, 222);
     fill: rgb(63, 154, 222);
@@ -327,8 +334,16 @@
     content: "\F109";
 }
 
+.icon-envelope:before {
+    content: "\F110";
+}
+
 .icon-expand:before {
     content: "\F111";
+}
+
+.icon-gild:before {
+    content: "\F11B";
 }
 
 .icon-info:before {
@@ -1758,6 +1773,48 @@
     color: rgb(255, 255, 255);
     fill: rgb(255, 255, 255);
     border-color: rgb(0, 96, 168);
+}
+
+._1C6NYhYvuXKUDoONxrMR0d {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    line-height: 12px;
+    text-transform: uppercase;
+    -ms-flex-align: center;
+    align-items: center;
+    color: rgb(135, 138, 140);
+    display: flex;
+    padding: 8px 24px;
+}
+
+._1YWXCINvcuU7nk0ED-bta8 {
+    box-sizing: border-box;
+    color: rgb(28, 28, 28);
+    cursor: pointer;
+    display: block;
+    fill: rgb(135, 138, 140);
+    padding: 10px 16px 10px 48px;
+    position: relative;
+}
+
+._2BQPq3iyS8t6kKtFmtkB30, ._2BQPq3iyS8t6kKtFmtkB30._3RofgwJEAbXD6OnLxEZ8Kg {
+    height: 20px;
+    left: 16px;
+    position: absolute;
+    top: 10px;
+    width: 20px;
+}
+
+
+.vzhy90YD0qH7ZDJi7xMGw {
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    display: inline-block;
+    vertical-align: middle;
+
 }
 
 @font-face {

@@ -8,7 +8,7 @@
        "default_icon": { "19": "images/thredd19.png", "38": "images/thredd38.png" },
        "default_title": "Thredd"
     },
-    "description": "Get reviews for the page you're reading or recommendations for similar content - crowdsourced from Reddit!",
+    "description": "See Reddit comments about the page you're reading. Find out what people think or get recommendations for similar content!",
     "options_page": "options.html",
     "icons": {
        "19": "images/thredd19.png",
@@ -18,7 +18,7 @@
        "64": "images/thredd64.png",
        "128": "images/thredd128.png"
     },
-    "name": "Thredd - Collaborative Browsing",
+    "name": "Thredd - Reddit Browser Companion",
     "short_name": "Thredd",
     "permissions": [
         "identity",
@@ -27,7 +27,7 @@
         "*://*/*",
         "storage"],
     "update_url": "http://clients2.google.com/service/update2/crx",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "web_accessible_resources": [
         "comment.html",
         "options.html",
