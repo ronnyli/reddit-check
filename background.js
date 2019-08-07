@@ -12,8 +12,14 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 });
 
 // update on URL update
-chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
-    changeAction(tab)
+chrome.tabs.onUpdated.addListener(function(tabId, changeinfo, tab) {
+    const url = tab.url;
+    // Put changeAction in this conditional to prevent it from firing
+    // multiple times per tab
+    // Source: https://stackoverflow.com/a/6168149/10928982
+    if (url !== undefined && changeinfo.status == "complete") {
+        changeAction(tab);
+    }
 });
 
 // update on selection change
@@ -24,6 +30,15 @@ chrome.tabs.onSelectionChanged.addListener(function(tabId, info) {
 });
 
 function changeAction(tab) {
+    // Determine whether notificationPopup() should run
+    // Leave this logic outside of url_utils.getTabUrl so it runs
+    // before notificationPopup() has a chance to evaluate
+    if (tab.url.indexOf('www.google') > -1) {
+        lscache.set('google_search', true, 5);
+    } else if (lscache.get('google_search')) {
+        lscache.set('google_search', false, 5);
+        lscache.set('trigger_notification', true, 5);
+    }
     url_utils.getTabUrl(function(url) {
         if (lscache.get(DEDUPE_KEY + url + tab.id) != null) {
             const posts = lscache.get(URL_STORAGE_KEY + url);
@@ -71,6 +86,7 @@ function getURLInfo(tab, override_url){
         })
         .then(function(listing) {
             updateBadge(listing.length, tab);
+            notificationPopup(listing.length);
             SubmissionLscache.insert(listing, url);
             return listing;
         });
@@ -132,6 +148,24 @@ function flashBadge(text, tabId) {
             setTimeout(function() {
                 clearInterval(flashInterval);
             }, 333 * 6);
+        }
+    });
+}
+
+function notificationPopup(num_results) {
+    chrome.storage.sync.get('disable_popup_notification', function(settings) {
+        if (!(settings['disable_popup_notification'])) {
+            if (lscache.get('trigger_notification')) {
+                lscache.set('trigger_notification', false, 5);
+                if (num_results) {
+                    chrome.notifications.create('thredd_notification', {
+                        type: "basic",
+                        title: "Thredd found results!",
+                        message: "Open up Thredd to find out what other people have learned",
+                        iconUrl: "images/thredd128.png"
+                    })
+                }
+            }
         }
     });
 }
