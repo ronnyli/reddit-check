@@ -33,3 +33,13 @@ test('tfidf success', () => {
         expect(actual).toEqual(expected);
     });
 });
+
+// // Commented out because it's technically an integration test
+// test('tfidf to logistic regression success', () => {
+//     lr_test.x_raw.forEach((body, i) => {
+//         const x = usefulness.tfidf(body);
+//         const actual = usefulness.logistic_regression.predict_proba(x);
+//         const expected = lr_test.y[i];
+//         expect(actual.toFixed(10)).toEqual(expected.toFixed(10));
+//     });
+// });

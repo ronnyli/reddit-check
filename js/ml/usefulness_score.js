@@ -42,7 +42,6 @@ function tfidf(txt) {
     });
     // l2 norm (sum of squared elements adds up to 1)
     const l2_norm_factor = Math.sqrt(tfidf_.reduce((a, b) => a + Math.pow(b, 2), 0));
-    console.log(tfidf_.reduce((a, b) => a + b, 0));
     return tfidf_.map(el => el / l2_norm_factor);
 } 
 
