@@ -42,7 +42,7 @@ class PopupResults extends React.Component {
         return posts;
     }
 
-    sortPost(postA, postB, sortKey='score', descending=true) {
+    sortPost(postA, postB, sortKey='usefulness_score', descending=true) {
         const descending_num = descending ? 1 : -1;
         return descending_num * (postB[sortKey] - postA[sortKey])
     }

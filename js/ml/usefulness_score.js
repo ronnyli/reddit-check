@@ -99,7 +99,7 @@ function tf(txt) {
         return out;
     }
 
-    txt = txt.toLowerCase();
+    txt = txt.toString().toLowerCase();
     let tokens = txt.match(/\w{1,}/g);;
     let ngrams = _word_ngrams(tokens, ngram_range=[1, 3], stop_words=ENGLISH_STOP_WORDS);
     let token_count = _count_vocab(ngrams);
