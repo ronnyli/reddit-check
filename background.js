@@ -72,7 +72,7 @@ function getURLInfo(tab, override_url){
         })
         .then(listing => {
             return listing.map(el => {
-                const txt = el.thredd_result_details || el.title;
+                const txt = el.thredd_result_details ? el.thredd_result_details.body_html : el.title;
                 const x = usefulness.tfidf(txt);
                 el.usefulness_score = usefulness.logistic_regression.predict_proba(x);
                 return el;
