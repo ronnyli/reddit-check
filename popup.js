@@ -81,3 +81,4 @@ chrome.runtime.getBackgroundPage(function (global) {
 });
 
 renderPopupMenu();
+lscache.set('trigger_notification', false, 5);

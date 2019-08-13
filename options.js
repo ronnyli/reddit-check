@@ -29,11 +29,13 @@ function loadBlacklist()
         'blacklist',
         'blacklist_edited',
         'disable_flashing_notification',
+        'disable_popup_notification',
         'run_on_click'
     ], function (storageMap) {
         $('div#loading').hide(0);
         $('#runonclick').prop('checked', storageMap['run_on_click']);
         $('#disableflash').prop('checked', storageMap['disable_flashing_notification']);
+        $('#disablepopup').prop('checked', storageMap['disable_popup_notification']);
         if ((!storageMap['blacklist_edited']) || storageMap['blacklist']){
             gBlacklist = storageMap['blacklist'] || [];
             if (!storageMap['blacklist_edited']) {
@@ -88,6 +90,25 @@ function saveBlacklist(blacklist, message)
 }
 loadBlacklist();
 
+function updateCheckbox(elem_id, setting_key, setting_val) {
+    // TODO: this function doesn't actually work
+    $(`#${elem_id}`).click(function() {
+        $(`#${elem_id}_saved`).hide();
+        $(`#${elem_id}_saving`).show();
+        if (setting_val) {
+            $(`#${elem_id}_warning`).show();
+        } else {
+            $(`#${elem_id}_warning`).hide();
+        }
+        let settings =  {};
+        settings[setting_key] = setting_val;
+        chrome.storage.sync.set(settings, function(){
+            $(`#${elem_id}_saved`).show();
+            $(`#${elem_id}_saving`).hide();
+        });
+    })
+}
+
 $('#runonclick').click(function() {
     $('#runonclick_saved').hide();
     $('#runonclick_saving').show();
@@ -117,5 +138,21 @@ $('#disableflash').click(function() {
     },function(){
         $('#disableflash_saved').show();
         $('#disableflash_saving').hide();
+    });
+});
+
+$('#disablepopup').click(function() {
+    $('#disablepopup_saved').hide();
+    $('#disablepopup_saving').show();
+    if (this.checked) {
+        $('#disablepopup_warning').show();
+    } else {
+        $('#disablepopup_warning').hide();
+    }
+    chrome.storage.sync.set({
+        'disable_popup_notification': this.checked
+    },function(){
+        $('#disablepopup_saved').show();
+        $('#disablepopup_saving').hide();
     });
 });
