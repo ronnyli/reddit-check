@@ -95,6 +95,47 @@ function backgroundSnoowrap() {
         }
     }
 
+    function searchSnoowrap(q) {
+        return getSnoowrapRequester()
+          .then(r => r.search({
+            query: q,
+            restrictSr: false,
+            time: 'all',
+            sort: 'relevance',
+            syntax: 'lucene'
+          }))
+          .then(listing => {
+            let listing_filtered = listing;
+            // Filter out NSFW results
+            if (true) {  // TODO: convert this to an option
+                listing_filtered = listing
+                .filter((el) => {return !el.over_18});
+            }
+            listing_filtered.map(elem => {
+                if (elem.url.indexOf(elem.permalink) != -1) {
+                    elem.thredd_result_type = 'selfpost';
+                } else {
+                    elem.thredd_result_type = 'link post';
+                }
+            })
+            return listing_filtered;
+          })
+          .catch(error => {
+            console.error(error);
+            console.error('current time: ' + new Date().getTime().toString());
+            if (lscache.get('is_logged_in_reddit')) {
+                console.error('using logged in requester. Expires:');
+                console.error(lscache.get('is_logged_in_reddit-cacheexpiration') * 1000 * 60);  // ms
+                // TODO: reset logged_in_reddit but only if error has status 403
+            } else {
+                console.error('using anonymous_requester');
+                console.error(anonymous_requester);
+                anonymous_requester = {};  // reset to get a new one next time
+            }
+            return [];
+          });
+    }
+
     return {
         setSnoowrapFromAuthCode: setSnoowrapFromAuthCode,
 
@@ -274,22 +315,10 @@ function backgroundSnoowrap() {
                 return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
             }
 
-            return getSnoowrapRequester()
-              .then(r => r.search({
-                query: query,
-                restrictSr: false,
-                time: 'all',
-                sort: 'relevance',
-                syntax: 'lucene'
-              }))
+            return searchSnoowrap(query)
               .then(listing => {
                 let listing_filtered = listing;
                 const u = url_utils.trimURL(url);
-                // Filter out NSFW results
-                if (true) {  // TODO: convert this to an option
-                    listing_filtered = listing
-                    .filter((el) => {return !el.over_18});
-                }
                 if (!is_youtube) {
                     const too_much = new RegExp(escapeRegExp(u) + '/?\\w');
                     const basic = new RegExp(escapeRegExp(u));
@@ -301,30 +330,11 @@ function backgroundSnoowrap() {
                         );
                     });
                 }
-                listing_filtered.map(elem => {
-                    if (elem.url.indexOf(u) != -1) {
-                        elem.thredd_result_type = 'link post';
-                    } else {
-                        elem.thredd_result_type = 'selfpost';
-                    }
-                })
                 return listing_filtered;
-              })
-              .catch(error => {
-                console.error(error);
-                console.error('current time: ' + new Date().getTime().toString());
-                if (lscache.get('is_logged_in_reddit')) {
-                    console.error('using logged in requester. Expires:');
-                    console.error(lscache.get('is_logged_in_reddit-cacheexpiration') * 1000 * 60);  // ms
-                    // TODO: reset logged_in_reddit but only if error has status 403
-                } else {
-                    console.error('using anonymous_requester');
-                    console.error(anonymous_requester);
-                    anonymous_requester = {};  // reset to get a new one next time
-                }
-                return [];
               });
         },
+
+        searchSnoowrap: searchSnoowrap,
 
         searchCommentsForURL: function(url) {
             // TODO: clean up search logic

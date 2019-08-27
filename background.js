@@ -55,7 +55,8 @@ function changeAction(tab) {
             } else {
                 const fake_tab = {
                     url: url,
-                    id: tab.id
+                    id: tab.id,
+                    title: tab.title
                 };
                 lscache.set(DEDUPE_KEY + url + tab.id, "", 2)
                 isBlacklisted(fake_tab, disableBadge, getURLInfo)
@@ -83,6 +84,13 @@ function getURLInfo(tab, override_url){
             snoo.searchSubmissionsForURL(trimmed_url)])
         .then(values => {
             return [].concat.apply([], values);
+        })
+        .then(listing => {
+            if (listing.length == 0) {
+                return snoo.searchSnoowrap(`"${tab.title}"`)
+            } else {
+                return listing
+            }
         })
         .then(function(listing) {
             updateBadge(listing.length, tab);
