@@ -8,7 +8,7 @@
        "default_icon": { "19": "images/thredd19.png", "38": "images/thredd38.png" },
        "default_title": "Thredd"
     },
-    "description": "Learn from people while you surf the web! Find Redditors talking about their experience with the site you're on.",
+    "description": "Learn from people while you surf the web!",
     "options_page": "options.html",
     "icons": {
        "19": "images/thredd19.png",

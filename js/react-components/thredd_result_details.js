@@ -76,7 +76,7 @@ class ThreddResultDetails extends React.Component {
     renderDetails() {
         const decoded_html = this.htmlDecode(this.props.body_html);
         let comment_html;
-        if (decoded_html.indexOf('</a>') != -1) {
+        if (decoded_html.indexOf('</div>') != -1) {
             comment_html = decoded_html;
         } else {
             comment_html = this.props.body_html;

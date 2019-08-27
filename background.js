@@ -87,7 +87,7 @@ function getURLInfo(tab, override_url){
         })
         .then(listing => {
             if (listing.length == 0) {
-                return snoo.searchSnoowrap(`"${tab.title}"`)
+                return snoo.searchPushshift(tab.title)
             } else {
                 return listing
             }
