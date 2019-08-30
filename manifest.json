@@ -8,7 +8,7 @@
        "default_icon": { "19": "images/thredd19.png", "38": "images/thredd38.png" },
        "default_title": "Thredd"
     },
-    "description": "See Reddit discussions about the page you're reading. Learn from others' experiences and get their recommendations!",
+    "description": "Learn from people while you surf the web!",
     "options_page": "options.html",
     "icons": {
        "19": "images/thredd19.png",
@@ -18,7 +18,7 @@
        "64": "images/thredd64.png",
        "128": "images/thredd128.png"
     },
-    "name": "Thredd - Useful Advice on the Internet",
+    "name": "Thredd - Useful Advice from Reddit",
     "short_name": "Thredd",
     "permissions": [
         "identity",
@@ -28,7 +28,7 @@
         "*://*/*",
         "storage"],
     "update_url": "http://clients2.google.com/service/update2/crx",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "web_accessible_resources": [
         "comment.html",
         "options.html",
