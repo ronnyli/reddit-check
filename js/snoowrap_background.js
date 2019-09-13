@@ -95,114 +95,6 @@ function backgroundSnoowrap() {
         }
     }
 
-    function searchSnoowrap(q) {
-        return getSnoowrapRequester()
-          .then(r => r.search({
-            query: q,
-            restrictSr: false,
-            time: 'all',
-            sort: 'relevance',
-            syntax: 'lucene'
-          }))
-          .then(listing => {
-            let listing_filtered = listing;
-            // Filter out NSFW results
-            if (true) {  // TODO: convert this to an option
-                listing_filtered = listing
-                .filter((el) => {return !el.over_18});
-            }
-            listing_filtered.map(elem => {
-                if (elem.url.indexOf(elem.permalink) != -1) {
-                    elem.thredd_result_type = 'selfpost';
-                } else {
-                    elem.thredd_result_type = 'link post';
-                }
-            })
-            return listing_filtered;
-          })
-          .catch(error => {
-            console.error(error);
-            console.error('current time: ' + new Date().getTime().toString());
-            if (lscache.get('is_logged_in_reddit')) {
-                console.error('using logged in requester. Expires:');
-                console.error(lscache.get('is_logged_in_reddit-cacheexpiration') * 1000 * 60);  // ms
-                // TODO: reset logged_in_reddit but only if error has status 403
-            } else {
-                console.error('using anonymous_requester');
-                console.error(anonymous_requester);
-                anonymous_requester = {};  // reset to get a new one next time
-            }
-            return [];
-          });
-    }
-
-    function searchPushshift(q) {
-        const comment_api = 'https://api.pushshift.io/reddit/search/comment/?';
-        const submission_api = 'https://api.pushshift.io/reddit/search/submission/?';
-        const fields = ['author', 'body', 'created_utc', 'id', 'link_id', 'score'];
-        let comments = [];
-
-        return fetch(comment_api + 'q=' + URI.encode(q) + '&fields=' + fields.join(','))
-        .then(response => response.json())
-        .then(resp => resp.data)
-        .then(data => {
-            // get up-to-date info from Reddit
-            // TODO: remove when pushshift is synced with Reddit
-            const comment_ids = data.map(elem => 't1_' + elem.id);
-            return reddit_api.getBatchIds(comment_ids);
-        })
-        .then(data => data.map(elem => {
-            elem.body_html = elem.body_html || marked(elem.body);
-            comments.push(elem);
-            return elem.link_id;  // array of submission IDs
-        }))
-        .catch(error => {
-            console.error(error);
-            return [];
-        })
-        .then(ids => {
-            if (ids.length == 0) {
-                throw new Error('aborting pushshift api call');
-                return [];
-            } else {
-                // pushshift submission_api is not as up-to-date as Reddit's
-                // but the benefit is that there's only one API call
-                return fetch(submission_api + 'ids=' + ids.toString());
-            }
-        })
-        .then(response => response.json())
-        .then(resp => resp.data)
-        .then(listing => {
-            let listing_filtered = listing;
-            // Filter out NSFW results
-            if (true) {  // TODO: convert this to an option
-                listing_filtered = listing.filter((el) => {return !el.over_18});
-            }
-            return listing_filtered;
-        })
-        .then(listing => listing.map(function(el) {
-            el.thredd_result_type = 'comment';
-            el.thredd_result_details = comments.find(comment => {
-                const submission_id = el.id.indexOf('_') != -1 ? el.id : 't3_' + el.id;
-                return comment.link_id == submission_id;
-            });
-            if (el.subreddit_type === 'user') {
-                el.subreddit_name_prefixed = el.subreddit.replace('_', '/');
-                return el;
-            } else {
-                el.subreddit_name_prefixed = 'r/' + el.subreddit;
-                return el;
-            }
-        }))
-        .catch(error => {
-            if (error.message === 'aborting pushshift api call') {
-                return [];
-            } else {
-                throw error;
-            }
-        });
-    }
-
     return {
         setSnoowrapFromAuthCode: setSnoowrapFromAuthCode,
 
@@ -382,10 +274,22 @@ function backgroundSnoowrap() {
                 return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
             }
 
-            return searchSnoowrap(query)
+            return getSnoowrapRequester()
+              .then(r => r.search({
+                query: query,
+                restrictSr: false,
+                time: 'all',
+                sort: 'relevance',
+                syntax: 'lucene'
+              }))
               .then(listing => {
                 let listing_filtered = listing;
                 const u = url_utils.trimURL(url);
+                // Filter out NSFW results
+                if (true) {  // TODO: convert this to an option
+                    listing_filtered = listing
+                    .filter((el) => {return !el.over_18});
+                }
                 if (!is_youtube) {
                     const too_much = new RegExp(escapeRegExp(u) + '/?\\w');
                     const basic = new RegExp(escapeRegExp(u));
@@ -397,11 +301,30 @@ function backgroundSnoowrap() {
                         );
                     });
                 }
+                listing_filtered.map(elem => {
+                    if (elem.url.indexOf(u) != -1) {
+                        elem.thredd_result_type = 'link post';
+                    } else {
+                        elem.thredd_result_type = 'selfpost';
+                    }
+                })
                 return listing_filtered;
+              })
+              .catch(error => {
+                console.error(error);
+                console.error('current time: ' + new Date().getTime().toString());
+                if (lscache.get('is_logged_in_reddit')) {
+                    console.error('using logged in requester. Expires:');
+                    console.error(lscache.get('is_logged_in_reddit-cacheexpiration') * 1000 * 60);  // ms
+                    // TODO: reset logged_in_reddit but only if error has status 403
+                } else {
+                    console.error('using anonymous_requester');
+                    console.error(anonymous_requester);
+                    anonymous_requester = {};  // reset to get a new one next time
+                }
+                return [];
               });
         },
-
-        searchSnoowrap: searchSnoowrap,
 
         searchCommentsForURL: function(url) {
             // TODO: clean up search logic
@@ -503,8 +426,6 @@ function backgroundSnoowrap() {
                 }
             });
         },
-
-        searchPushshift: searchPushshift,
 
         saveReddit: function(id, save_type, replyable_content_type, callback) {
             getSnoowrapRequester()

@@ -147,18 +147,9 @@ test('logInReddit', () => {
 //     expect(0).toBe(1);
 // });
 
-// test('searchSnoowrap', () => {
-//     expect(0).toBe(1);
-// });
-
 // test('searchCommentsForURL', () => {
 //     expect(0).toBe(1);
 // });
-
-// test('searchPushshift', () => {
-//     expect(0).toBe(1);
-// });
-
 
 // test('saveReddit', () => {
 //     expect(0).toBe(1);
