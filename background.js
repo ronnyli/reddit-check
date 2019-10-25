@@ -1,4 +1,5 @@
 const url_utils = require('./js/URL_utils');
+const usefulness = require('./js/ml/usefulness_score.js');
 
 // Bug with lscache when Thredd is updated:
 // pre-existing cached items lose the -cacheexpiration suffix so
@@ -83,6 +84,14 @@ function getURLInfo(tab, override_url){
             snoo.searchSubmissionsForURL(trimmed_url)])
         .then(values => {
             return [].concat.apply([], values);
+        })
+        .then(listing => {
+            return listing.map(el => {
+                const txt = el.thredd_result_details ? el.thredd_result_details.body_html : el.title;
+                const x = usefulness.tfidf(txt);
+                el.usefulness_score = usefulness.logistic_regression.predict_proba(x);
+                return el;
+            });
         })
         .then(function(listing) {
             updateBadge(listing.length, tab);
