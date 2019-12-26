@@ -1,13 +1,22 @@
 # Notes to Self
 ## TODO
-### Before release
+1. Link Search
+    - Search page for desired links
+        - Page (?)
+            - get all `<a>` elements
+        - PageParser
+            - returns desired `<a>` elements
+        - PageDispatcher
+            - for determining which PageParser to use
+    - Run getURLInfo on every link
+    - Modify PageParser elements to show Thredd results
+        - `chrome.tabs.executeScript`
 1. User testing
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML
     - extra libraries that aren't necessary
     - Bugfix:
         - when posts/comments link to subreddits/users, the href does not go where you would expect
-### After release
 1. Performance improvements
 1. IndexedDB to bypass 5MB LocalStorage limit
     - would need to implement expiring old data
@@ -25,24 +34,8 @@
         - turn this filter on by default
 1. Pagination
 1. Move ALL HTML into Javascript b/c otherwise you have to remember which HTML goes where
-1. Think about actions for:
-    - pages without posts
-    - people who don't want to post/comment
 1. additional Reddit API stuff
     - Edit
     - Hide
     - Report
     - etc.
-1. could right-clicking Open In New Tab somehow keep popup window open?
-    - or make the extension an overlay so it doesn't keep closing
-1. Consistent UI for post.html
-    - after posting, go to `comment.html` if it was successful
-1. Search multiple variations of the URL and stop when results are found
-    1. URL with ? params
-    1. URL with # segment
-    1. URL w/o ? or #
-
-Where to get outside help?
-    - ideally trustworthy
-        - Alessia, Josh, Sami
-    - if can't get the above ppl how do I recruit a trustworthy stranger
