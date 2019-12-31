@@ -1,4 +1,5 @@
 const url_utils = require('./js/URL_utils');
+const page = require('./js/page/page');
 
 // Bug with lscache when Thredd is updated:
 // pre-existing cached items lose the -cacheexpiration suffix so
@@ -14,10 +15,10 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, changeinfo, tab) {
     const url = tab.url;
-    // Put changeAction in this conditional to prevent it from firing
-    // multiple times per tab
-    // Source: https://stackoverflow.com/a/6168149/10928982
     if (url !== undefined && changeinfo.status == "complete") {
+        // Put changeAction in this conditional to prevent it from firing
+        // multiple times per tab
+        // Source: https://stackoverflow.com/a/6168149/10928982
         changeAction(tab);
     }
 });
@@ -30,6 +31,7 @@ chrome.tabs.onSelectionChanged.addListener(function(tabId, info) {
 });
 
 function changeAction(tab) {
+    page.pageDispatcher(tab.url);
     // Determine whether notificationPopup() should run
     // Leave this logic outside of url_utils.getTabUrl so it runs
     // before notificationPopup() has a chance to evaluate
@@ -100,6 +102,7 @@ function searchURL(url_raw) {
         });
     }
 }
+global.searchURL = searchURL;
 
 function disableBadge(tab){
     var title = "Not running on this page"

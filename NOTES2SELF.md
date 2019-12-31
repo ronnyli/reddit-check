@@ -4,8 +4,6 @@
     - Search page for desired links
         - PageParser
             - returns desired `<a>` elements
-            - var links = document.querySelectorAll('.r>a')
-            - links.forEach(elem => console.log(elem.href))
         - PageDispatcher
             - for determining which PageParser to use
     - ~~Run getURLInfo on every link~~
