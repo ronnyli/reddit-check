@@ -2,13 +2,13 @@
 ## TODO
 1. Link Search
     - Search page for desired links
-        - Page (?)
-            - get all `<a>` elements
         - PageParser
             - returns desired `<a>` elements
+            - var links = document.querySelectorAll('.r>a')
+            - links.forEach(elem => console.log(elem.href))
         - PageDispatcher
             - for determining which PageParser to use
-    - Run getURLInfo on every link
+    - ~~Run getURLInfo on every link~~
     - Modify PageParser elements to show Thredd results
         - `chrome.tabs.executeScript`
 1. User testing
