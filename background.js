@@ -31,7 +31,6 @@ chrome.tabs.onSelectionChanged.addListener(function(tabId, info) {
 });
 
 function changeAction(tab) {
-    page.pageDispatcher(tab.url);
     // Determine whether notificationPopup() should run
     // Leave this logic outside of url_utils.getTabUrl so it runs
     // before notificationPopup() has a chance to evaluate
@@ -64,6 +63,7 @@ function changeAction(tab) {
             }
         });
     });
+    page.pageDispatcher(tab.url);
 }
 
 function getURLInfo(tab, override_url){

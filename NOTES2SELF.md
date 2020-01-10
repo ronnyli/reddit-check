@@ -1,14 +1,15 @@
 # Notes to Self
 ## TODO
 1. Link Search
-    - Search page for desired links
-        - PageParser
-            - returns desired `<a>` elements
-        - PageDispatcher
-            - for determining which PageParser to use
-    - ~~Run getURLInfo on every link~~
-    - Modify PageParser elements to show Thredd results
-        - `chrome.tabs.executeScript`
+    - Click opens overlay
+    - Pushshift throttle
+        - I am hitting pushshift with too many simultaneous requests
+        - https://www.heavymetalcoder.com/make-array-foreach-synchronous-even-with-an-asynchronous-body/
+        - https://www.npmjs.com/package/bottleneck#batching (probably overkill)
+    - Check for Thredd results element before appending
+    - Nicer look
+        - Loading animation
+        - Logo
 1. User testing
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML

@@ -9,31 +9,22 @@ function pageDispatcher() {
             parseGoogleResults();
         } else if (url.indexOf('duckduckgo') > -1) {
             parseDuckDuckGoResults();
+        } else {
+            parseDefault();
         }
     });
+}
+
+function parseDefault() {
+    chrome.tabs.executeScript({
+        file: `js/page/parse/default.js`
+    }, displayResults);
 }
 
 function parseGoogleResults() {
     chrome.tabs.executeScript({
         file: `js/page/parse/google.js`
-    }, function(href) {
-        href[0].forEach(url => {
-            searchURL(url)
-            .then(listing => {
-                // TODO: append Thredd logo
-                // TODO: open overlay.js when clicked
-                // TODO: don't append if div is already there
-                chrome.tabs.executeScript({
-                    code: `
-                        var a = document.querySelectorAll('a[href="${url}"]');
-                        var thredd_results = document.createElement('div');
-                        thredd_results.innerText = '${listing.length} Thredd results';
-                        a.forEach(elem => elem.insertAdjacentElement('afterend', thredd_results));
-                    `
-                });
-            });
-        });
-    });
+    }, displayResults);
 }
 
 function parseDuckDuckGoResults(){
@@ -46,6 +37,26 @@ function parseDuckDuckGoResults(){
             console.log(elem);
             // elem.insertAdjacentElement('afterend', loader);
         })
+    });
+}
+
+function displayResults(href) {
+    // given a list of hrefs, display the number of Thredd results on the page
+    href[0].forEach(url => {
+        searchURL(url)
+        .then(listing => {
+            // TODO: append Thredd logo
+            // TODO: open overlay.js when clicked
+            // TODO: don't append if div is already there
+            chrome.tabs.executeScript({
+                code: `
+                    var a = document.querySelectorAll('a[href="${url}"]');
+                    var thredd_results = document.createElement('div');
+                    thredd_results.innerText = '${listing.length} Thredd results';
+                    a.forEach(elem => elem.insertAdjacentElement('afterend', thredd_results));
+                `
+            });
+        });
     });
 }
 
