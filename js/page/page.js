@@ -50,14 +50,19 @@ function displayResults(href) {
         .then(listing => {
             // TODO: append Thredd logo
             // TODO: open overlay.js when clicked
-            // TODO: don't append if div is already there
-            chrome.tabs.executeScript({
-                code: `
-                    var a = document.querySelectorAll('a[href="${url}"]');
+            const display_js = `
+                var a = document.querySelectorAll('a[href="${url}"]');
+                var existing_thredd = document.getElementById('${url}');
+                if (!existing_thredd || existing_thredd.className !== 'thredd_results') {
                     var thredd_results = document.createElement('div');
-                    thredd_results.innerText = '${listing.length} Thredd results';
+                    thredd_results.id = '${url}';
+                    thredd_results.setAttribute('class', 'thredd_results');
+                    thredd_results.textContent = '${listing.length} Thredd results';
                     a.forEach(elem => elem.insertAdjacentElement('afterend', thredd_results));
-                `
+                }
+            `;
+            chrome.tabs.executeScript({
+                code: display_js
             });
         });
     }, Promise.resolve());

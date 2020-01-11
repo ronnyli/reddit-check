@@ -3,10 +3,13 @@
 var loader = document.createElement('div');
 loader.className = 'loader';
 loader.innerText = 'Loading...';
+var num_thredd = document.querySelectorAll('.thredd_results').length;
 var arr=[];
-var google_results = document.querySelectorAll('.r>a');
-google_results.forEach(elem => {
-    arr.push(elem.href);
-    elem.insertAdjacentElement('afterend', loader);
-});
+if (num_thredd==0) {
+    var google_results = document.querySelectorAll('.r>a');
+    google_results.forEach(elem => {
+        arr.push(elem.href);
+        elem.insertAdjacentElement('afterend', loader);
+    });
+}
 arr;

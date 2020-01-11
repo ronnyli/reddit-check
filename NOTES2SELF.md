@@ -2,7 +2,6 @@
 ## TODO
 1. Link Search
     - Click opens overlay
-    - Check for Thredd results element before appending
     - Nicer look
         - Loading animation
         - Logo
