@@ -2,10 +2,6 @@
 ## TODO
 1. Link Search
     - Click opens overlay
-    - Pushshift throttle
-        - I am hitting pushshift with too many simultaneous requests
-        - https://www.heavymetalcoder.com/make-array-foreach-synchronous-even-with-an-asynchronous-body/
-        - https://www.npmjs.com/package/bottleneck#batching (probably overkill)
     - Check for Thredd results element before appending
     - Nicer look
         - Loading animation

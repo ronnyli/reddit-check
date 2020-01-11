@@ -42,8 +42,11 @@ function parseDuckDuckGoResults(){
 
 function displayResults(href) {
     // given a list of hrefs, display the number of Thredd results on the page
-    href[0].forEach(url => {
-        searchURL(url)
+    // use reduce instead of foreach to prevent sending too many simultaneous requests
+    // https://www.heavymetalcoder.com/make-array-foreach-synchronous-even-with-an-asynchronous-body/
+    href[0].reduce((accumulator, url) => {
+        return accumulator
+        .then(() => searchURL(url))
         .then(listing => {
             // TODO: append Thredd logo
             // TODO: open overlay.js when clicked
@@ -57,7 +60,7 @@ function displayResults(href) {
                 `
             });
         });
-    });
+    }, Promise.resolve());
 }
 
 module.exports = {
