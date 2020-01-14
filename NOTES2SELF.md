@@ -1,7 +1,6 @@
 # Notes to Self
 ## TODO
 1. Link Search
-    - Click opens overlay
     - Nicer look
         - Loading animation
         - Logo

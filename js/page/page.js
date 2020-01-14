@@ -54,11 +54,12 @@ function displayResults(href) {
                 var a = document.querySelectorAll('a[href="${url}"]');
                 var existing_thredd = document.getElementById('${url}');
                 if (!existing_thredd || existing_thredd.className !== 'thredd_results') {
-                    var thredd_results = document.createElement('div');
+                    var thredd_results = document.createElement('span');
                     thredd_results.id = '${url}';
                     thredd_results.setAttribute('class', 'thredd_results');
+                    thredd_results.setAttribute('style', 'margin-left: 1%;');
                     thredd_results.textContent = '${listing.length} Thredd results';
-                    a.forEach(elem => elem.insertAdjacentElement('afterend', thredd_results));
+                    a.forEach(elem => elem.appendChild(thredd_results));
                 }
             `;
             chrome.tabs.executeScript({
