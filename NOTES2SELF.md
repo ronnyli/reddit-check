@@ -3,7 +3,6 @@
 1. Link Search
     - Nicer look
         - Loading animation
-        - Logo
 1. User testing
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML

@@ -48,17 +48,24 @@ function displayResults(href) {
         return accumulator
         .then(() => searchURL(url))
         .then(listing => {
-            // TODO: append Thredd logo
-            // TODO: open overlay.js when clicked
             const display_js = `
                 var a = document.querySelectorAll('a[href="${url}"]');
                 var existing_thredd = document.getElementById('${url}');
-                if (!existing_thredd || existing_thredd.className !== 'thredd_results') {
+                if ((!existing_thredd || existing_thredd.className !== 'thredd_results')
+                    && ${listing.length} > 0) {
                     var thredd_results = document.createElement('span');
                     thredd_results.id = '${url}';
                     thredd_results.setAttribute('class', 'thredd_results');
-                    thredd_results.setAttribute('style', 'margin-left: 1%;');
-                    thredd_results.textContent = '${listing.length} Thredd results';
+                    thredd_results.setAttribute('style', 'margin-left: 1%; position: relative; padding-bottom: 0.5em;');
+                    thredd_results.title = '${listing.length} Thredd results!';
+                    var thredd_logo = document.createElement('img');
+                    thredd_logo.src = chrome.extension.getURL("images/thredd256.png");;
+                    thredd_logo.setAttribute('style', 'height: 1em!important; width: auto;');
+                    thredd_results.appendChild(thredd_logo);
+                    var thredd_num = document.createElement('strong');
+                    thredd_num.setAttribute('style', 'position: absolute; right:-0.5em; bottom:0.25em; background:rgb(236, 19, 19); text-align: center; border-radius: 0.75em 0.75em 0.75em 0.75em; color:white; padding:0.25em 0.25em; font-size:0.5em');
+                    thredd_num.textContent = ' ${listing.length}';
+                    thredd_results.appendChild(thredd_num);
                     a.forEach(elem => elem.appendChild(thredd_results));
                 }
             `;

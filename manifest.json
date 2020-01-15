@@ -32,6 +32,7 @@
     "web_accessible_resources": [
         "comment.html",
         "options.html",
-        "popup.html"
+        "popup.html",
+        "images/thredd256.png"
     ]
 }
