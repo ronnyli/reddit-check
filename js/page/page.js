@@ -27,17 +27,10 @@ function parseGoogleResults() {
     }, displayResults);
 }
 
-function parseDuckDuckGoResults(){
+function parseDuckDuckGoResults() {
     chrome.tabs.executeScript({
-        code: `document.getElementsByClassName('result__a');`
-    }, function(href) {
-        var loader = document.createElement('div');
-        loader.className = 'loader';
-        href.forEach(elem => {
-            console.log(elem);
-            // elem.insertAdjacentElement('afterend', loader);
-        })
-    });
+        file: `js/page/parse/duckduckgo.js`
+    }, displayResults);
 }
 
 function displayResults(href) {
