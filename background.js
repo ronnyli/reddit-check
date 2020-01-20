@@ -1,4 +1,5 @@
 const url_utils = require('./js/URL_utils');
+const page = require('./js/page/page');
 
 // Bug with lscache when Thredd is updated:
 // pre-existing cached items lose the -cacheexpiration suffix so
@@ -14,10 +15,10 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 // update on URL update
 chrome.tabs.onUpdated.addListener(function(tabId, changeinfo, tab) {
     const url = tab.url;
-    // Put changeAction in this conditional to prevent it from firing
-    // multiple times per tab
-    // Source: https://stackoverflow.com/a/6168149/10928982
     if (url !== undefined && changeinfo.status == "complete") {
+        // Put changeAction in this conditional to prevent it from firing
+        // multiple times per tab
+        // Source: https://stackoverflow.com/a/6168149/10928982
         changeAction(tab);
     }
 });
@@ -62,22 +63,33 @@ function changeAction(tab) {
             }
         });
     });
+    page.pageDispatcher(tab.url);
 }
 
 function getURLInfo(tab, override_url){
     const url = override_url || tab.url;
-    var posts = lscache.get(URL_STORAGE_KEY + url);
-    if (posts != null) {
-        updateBadge(posts.length, tab);
-        return new Promise(function(resolve, reject) {
-            resolve(SubmissionCollectionLscache.get(url) || []);
-        });
-    } else if (tab.url.indexOf('http') == -1) {
+    if (tab.url.indexOf('http') == -1) {
         return new Promise(function(resolve, reject) {
             resolve([]);
         });
     } else {
-        const trimmed_url = url_utils.trimURL(url, http_only=true);
+        return searchURL(url)
+        .then(listing => {
+            updateBadge(listing.length, tab);
+            notificationPopup(listing.length);
+        })
+    }
+}
+global.getURLInfo = getURLInfo;
+
+function searchURL(url_raw) {
+    var posts = lscache.get(URL_STORAGE_KEY + url_raw);
+    if (posts != null) {
+        return new Promise(function(resolve, reject) {
+            resolve(SubmissionCollectionLscache.get(url_raw) || []);
+        });
+    } else {
+        const trimmed_url = url_utils.trimURL(url_raw, http_only=true);
         return Promise.all([
             snoo.searchCommentsForURL(trimmed_url),
             snoo.searchSubmissionsForURL(trimmed_url)])
@@ -85,14 +97,12 @@ function getURLInfo(tab, override_url){
             return [].concat.apply([], values);
         })
         .then(function(listing) {
-            updateBadge(listing.length, tab);
-            notificationPopup(listing.length);
-            SubmissionLscache.insert(listing, url);
+            SubmissionLscache.insert(listing, url_raw);
             return listing;
         });
     }
 }
-global.getURLInfo = getURLInfo;
+global.searchURL = searchURL;
 
 function disableBadge(tab){
     var title = "Not running on this page"

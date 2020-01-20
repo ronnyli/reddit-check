@@ -23,12 +23,14 @@
   },
   "homepage": "https://github.com/ronnyli/reddit-check#readme",
   "devDependencies": {
+    "browserify": "16.5.0",
     "jest": "^24.8.0",
+    "web-ext": "3.2.1",
     "sinon-chrome": "^3.0.1"
   },
   "dependencies": {
     "lscache": "^1.3.0",
-    "marked": "^0.6.2",
+    "marked": "^0.8.0",
     "snoowrap": "^1.15.2"
   }
 }
