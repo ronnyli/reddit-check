@@ -65,6 +65,7 @@ chrome.runtime.getBackgroundPage(function (global) {
         active: true,
         currentWindow: true
     }, function(tabs) {
+        let tab = tabs[0];
         url_utils.getTabUrl(function(url) {
             const fake_tab = {
                 url:url,
