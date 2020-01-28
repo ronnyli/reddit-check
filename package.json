@@ -10,7 +10,9 @@
     "test": "jest",
     "build": "npm run browserify:background && npm run browserify:popup",
     "browserify:background": "browserify background.js > background_browserify.js",
-    "browserify:popup": "browserify popup.js > popup_browserify.js"
+    "browserify:popup": "browserify popup.js > popup_browserify.js",
+    "web-ext:build": "web-ext build",
+    "web-ext:run": "web-ext run"
   },
   "repository": {
     "type": "git",
