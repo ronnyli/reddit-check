@@ -1,4 +1,5 @@
 CLIENT_ID_DEV = 'FAKE ID';
+FIREFOX_CLIENT_ID_DEV = 'FAKE ID';
 const chrome = require("sinon-chrome");
 window.chrome = chrome;
 const lscache = {
