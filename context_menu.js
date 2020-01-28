@@ -58,3 +58,15 @@ const donateMenuId = chrome.contextMenus.create({
         .click();
     }
 });
+
+const feedbackMenuId = chrome.contextMenus.create({
+    "title": "Give Feedback",
+    "contexts": ["browser_action"],
+    "onclick": function() {
+        const contactUrl = "https://thredd.io/contact/";
+        $("<a>")
+        .attr("href", contactUrl)
+        .attr("target", "_blank")[0]
+        .click();
+    }
+});
