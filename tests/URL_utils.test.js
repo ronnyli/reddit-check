@@ -139,6 +139,24 @@ test('getTabUrl success', function(done) {
     });
 });
 
+// // TODO: port getURLInfo to url_utils
+// test('getURLInfo returns listing', function() {
+//     const tab = {
+//         url: 'http://www.google.com'
+//     };
+//     global.searchURL = function(url) {
+//         return new Promise((resolve, reject) => {
+//             resolve([1, 2, 3]);
+//         })
+//     }
+//     global.updateBadge = jest.fn();
+//     global.notificationPopup = jest.fn();
+//     return url_utils.getURLInfo(tab)
+//         .then(listing => {
+//             expect(listing).toEqual([1, 2, 3]);
+//         });
+// })
+
 test('getYoutubeURLs not video link', function() {
     const url = 'https://www.youtube.com/results?search_query=abc#def';
     expect(url_utils.getYoutubeURLs(url)).toEqual([]);
