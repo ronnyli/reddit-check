@@ -7,8 +7,10 @@ function pageDispatcher() {
         let url = tab.url;
         if (url.indexOf('www.google') > -1) {
             parseGoogleResults();
-        } else if (url.indexOf('duckduckgo') > -1) {
+        } else if (url.indexOf('duckduckgo.com') > -1) {
             parseDuckDuckGoResults();
+        } else if (url.indexOf('reddit.com') > -1) {
+            // do nothing because obviously the links are being discussed on Reddit
         } else {
             parseDefault();
         }
