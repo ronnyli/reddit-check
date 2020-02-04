@@ -80,6 +80,7 @@ function getURLInfo(tab, override_url){
         .then(listing => {
             updateBadge(listing.length, tab);
             notificationPopup(listing.length);
+            return listing;
         })
     }
 }
