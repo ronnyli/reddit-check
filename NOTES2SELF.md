@@ -1,5 +1,9 @@
 # Notes to Self
 ## TODO
+1. Banner
+    - Copy
+    - Nicer look
+    - CTA to feedback form
 1. Link Search
     - Nicer look
         - Loading animation

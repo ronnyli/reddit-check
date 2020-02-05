@@ -87,8 +87,10 @@ chrome.runtime.getBackgroundPage(function (global) {
 renderPopupMenu();
 ReactDOM.render(
     React.createElement(Banner, {
-        backgroundColor: 'red',
-        bannerText: 'goLorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices auctor tellus, id rutrum lacus volutpat et. Cras tincidunt sem ac gravida porttitor. In quis lectus at lacus lacinia placerat non ac ante. Fusce quis enim sit amet est porttitor gravida quis ac eros. Duis efficitur orci mollis felis gravida convallis. Aenean hendrerit semper erat ut bibendum. Praesent diam dolor, sodales in urna non, rutrum feugiat dolor. Nunc rhoncus mi vel erat sodales,odbye'
+        bannerName: 'popup_survey',
+        bannerSleep: 40320,  // 28 days
+        backgroundColor: 'rgb(252, 252, 200)',
+        bannerText: 'Want to make Thredd better? Click here to share your thoughts!'
     }),
     document.getElementById('banner'));
 lscache.set('trigger_notification', false, 5);

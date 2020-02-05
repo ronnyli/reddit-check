@@ -2,19 +2,19 @@ class Banner extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: true  // TODO: set this value based on lscache
+            close: lscache.get(this.props.bannerName) || false
         }
     }
 
     handleClose() {
-        // TODO: set lscache to hide this banner
-        this.setState({open: false});
+        lscache.set(this.props.bannerName, true, this.props.bannerSleep);
+        this.setState({close: true});
     }
 
     render() {
         return React.createElement('div', {
             style: {
-                display: this.state.open ? 'block' : 'none',
+                display: this.state.close ? 'none' : 'block',
                 position: 'absolute',
                 left: '2.5%',
                 right: '2.5%',
@@ -25,7 +25,7 @@ class Banner extends React.Component {
         }, [
             React.createElement('p', {
                 style: {
-                    margin: '4%',
+                    margin: '2%',
                     textAlign: 'center',
                 }
             }, [
