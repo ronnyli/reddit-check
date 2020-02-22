@@ -24,6 +24,48 @@
     - how it works
         - request to `atb.js?event=open_thredd`
         - response = {"status":"success","for_more_info":"https://help.thredd.com/privacy/atb/"}
+        - How DuckDuckGo requests atb.js: ```
+        /*
+        * Params:
+        *  - url: request URL
+        *  - etag: set an if-none-match header
+        */
+        function loadExtensionFile(params) {
+            var xhr = new XMLHttpRequest();
+            var url = params.url;
+
+            xhr.open('GET', url);
+
+            if (params.etag) {
+                xhr.setRequestHeader('If-None-Match', params.etag);
+            }
+
+            xhr.timeout = params.timeout || 30000;
+
+            xhr.send(null);
+
+            return new Promise(function (resolve, reject) {
+                xhr.ontimeout = function () {
+                    reject(new Error(url + ' timed out'));
+                };
+                xhr.onreadystatechange = function () {
+                    var done = XMLHttpRequest.DONE ? XMLHttpRequest.DONE : 4;
+                    if (xhr.readyState === done) {
+                        if (xhr.status === 200 || xhr.type && xhr.type === 'internal') {
+                            xhr.data = returnResponse(xhr, params.returnType);
+                            if (!xhr.data) reject(new Error(url + ' returned no data'));
+                            resolve(xhr);
+                        } else if (xhr.status === 304) {
+                            console.log(url + ' returned 304, resource not changed');
+                            resolve(xhr);
+                        } else {
+                            reject(new Error(url + ' returned ' + xhr.status));
+                        }
+                    }
+                };
+            });
+        }
+        ```
 1. Performance improvements
 1. IndexedDB to bypass 5MB LocalStorage limit (DDG uses Dexie)
     - would need to implement expiring old data
