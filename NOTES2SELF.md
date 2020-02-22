@@ -1,16 +1,31 @@
 # Notes to Self
 ## TODO
+1. User testing
+1. Banner
+    - Copy
+    - Nicer look
+    - CTA to feedback form
 1. Link Search
     - Nicer look
         - Loading animation
-1. User testing
+        - Number blocks logo
+    - Bugfix
+        - Breaks on some web pages like Penny Arcade
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML
     - extra libraries that aren't necessary
     - Bugfix:
         - when posts/comments link to subreddits/users, the href does not go where you would expect
+1. Analytics that respects privacy
+    - copy DuckDuckGo [atb method](https://help.duckduckgo.com/privacy/atb/)
+        - only know how many times something was clicked, but not what was clicked nor who did it
+        - use DuckDuckGo's method of encryption
+        - update privacy policy to reflect DuckDuckGo's
+    - how it works
+        - request to `atb.js?event=open_thredd`
+        - response = {"status":"success","for_more_info":"https://help.thredd.com/privacy/atb/"}
 1. Performance improvements
-1. IndexedDB to bypass 5MB LocalStorage limit
+1. IndexedDB to bypass 5MB LocalStorage limit (DDG uses Dexie)
     - would need to implement expiring old data
         - probably as part of `changeAction`
         - all records should have an indexed timestamp called `expires_at`
