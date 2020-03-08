@@ -4,6 +4,13 @@
     - Nicer look
         - Loading animation
 1. User testing
+1. chrome_settings_overrides
+    - https://github.com/duckduckgo/duckduckgo-privacy-extension/blob/develop/browsers/chrome/manifest.json#L26-L36
+    - Create a Thredd search bar
+1. Find My Link
+    - it is not obvious that this feature exists
+    - make it a sticky footer button when comment element is not in view
+    - Add "back to top" sticky footer when submission element is not in view
 1. Code Cleanup
     - bogus user agents, state, large blocks of HTML
     - extra libraries that aren't necessary
