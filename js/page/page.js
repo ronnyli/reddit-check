@@ -55,10 +55,10 @@ function displayResults(href) {
                     thredd_results.title = '${listing.length} Thredd results!';
                     var thredd_logo = document.createElement('img');
                     thredd_logo.src = chrome.extension.getURL("images/thredd256.png");;
-                    thredd_logo.setAttribute('style', 'height: 1em!important; width: auto;');
+                    thredd_logo.setAttribute('style', 'display: inline; height: 1em!important; width: auto;');
                     thredd_results.appendChild(thredd_logo);
                     var thredd_num = document.createElement('strong');
-                    thredd_num.setAttribute('style', 'position: absolute; right:-0.5em; bottom:0.25em; background:rgb(236, 19, 19); text-align: center; border-radius: 0.75em 0.75em 0.75em 0.75em; color:white; padding:0.25em 0.25em; font-size:0.5em');
+                    thredd_num.setAttribute('style', 'display:inline; background:rgb(236, 19, 19); text-align: center; border-radius: 20%/40%; color:white; padding:0.25em; font-size:0.6em; margin-right: 0.5%;');
                     thredd_num.textContent = ' ${listing.length}';
                     thredd_results.appendChild(thredd_num);
                     a.forEach(elem => elem.appendChild(thredd_results));
