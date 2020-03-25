@@ -11,7 +11,7 @@ function pageDispatcher() {
             parseDuckDuckGoResults();
         } else if (url.indexOf('reddit.com') > -1) {
             // do nothing because obviously the links are being discussed on Reddit
-        } else {
+        } else if (url.indexOf('http') > -1) {
             parseDefault();
         }
     });
