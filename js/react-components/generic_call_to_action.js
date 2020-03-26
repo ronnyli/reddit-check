@@ -1,13 +1,13 @@
-function CreatePostButton(props) {
+function GenericCallToActionButton(props) {
     return React.createElement('a', {
         className: 's6tnjvv-17 cvgsde pbxmwi-2 bmmzQa',
-        href: `https://www.reddit.com/submit?url=${props.encodedUrl}`,
+        href: props.href,
         target: '_blank',
         rel: 'noopener noreferrer'
-    }, 'Create Post');
+    }, props.button_text);
 }
 
-function CreatePost(props) {
+function GenericCallToAction(props) {
     return React.createElement('div', {
         style: {
             display: 'flex',
@@ -17,7 +17,7 @@ function CreatePost(props) {
     }, [
         React.createElement('div', {
             className: '_1C6NYhYvuXKUDoONxrMR0d'
-        }, "Don't see a relevant thread? Start your own!"),
-        React.createElement(CreatePostButton, props)
+        }, props.button_description),
+        React.createElement(GenericCallToActionButton, props)
     ])
 }
