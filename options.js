@@ -28,14 +28,16 @@ function loadBlacklist()
     chrome.storage.sync.get([
         'blacklist',
         'blacklist_edited',
+        'disable_link_preview',
         'disable_flashing_notification',
         'disable_popup_notification',
         'run_on_click'
     ], function (storageMap) {
         $('div#loading').hide(0);
-        $('#runonclick').prop('checked', storageMap['run_on_click']);
-        $('#disableflash').prop('checked', storageMap['disable_flashing_notification']);
-        $('#disablepopup').prop('checked', storageMap['disable_popup_notification']);
+        $('#run_on_click').prop('checked', storageMap['run_on_click']);
+        $('#disable_link_preview').prop('checked', storageMap['disable_link_preview']);
+        $('#disable_flashing_notification').prop('checked', storageMap['disable_flashing_notification']);
+        $('#disable_popup_notification').prop('checked', storageMap['disable_popup_notification']);
         if ((!storageMap['blacklist_edited']) || storageMap['blacklist']){
             gBlacklist = storageMap['blacklist'] || [];
             if (!storageMap['blacklist_edited']) {
@@ -90,69 +92,31 @@ function saveBlacklist(blacklist, message)
 }
 loadBlacklist();
 
-function updateCheckbox(elem_id, setting_key, setting_val) {
-    // TODO: this function doesn't actually work
-    $(`#${elem_id}`).click(function() {
-        $(`#${elem_id}_saved`).hide();
-        $(`#${elem_id}_saving`).show();
-        if (setting_val) {
-            $(`#${elem_id}_warning`).show();
-        } else {
-            $(`#${elem_id}_warning`).hide();
-        }
-        let settings =  {};
-        settings[setting_key] = setting_val;
-        chrome.storage.sync.set(settings, function(){
-            $(`#${elem_id}_saved`).show();
-            $(`#${elem_id}_saving`).hide();
+document.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
+    checkbox.addEventListener('click', function(e) {
+        const status_id = this.id + '_status';
+        let status = document.getElementById(status_id);
+        if (!status) {
+            status = document.createElement('span');
+            this.insertAdjacentElement('afterend', status);
+        };
+        status.id = status_id;
+        status.style.paddingLeft = '15px';
+        status.style.color = 'black';
+        status.textContent = 'Saving...';
+        let setting = {};
+        setting[this.id] = this.checked;
+        chrome.storage.sync.set(setting, function() {
+            status.style.color = 'green';
+            status.textContent = 'Saved!';
         });
-    })
-}
+    });
+});
 
-$('#runonclick').click(function() {
-    $('#runonclick_saved').hide();
-    $('#runonclick_saving').show();
+$('#run_on_click').click(function() {
     if (this.checked) {
         $('#runonclick_warning').show();
     } else {
         $('#runonclick_warning').hide();
     }
-    chrome.storage.sync.set({
-        'run_on_click': this.checked
-    },function(){
-        $('#runonclick_saved').show();
-        $('#runonclick_saving').hide();
-    });
-})
-
-$('#disableflash').click(function() {
-    $('#disableflash_saved').hide();
-    $('#disableflash_saving').show();
-    if (this.checked) {
-        $('#disableflash_warning').show();
-    } else {
-        $('#disableflash_warning').hide();
-    }
-    chrome.storage.sync.set({
-        'disable_flashing_notification': this.checked
-    },function(){
-        $('#disableflash_saved').show();
-        $('#disableflash_saving').hide();
-    });
-});
-
-$('#disablepopup').click(function() {
-    $('#disablepopup_saved').hide();
-    $('#disablepopup_saving').show();
-    if (this.checked) {
-        $('#disablepopup_warning').show();
-    } else {
-        $('#disablepopup_warning').hide();
-    }
-    chrome.storage.sync.set({
-        'disable_popup_notification': this.checked
-    },function(){
-        $('#disablepopup_saved').show();
-        $('#disablepopup_saving').hide();
-    });
 });

@@ -1,18 +1,22 @@
 function pageDispatcher() {
-    chrome.tabs.query({
-        active: true,
-        currentWindow: true
-    }, function(tabs) {
-        let tab = tabs[0];
-        let url = tab.url;
-        if (url.indexOf('www.google') > -1) {
-            parseGoogleResults();
-        } else if (url.indexOf('duckduckgo.com') > -1) {
-            parseDuckDuckGoResults();
-        } else if (url.indexOf('reddit.com') > -1) {
-            // do nothing because obviously the links are being discussed on Reddit
-        } else if (url.indexOf('http') > -1) {
-            parseDefault();
+    chrome.storage.sync.get('disable_link_preview', function(settings) {
+        if (!settings['disable_link_preview']) {
+            chrome.tabs.query({
+                active: true,
+                currentWindow: true
+            }, function(tabs) {
+                let tab = tabs[0];
+                let url = tab.url;
+                if (url.indexOf('www.google') > -1) {
+                    parseGoogleResults();
+                } else if (url.indexOf('duckduckgo.com') > -1) {
+                    parseDuckDuckGoResults();
+                } else if (url.indexOf('reddit.com') > -1) {
+                    // do nothing because obviously the links are being discussed on Reddit
+                } else if (url.indexOf('http') > -1) {
+                    parseDefault();
+                }
+            });
         }
     });
 }
