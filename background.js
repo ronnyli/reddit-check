@@ -244,4 +244,8 @@ chrome.runtime.onInstalled.addListener(function(details) {
     if (details.reason == 'install') {
         chrome.tabs.create({ url: 'http://thredd.io/thank-you/' });
     }
+    if (details.reason == 'update') {
+        let update_window = window.open('http://thredd.io/changelog/', '_blank');
+        update_window.opener = null;
+    }
 });
