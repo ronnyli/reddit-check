@@ -27,13 +27,15 @@ function parsePosts(globalPage, tab) {
             }
         });
     }
-    renderCreatePost(encodedUrl);
+    renderThreddSubreddit(encodedUrl);
 }
 
-function renderCreatePost(encodedUrl) {
+function renderThreddSubreddit(encodedUrl) {
     ReactDOM.render(
-        React.createElement(CreatePost, {
-            encodedUrl: encodedUrl
+        React.createElement(GenericCallToAction, {
+            button_description: "Share your feedback and keep up-to-date with Thredd's development!",
+            button_text: 'Join r/Thredd',
+            href: 'https://www.reddit.com/r/Thredd'
     }), document.getElementById('create-post'));
 }
 
