@@ -3,6 +3,10 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
+    res.redirect('https://thredd.io');
+});
+
+app.get('/popup.html', (req, res) => {
   const thredd_search_url = req.query.override_url;
   res.status(200).send(thredd_search_url).end();
 });
