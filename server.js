@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
 
 app.get('/popup.html', (req, res) => {
   const thredd_search_url = req.query.override_url;
-  res.status(200).send(thredd_search_url).end();
+  res.status(200).sendFile('/popup.html').end();
 });
 
 // Start the server
